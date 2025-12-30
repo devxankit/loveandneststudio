@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/common/Button';
+import LazyImage from '../../components/common/LazyImage';
 
 // Import Images
 import img1 from '../../assets/images/hero/Screenshot 2025-12-30 141652.png';
@@ -34,7 +35,17 @@ const Hero = () => {
                 >
                     {heroImages.map((img, index) => (
                         <div key={index} className="hero-slide-item-bg">
-                            <img src={img} alt={`Hero Slide ${index + 1}`} />
+                            {/* Load first image immediately, rest lazily */}
+                            {index === 0 ? (
+                                <img src={img} alt={`Hero Slide ${index + 1}`} />
+                            ) : (
+                                <LazyImage
+                                    src={img}
+                                    alt={`Hero Slide ${index + 1}`}
+                                    threshold={0.01}
+                                    rootMargin="100px"
+                                />
+                            )}
                         </div>
                     ))}
                 </div>
@@ -73,3 +84,4 @@ const Hero = () => {
 };
 
 export default Hero;
+

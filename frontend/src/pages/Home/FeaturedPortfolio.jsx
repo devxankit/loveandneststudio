@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SectionTitle from '../../components/common/SectionTitle';
 import ImageCard from '../../components/common/ImageCard';
+import LazyImage from '../../components/common/LazyImage';
 import decorativeImg from '../../assets/images/hero/Screenshot 2025-12-30 141711.png'; // Using a baby image
 
 const FeaturedPortfolio = () => {
@@ -42,7 +43,7 @@ const FeaturedPortfolio = () => {
                 {/* Left Side Decorative Image */}
                 <div className="portfolio-left-decor">
                     <div className="decor-image-container">
-                        <img src={decorativeImg} alt="Baby" className="decor-img" />
+                        <LazyImage src={decorativeImg} alt="Baby" className="decor-img" />
                         <div className="decor-overlay"></div>
                     </div>
                 </div>
@@ -81,3 +82,4 @@ const FeaturedPortfolio = () => {
 };
 
 export default FeaturedPortfolio;
+

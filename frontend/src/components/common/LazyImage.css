@@ -1,0 +1,38 @@
+.lazy-image {
+    transition: opacity 0.4s ease-in-out, filter 0.4s ease-in-out;
+    will-change: opacity, filter;
+}
+
+.lazy-image.loading {
+    opacity: 0.6;
+    filter: blur(8px);
+}
+
+.lazy-image.loaded {
+    opacity: 1;
+    filter: blur(0);
+}
+
+/* Smooth fade-in animation when image enters viewport */
+.lazy-image.in-view {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Prevent layout shift while image is loading */
+.lazy-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}

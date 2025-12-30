@@ -4,24 +4,24 @@ import SEO from '../components/seo/SEO';
 import Button from '../components/common/Button';
 
 const NotFound = () => {
-    return (
-        <>
-            <SEO
-                title="404 - Page Not Found"
-                description="The page you're looking for doesn't exist."
-            />
-            <div className="not-found-page">
-                <div className="not-found-content">
-                    <h1>404</h1>
-                    <h2>Page Not Found</h2>
-                    <p>Sorry, the page you're looking for doesn't exist.</p>
-                    <Link to="/">
-                        <Button variant="primary" size="large">Go Home</Button>
-                    </Link>
-                </div>
-            </div>
+  return (
+    <>
+      <SEO
+        title="404 - Page Not Found"
+        description="The page you're looking for doesn't exist."
+      />
+      <div className="not-found-page">
+        <div className="not-found-content">
+          <h1>404</h1>
+          <h2>Page Not Found</h2>
+          <p>Sorry, the page you're looking for doesn't exist.</p>
+          <Link to="/">
+            <Button variant="primary" size="large">Go Home</Button>
+          </Link>
+        </div>
+      </div>
 
-            <style>{`
+      <style>{`
         .not-found-page {
           min-height: 80vh;
           display: flex;
@@ -56,8 +56,8 @@ const NotFound = () => {
           margin-bottom: 2rem;
         }
       `}</style>
-        </>
-    );
+    </>
+  );
 };
 
 export default NotFound;
