@@ -1,0 +1,157 @@
+/* Import Design System */
+@import './colors.css';
+@import './typography.css';
+@import './animations.css';
+
+/* Global Reset */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Root Styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--color-gray-800);
+    background-color: var(--color-white);
+    overflow-x: hidden;
+}
+
+/* Links */
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--duration-normal) var(--ease-in-out);
+}
+
+a:hover {
+    color: var(--color-primary);
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Lists */
+ul,
+ol {
+    list-style: none;
+}
+
+/* Buttons */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* Form Elements */
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+/* Selection */
+::selection {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-dark);
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Section Title Styles */
+.section-title {
+    margin-bottom: 3rem;
+}
+
+.section-title-center {
+    text-align: center;
+}
+
+.section-title-left {
+    text-align: left;
+}
+
+.section-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wider);
+    margin-bottom: 0.5rem;
+}
+
+.section-heading {
+    font-size: var(--font-size-4xl);
+    color: var(--color-gray-900);
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+}

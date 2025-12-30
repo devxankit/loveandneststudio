@@ -1,0 +1,186 @@
+/* Services Page Styles */
+.services-page {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.services-header {
+    background: linear-gradient(135deg, hsl(340, 80%, 60%) 0%, hsl(280, 70%, 50%) 100%);
+    color: white;
+    padding: 4rem 2rem;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+
+.service-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.service-card h3 {
+    font-size: 1.8rem;
+    color: hsl(340, 80%, 60%);
+    margin-bottom: 1rem;
+}
+
+.service-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: hsl(0, 0%, 30%);
+    margin-bottom: 1.5rem;
+}
+
+.service-features {
+    list-style: none;
+    padding: 0;
+}
+
+.service-features li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: hsl(0, 0%, 40%);
+}
+
+.service-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: hsl(340, 80%, 60%);
+    font-weight: bold;
+}
+
+/* Tablet Landscape */
+@media (max-width: 1024px) {
+    .services-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2.25rem;
+    }
+
+    .service-card h3 {
+        font-size: 1.6rem;
+    }
+
+    .service-description {
+        font-size: 1.05rem;
+    }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+    .services-header {
+        padding: 3rem 1.5rem;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 2rem;
+        padding: 0 1.5rem;
+        margin: 3rem auto;
+    }
+
+    .service-card {
+        padding: 2rem;
+    }
+
+    .service-card h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile Landscape */
+@media (max-width: 640px) {
+    .services-header {
+        padding: 2.5rem 1rem;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+        margin: 2.5rem auto;
+    }
+
+    .service-card {
+        padding: 1.75rem;
+    }
+
+    .service-card h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.875rem;
+    }
+
+    .service-description {
+        font-size: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .service-features li {
+        font-size: 0.95rem;
+        padding: 0.4rem 0;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+    .services-header {
+        padding: 2rem 1rem;
+    }
+
+    .services-grid {
+        gap: 1.25rem;
+        margin: 2rem auto;
+    }
+
+    .service-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+
+    .service-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .service-description {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+
+    .service-features li {
+        font-size: 0.9rem;
+        padding: 0.35rem 0;
+        padding-left: 1.25rem;
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 375px) {
+    .service-card {
+        padding: 1.25rem;
+    }
+
+    .service-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .service-description {
+        font-size: 0.9rem;
+    }
+}

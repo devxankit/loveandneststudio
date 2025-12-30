@@ -1,0 +1,757 @@
+/* About Page Styles */
+.about-page {
+    width: 100%;
+}
+
+.about-hero {
+    background: linear-gradient(135deg, #D6A9B4 0%, #B7C1B8 100%);
+    /* Dusty Rose to Sage */
+    color: white;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    /* Further reduced padding */
+    position: relative;
+    overflow: hidden;
+    min-height: 35vh;
+    /* Further reduced height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Floating Images Container */
+.hero-images-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.3;
+    /* Faded for background effect */
+}
+
+.floating-image {
+    position: absolute;
+    border-radius: 15px;
+    /* Slightly smaller radius */
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    will-change: transform;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Smooth, elegant transition */
+    cursor: pointer;
+}
+
+.floating-image:hover {
+    opacity: 1 !important;
+    /* Full brightness on hover */
+    filter: brightness(1.15);
+    /* Subtle brightness boost */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    transform: scale(1.03);
+    /* Gentle zoom */
+    z-index: 10;
+    /* Bring to front */
+}
+
+.floating-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Individual Image Positions & Sizes - Randomly Scattered Across Area */
+.float-1 {
+    width: 90px;
+    height: 130px;
+    top: 12%;
+    left: 7%;
+    animation: float1 22s ease-in-out infinite;
+}
+
+.float-2 {
+    width: 85px;
+    height: 120px;
+    top: 68%;
+    left: 23%;
+    animation: float2 20s ease-in-out infinite 1s;
+}
+
+.float-3 {
+    width: 95px;
+    height: 135px;
+    top: 28%;
+    left: 82%;
+    animation: float3 24s ease-in-out infinite 2s;
+}
+
+.float-4 {
+    width: 80px;
+    height: 115px;
+    top: 75%;
+    left: 51%;
+    animation: float4 21s ease-in-out infinite 0.5s;
+}
+
+.float-5 {
+    width: 100px;
+    height: 140px;
+    top: 18%;
+    left: 38%;
+    animation: float5 23s ease-in-out infinite 1.5s;
+}
+
+.float-6 {
+    width: 90px;
+    height: 125px;
+    top: 55%;
+    left: 89%;
+    animation: float6 19s ease-in-out infinite 2.5s;
+}
+
+.float-7 {
+    width: 85px;
+    height: 120px;
+    top: 8%;
+    left: 63%;
+    animation: float1 25s ease-in-out infinite 3s;
+}
+
+.float-8 {
+    width: 95px;
+    height: 130px;
+    top: 42%;
+    left: 14%;
+    animation: float2 22s ease-in-out infinite 1.8s;
+}
+
+.float-9 {
+    width: 88px;
+    height: 125px;
+    top: 82%;
+    left: 70%;
+    animation: float3 20s ease-in-out infinite 2.2s;
+}
+
+.float-10 {
+    width: 92px;
+    height: 132px;
+    top: 35%;
+    left: 48%;
+    animation: float4 23s ease-in-out infinite 0.8s;
+}
+
+.float-11 {
+    width: 85px;
+    height: 118px;
+    top: 15%;
+    left: 91%;
+    animation: float5 21s ease-in-out infinite 1.2s;
+}
+
+.float-12 {
+    width: 98px;
+    height: 138px;
+    top: 62%;
+    left: 6%;
+    animation: float6 24s ease-in-out infinite 2.8s;
+}
+
+.float-13 {
+    width: 90px;
+    height: 128px;
+    top: 48%;
+    left: 76%;
+    animation: float1 20s ease-in-out infinite 3.5s;
+}
+
+.float-14 {
+    width: 95px;
+    height: 135px;
+    top: 25%;
+    left: 19%;
+    animation: float2 22s ease-in-out infinite 1.5s;
+}
+
+.float-15 {
+    width: 87px;
+    height: 122px;
+    top: 71%;
+    left: 43%;
+    animation: float3 21s ease-in-out infinite 2.5s;
+}
+
+.float-16 {
+    width: 93px;
+    height: 130px;
+    top: 9%;
+    left: 29%;
+    animation: float4 23s ease-in-out infinite 0.7s;
+}
+
+.float-17 {
+    width: 90px;
+    height: 127px;
+    top: 58%;
+    left: 62%;
+    animation: float5 20s ease-in-out infinite 1.8s;
+}
+
+.float-18 {
+    width: 88px;
+    height: 124px;
+    top: 38%;
+    left: 8%;
+    animation: float6 24s ease-in-out infinite 3.2s;
+}
+
+.float-19 {
+    width: 96px;
+    height: 136px;
+    top: 78%;
+    left: 86%;
+    animation: float1 22s ease-in-out infinite 1.2s;
+}
+
+.float-20 {
+    width: 85px;
+    height: 120px;
+    top: 22%;
+    left: 52%;
+    animation: float2 21s ease-in-out infinite 2.8s;
+}
+
+.float-21 {
+    width: 92px;
+    height: 130px;
+    top: 65%;
+    left: 31%;
+    animation: float3 23s ease-in-out infinite 0.9s;
+}
+
+/* Floating Animations */
+@keyframes float1 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(-3deg) scale(1);
+    }
+
+    25% {
+        transform: translate(20px, -30px) rotate(2deg) scale(1.05);
+    }
+
+    50% {
+        transform: translate(-15px, -20px) rotate(-2deg) scale(0.98);
+    }
+
+    75% {
+        transform: translate(10px, -35px) rotate(1deg) scale(1.02);
+    }
+}
+
+@keyframes float2 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(2deg) scale(1);
+    }
+
+    33% {
+        transform: translate(-25px, 25px) rotate(-3deg) scale(1.03);
+    }
+
+    66% {
+        transform: translate(15px, -15px) rotate(3deg) scale(0.97);
+    }
+}
+
+@keyframes float3 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(-2deg) scale(1);
+    }
+
+    30% {
+        transform: translate(-20px, 30px) rotate(3deg) scale(1.04);
+    }
+
+    60% {
+        transform: translate(25px, -25px) rotate(-3deg) scale(0.96);
+    }
+}
+
+@keyframes float4 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(3deg) scale(1);
+    }
+
+    40% {
+        transform: translate(30px, -20px) rotate(-2deg) scale(1.05);
+    }
+
+    80% {
+        transform: translate(-20px, 15px) rotate(2deg) scale(0.98);
+    }
+}
+
+@keyframes float5 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(-1deg) scale(1);
+    }
+
+    35% {
+        transform: translate(-15px, -25px) rotate(2deg) scale(1.02);
+    }
+
+    70% {
+        transform: translate(20px, 20px) rotate(-2deg) scale(0.99);
+    }
+}
+
+@keyframes float6 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(2deg) scale(1);
+    }
+
+    45% {
+        transform: translate(-30px, 15px) rotate(-3deg) scale(1.03);
+    }
+
+    90% {
+        transform: translate(15px, -20px) rotate(3deg) scale(0.97);
+    }
+}
+
+/* Text Overlay */
+.hero-text-overlay {
+    position: relative;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 3rem 2.5rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    animation: fadeInScale 1s ease-out 0.3s backwards;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.hero-text-overlay h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero-text-overlay p {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    opacity: 0.95;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.about-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+    background: linear-gradient(to bottom, #FAFAF7 0%, #fff 100%);
+}
+
+/* Split Card Section - Intro + Photographer */
+.intro-photographer-card {
+    display: flex;
+    gap: 0;
+    margin-bottom: 5rem;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    min-height: 500px;
+}
+
+.card-content-left {
+    flex: 0.75;
+    /* Even narrower - 35% width */
+    background: linear-gradient(135deg, #B77A8C 0%, #D6A9B4 100%);
+    /* Mauve Pink gradient */
+    padding: 2rem 1.75rem;
+    /* Tighter padding */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-content-left::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    animation: rotateGlow 15s linear infinite;
+}
+
+@keyframes rotateGlow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.card-image-right {
+    flex: 1.25;
+    /* Wider - 65% width */
+    position: relative;
+    overflow: hidden;
+}
+
+.card-image-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.intro-photographer-card:hover .card-image-right img {
+    transform: scale(1.05);
+}
+
+.intro-photographer-card .about-intro {
+    margin-bottom: 1.5rem;
+    /* Reduced spacing */
+    text-align: left;
+    position: relative;
+    z-index: 1;
+}
+
+.intro-photographer-card .lead-text {
+    color: white;
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    /* Smaller, more compact */
+    line-height: 1.65;
+    /* Tighter */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    margin-bottom: 0;
+}
+
+.photographer-section {
+    position: relative;
+    z-index: 1;
+}
+
+.photographer-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 2.2vw, 1.85rem);
+    /* More compact heading */
+    color: white;
+    margin-bottom: 0.85rem;
+    /* Tighter spacing */
+    font-weight: 600;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding-bottom: 0.6rem;
+}
+
+.photographer-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 45px;
+    /* Smaller accent */
+    height: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+}
+
+.photographer-section p {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+    /* Smaller, tighter text */
+    line-height: 1.65;
+    /* Compact line height */
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0;
+}
+
+/* Responsive for Split Card */
+@media (max-width: 768px) {
+    .intro-photographer-card {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .card-image-right {
+        min-height: 400px;
+    }
+
+    .card-content-left {
+        padding: 3rem 2rem;
+    }
+}
+
+.about-intro {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.lead-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.6;
+    color: #4A4A4A;
+    font-style: italic;
+    font-weight: 400;
+    margin: 0;
+}
+
+.about-section {
+    margin-bottom: 4rem;
+    position: relative;
+}
+
+.about-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    color: #8A9A95;
+    /* Sage Green */
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.about-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: #D6A9B4;
+    /* Dusty Rose */
+}
+
+.about-section p {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.1rem, 1.8vw, 1.25rem);
+    line-height: 1.9;
+    color: #4A4A4A;
+    margin-bottom: 1.5rem;
+}
+
+.mission-highlight {
+    background: linear-gradient(to right, rgba(214, 169, 180, 0.1), rgba(183, 193, 184, 0.1));
+    padding: 2rem;
+    border-left: 4px solid #D6A9B4;
+    border-radius: 0 12px 12px 0;
+    font-weight: 400;
+    font-style: italic;
+    margin-top: 2rem;
+}
+
+/* Signature Section */
+.signature-container {
+    margin-top: 6rem;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #F1EBDD;
+    /* Warm Cream */
+    border-radius: 30px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+.signature-container::before {
+    content: '"';
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    font-size: 6rem;
+    color: rgba(214, 169, 180, 0.2);
+    /* Faded Dusty Rose */
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+}
+
+.signature-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    line-height: 1.5;
+    color: #4A4A4A;
+    font-weight: 400;
+    font-style: italic;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+
+    /* Gradient Text Effect */
+    background: linear-gradient(to right, #8A9A95, #D6A9B4, #8A9A95);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: shimmer 8s linear infinite;
+}
+
+@keyframes shimmer {
+    to {
+        background-position: 200% center;
+    }
+}
+
+/* Tablet Landscape */
+@media (max-width: 1024px) {
+    .about-content {
+        max-width: 800px;
+        padding: 5rem 2rem;
+    }
+
+    .about-section h2 {
+        font-size: clamp(1.85rem, 3vw, 2.4rem);
+    }
+
+    .about-section p {
+        font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+    .about-hero {
+        padding: 4rem 1.5rem;
+    }
+
+    .about-content {
+        padding: 4rem 1.5rem;
+    }
+
+    .about-intro {
+        margin-bottom: 3.5rem;
+    }
+
+    .about-section {
+        margin-bottom: 3rem;
+    }
+
+    .signature-container {
+        padding: 3rem 1.5rem;
+        margin-top: 4rem;
+    }
+
+    .signature-container::before {
+        font-size: 4rem;
+        top: 0.5rem;
+        left: 1rem;
+    }
+}
+
+/* Mobile Landscape */
+@media (max-width: 640px) {
+    .about-hero {
+        padding: 3rem 1rem;
+    }
+
+    .about-content {
+        padding: 3rem 1rem;
+    }
+
+    .about-section {
+        margin-bottom: 2.5rem;
+    }
+
+    .signature-container {
+        padding: 2.5rem 1.5rem;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+    .about-hero {
+        padding: 2.5rem 1rem;
+    }
+
+    .about-hero h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .about-hero p {
+        font-size: 1rem;
+    }
+
+    .about-content {
+        padding: 2.5rem 1rem;
+    }
+
+    .about-intro {
+        margin-bottom: 3rem;
+    }
+
+    .lead-text {
+        font-size: 1.3rem;
+    }
+
+    .about-section {
+        margin-bottom: 2rem;
+    }
+
+    .about-section h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .about-section p {
+        font-size: 1rem;
+        line-height: 1.75;
+    }
+
+    .mission-highlight {
+        padding: 1.5rem;
+    }
+
+    .signature-container {
+        margin-top: 3rem;
+        padding: 2rem 1rem;
+        border-radius: 20px;
+    }
+
+    .signature-container::before {
+        font-size: 3rem;
+    }
+
+    .signature-text {
+        font-size: 1.5rem;
+    }
+}

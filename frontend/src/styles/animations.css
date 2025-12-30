@@ -1,0 +1,165 @@
+/* Animation Variables */
+:root {
+    /* Timing Functions */
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Durations */
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slide Up Animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide In From Left */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide In From Right */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Scale Up Animation */
+@keyframes scaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Spin Animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Utility Classes */
+.animate-fade-in {
+    animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-up {
+    animation: slideUp var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-right {
+    animation: slideInRight var(--duration-normal) var(--ease-out);
+}
+
+.animate-scale-up {
+    animation: scaleUp var(--duration-normal) var(--ease-out);
+}
+
+.animate-pulse {
+    animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+.animate-bounce {
+    animation: bounce 1s var(--ease-in-out) infinite;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Transition Utilities */
+.transition-all {
+    transition: all var(--duration-normal) var(--ease-in-out);
+}
+
+.transition-colors {
+    transition: color var(--duration-normal) var(--ease-in-out),
+        background-color var(--duration-normal) var(--ease-in-out),
+        border-color var(--duration-normal) var(--ease-in-out);
+}
+
+.transition-transform {
+    transition: transform var(--duration-normal) var(--ease-in-out);
+}
+
+.transition-opacity {
+    transition: opacity var(--duration-normal) var(--ease-in-out);
+}

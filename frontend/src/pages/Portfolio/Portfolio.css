@@ -1,0 +1,129 @@
+/* Portfolio Page Styles */
+.portfolio-page {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.portfolio-header {
+    background: linear-gradient(135deg, hsl(340, 80%, 60%) 0%, hsl(280, 70%, 50%) 100%);
+    color: white;
+    padding: 4rem 2rem;
+}
+
+.portfolio-categories {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Portfolio Category Pages */
+.portfolio-category-page {
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.gallery-placeholder {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    color: hsl(0, 0%, 50%);
+}
+
+/* Tablet Landscape */
+@media (max-width: 1024px) {
+    .categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.75rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+
+    .portfolio-header,
+    .portfolio-categories,
+    .portfolio-category-page {
+        padding: 3rem 1.5rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.25rem;
+        margin-top: 2.5rem;
+    }
+}
+
+/* Mobile Landscape */
+@media (max-width: 640px) {
+
+    .portfolio-header,
+    .portfolio-categories,
+    .portfolio-category-page {
+        padding: 2.5rem 1rem;
+    }
+
+    .categories-grid,
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .gallery-grid {
+        margin-top: 2rem;
+    }
+
+    .gallery-placeholder {
+        padding: 2rem;
+        font-size: 1.1rem;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+
+    .portfolio-header,
+    .portfolio-categories,
+    .portfolio-category-page {
+        padding: 2rem 1rem;
+    }
+
+    .categories-grid,
+    .gallery-grid {
+        gap: 1rem;
+    }
+
+    .gallery-grid {
+        margin-top: 1.75rem;
+    }
+
+    .gallery-placeholder {
+        padding: 1.5rem;
+        font-size: 1rem;
+    }
+}
