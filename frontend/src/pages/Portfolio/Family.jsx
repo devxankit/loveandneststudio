@@ -11,6 +11,7 @@ import portraitImg2 from '../../assets/images/portfolio/family/Screenshot 2025-1
 import storyImg from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120820.png';
 import detailImg1 from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120831.png';
 import detailImg2 from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120844.png';
+import lineArtImg from '../../assets/images/portfolio/family/line art/Screenshot_2025-12-31_145813-removebg-preview.png';
 
 const Family = () => {
     return (
@@ -21,60 +22,83 @@ const Family = () => {
                 keywords="family photography, luxury family portraits, dehradun photographer"
             />
 
-            <div className="w-full bg-white font-outfit text-[#4A4A4A]">
+            {/* --- FIXED BACKGROUND IMAGE (Watermark style) --- */}
+            <div className="fixed inset-0 w-full h-full -z-50 bg-[#FAF9F6]">
+                <img
+                    src={heroImg}
+                    alt="Background"
+                    className="w-full h-full object-cover opacity-[0.15] pointer-events-none saturate-0"
+                />
+            </div>
 
-                {/* 1. HERO SECTION */}
-                <section className="relative h-[100vh] w-full overflow-hidden">
+            {/* Ambient Background Glows */}
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-orange-100/30 rounded-full blur-[100px] opacity-60" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-rose-100/20 rounded-full blur-[120px] opacity-60" />
+            </div>
+
+            {/* Premium Grain Overlay */}
+            <div className="fixed inset-0 pointer-events-none z-[1] opacity-[0.04] mix-blend-multiply"
+                style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
+            </div>
+
+            <div className="w-full font-outfit text-[#4A4A4A] relative z-10 pt-40 md:pt-48">
+
+                {/* 1. REPURPOSED HEADER (Transparent) */}
+                <section className="flex flex-col justify-center items-center text-center px-6 mb-32 md:mb-40">
                     <motion.div
-                        initial={{ scale: 1.15 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 2.5, ease: "easeOut" }}
-                        className="absolute inset-0"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1, ease: "easeOut" }}
                     >
-                        <LazyImage
-                            src={heroImg}
-                            alt="Family Hero"
-                            className="w-full h-full object-cover object-top opacity-90"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/20"></div>
+                        <span className="font-outfit text-xs md:text-sm tracking-[0.3em] uppercase mb-6 text-[#8F8A86] inline-block">
+                            13 Years of Experience • Love & Nest Studio
+                        </span>
                     </motion.div>
 
-                    <div className="relative z-10 h-full flex flex-col justify-center items-center text-center text-white px-6">
-                        <motion.span
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.5 }}
-                            className="font-outfit text-xs md:text-sm tracking-[0.3em] uppercase mb-6 opacity-80"
-                        >
-                            Est. 2019 • Love & Nest Studio
-                        </motion.span>
-                        <motion.h1
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1, delay: 0.2 }}
-                            className="font-display text-5xl md:text-7xl lg:text-[5.5rem] tracking-wide leading-[1.1] uppercase mb-6 font-medium drop-shadow-lg"
-                        >
-                            Our Journey <br /><span className="italic font-light normal-case tracking-normal opacity-90">Together</span>
-                        </motion.h1>
-                        <div className="w-[1px] h-16 bg-white/50 mb-8 mt-4"></div>
-                        <motion.a
-                            href="/contact"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.8, delay: 0.8 }}
-                            className="inline-block text-white border border-white/30 bg-white/10 backdrop-blur-md py-4 px-12 text-xs md:text-sm uppercase tracking-[3px] hover:bg-white hover:text-black transition-all duration-500"
-                        >
-                            Book A Session
-                        </motion.a>
+                    <div className="relative mb-8 mt-2">
+                        <div className="overflow-hidden">
+                            <motion.h1
+                                initial={{ y: "100%", rotate: 2 }}
+                                animate={{ y: 0, rotate: 0 }}
+                                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                                className="font-display text-5xl md:text-7xl lg:text-[6.5rem] tracking-tight leading-[0.9] uppercase font-medium text-[#1a1a1a]"
+                            >
+                                Preserving Your
+                            </motion.h1>
+                        </div>
+                        <div className="overflow-hidden">
+                            <motion.h1
+                                initial={{ y: "100%", rotate: -2 }}
+                                animate={{ y: 0, rotate: 0 }}
+                                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                                className="font-display text-5xl md:text-7xl lg:text-[6.5rem] tracking-tight leading-[1] uppercase font-light text-[#1a1a1a]"
+                            >
+                                <span className="italic normal-case opacity-70">Family Legacy</span>
+                            </motion.h1>
+                        </div>
                     </div>
+
+                    <motion.div
+                        initial={{ scaleY: 0 }}
+                        animate={{ scaleY: 1 }}
+                        transition={{ duration: 1, delay: 0.8, ease: "circOut" }}
+                        className="w-[1px] h-16 bg-gradient-to-b from-[#1a1a1a]/40 to-transparent mb-10 mx-auto origin-top"
+                    ></motion.div>
+                    <motion.a
+                        href="/contact"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.8 }}
+                        className="inline-block text-[#1a1a1a] border border-[#1a1a1a]/30 py-4 px-12 text-xs md:text-sm uppercase tracking-[3px] hover:bg-[#1a1a1a] hover:text-white transition-all duration-500"
+                    >
+                        Book A Session
+                    </motion.a>
                 </section>
 
                 {/* 2. GREETINGS / INTRO SECTION */}
-                <section className="py-28 md:py-40 px-8 md:px-16 max-w-[1500px] mx-auto bg-white relative">
-                    {/* Watermark Background */}
-                    <div className="absolute top-20 right-0 font-display text-[15rem] leading-none text-gray-50 opacity-[0.03] select-none pointer-events-none hidden lg:block overflow-hidden">
-                        Family
-                    </div>
+                <section className="py-20 md:py-32 px-8 md:px-16 max-w-[1500px] mx-auto">
+                    {/* Watermark Background (Optional - Keeping it subtle or removing if too much) -> Removed to keep clean fixed bg */}
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
                         <motion.div
@@ -84,11 +108,11 @@ const Family = () => {
                             transition={{ duration: 1 }}
                             className="relative lg:col-span-5"
                         >
-                            <div className="aspect-[4/5] overflow-hidden">
+                            <div className="aspect-[4/5] overflow-hidden shadow-xl rounded-sm">
                                 <LazyImage src={portraitImg1} alt="Portrait Intro" className="w-full h-full object-cover grayscale-[10%]" />
                             </div>
-                            {/* Refined Decorative Lines */}
-                            <div className="absolute -top-6 -left-6 w-full h-full border-[0.5px] border-[#2a2a2a] -z-10 hidden md:block"></div>
+                            {/* Decorative Lines */}
+                            <div className="absolute -top-6 -left-6 w-full h-full border-[0.5px] border-[#2a2a2a]/30 -z-10 hidden md:block"></div>
                         </motion.div>
 
                         <motion.div
@@ -111,10 +135,10 @@ const Family = () => {
                                 </p>
                             </div>
                             <div className="mt-16 flex items-center gap-6">
-                                <div className="h-[1px] w-20 bg-[#2a2a2a]"></div>
+                                <div className="h-[1px] w-20 bg-[#2a2a2a]/30"></div>
                                 <div>
                                     <p className="font-display text-lg italic text-[#1a1a1a]">Anamika</p>
-                                    <p className="font-outfit text-[10px] tracking-widest text-gray-400 uppercase mt-0.5">Lead Photographer</p>
+                                    <p className="font-outfit text-[10px] tracking-widest text-gray-500 uppercase mt-0.5">Lead Photographer</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -122,8 +146,8 @@ const Family = () => {
                 </section>
 
                 {/* 3. WIDE CINEMATIC BANNER */}
-                <section className="w-full relative py-12 px-4 md:px-8">
-                    <div className="w-full h-[50vh] md:h-[75vh] overflow-hidden relative">
+                <section className="w-full relative py-12 px-4 md:px-8 max-w-[1600px] mx-auto">
+                    <div className="w-full h-[50vh] md:h-[75vh] overflow-hidden relative shadow-2xl">
                         <div className="absolute inset-0 p-4 md:p-8 border border-white/20 z-10 pointer-events-none">
                             <div className="w-full h-full border border-white/40"></div>
                         </div>
@@ -143,14 +167,14 @@ const Family = () => {
                 </section>
 
                 {/* 4. SELECTED WORKS (Editorial Grid) */}
-                <section className="py-28 md:py-40 px-6 md:px-12 max-w-[1300px] mx-auto bg-white">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-gray-200 pb-10">
+                <section className="py-28 md:py-40 px-6 md:px-12 max-w-[1300px] mx-auto">
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-[#2a2a2a]/10 pb-10">
                         <div>
-                            <span className="font-outfit text-xs tracking-[3px] text-gray-400 uppercase mb-2 block">Portfolio</span>
+                            <span className="font-outfit text-xs tracking-[3px] text-gray-500 uppercase mb-2 block">Portfolio</span>
                             <h2 className="font-display text-4xl md:text-5xl text-[#1a1a1a]">Selected Stories</h2>
                         </div>
                         <div className="hidden md:block">
-                            <a href="/contact" className="font-outfit text-xs uppercase tracking-[2px] border rounded-full px-6 py-3 hover:bg-[#1a1a1a] hover:text-white transition-all">View All Archives</a>
+                            <a href="/contact" className="font-outfit text-xs uppercase tracking-[2px] border border-[#2a2a2a]/30 rounded-full px-6 py-3 hover:bg-[#1a1a1a] hover:text-white transition-all">View All Archives</a>
                         </div>
                     </div>
 
@@ -162,12 +186,12 @@ const Family = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8 }}
-                                className="w-full aspect-[4/5] overflow-hidden mb-8 relative"
+                                className="w-full aspect-[4/5] overflow-hidden mb-8 relative shadow-lg"
                             >
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500 z-10"></div>
                                 <LazyImage src={portraitImg2} alt="The Mehta Family" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" />
                             </motion.div>
-                            <span className="font-outfit text-[10px] tracking-[3px] text-gray-400 uppercase mb-2">01 — Outdoor</span>
+                            <span className="font-outfit text-[10px] tracking-[3px] text-gray-500 uppercase mb-2">01 — Outdoor</span>
                             <h3 className="font-display text-3xl text-[#1a1a1a] group-hover:italic transition-all duration-300">The Mehta Family</h3>
                         </div>
 
@@ -178,12 +202,12 @@ const Family = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
-                                className="w-full aspect-[4/5] overflow-hidden mb-8 relative"
+                                className="w-full aspect-[4/5] overflow-hidden mb-8 relative shadow-lg"
                             >
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500 z-10"></div>
                                 <LazyImage src={storyImg} alt="The Kapoor Family" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" />
                             </motion.div>
-                            <span className="font-outfit text-[10px] tracking-[3px] text-gray-400 uppercase mb-2">02 — Studio</span>
+                            <span className="font-outfit text-[10px] tracking-[3px] text-gray-500 uppercase mb-2">02 — Studio</span>
                             <h3 className="font-display text-3xl text-[#1a1a1a] group-hover:italic transition-all duration-300">The Kapoor Family</h3>
                         </div>
                     </div>
@@ -192,21 +216,103 @@ const Family = () => {
                 {/* 5. BOTTOM GRID / MOSAIC */}
                 <section className="pb-24 px-6 md:px-12 max-w-[1200px] mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div className="aspect-square overflow-hidden">
+                        <div className="aspect-square overflow-hidden shadow-md">
                             <LazyImage src={detailImg1} className="w-full h-full object-cover hover:opacity-90 transition-opacity" />
                         </div>
-                        <div className="aspect-square overflow-hidden bg-[#FAF7F2] flex items-center justify-center p-8 text-center">
+                        <div className="aspect-square overflow-hidden bg-white/50 backdrop-blur-sm border border-white/40 flex items-center justify-center p-8 text-center shadow-md">
                             <div>
                                 <h4 className="font-display text-2xl text-[#2a2a2a] mb-2">Ready to tell your story?</h4>
                                 <a href="/contact" className="text-xs font-outfit uppercase tracking-[2px] border-b border-[#2a2a2a] pb-1 hover:text-[#88B8AF] hover:border-[#88B8AF] transition-colors">Get in Touch</a>
                             </div>
                         </div>
-                        <div className="aspect-square overflow-hidden">
+                        <div className="aspect-square overflow-hidden shadow-md">
                             <LazyImage src={detailImg2} className="w-full h-full object-cover hover:opacity-90 transition-opacity" />
                         </div>
                     </div>
                 </section>
 
+                {/* 6. ANIMATED ARCH GRID */}
+                <section className="py-20 md:py-32 px-4 overflow-hidden relative">
+                    <div className="flex justify-center items-end gap-2 md:gap-6 max-w-[1400px] mx-auto h-[250px] md:h-[500px]">
+
+                        {/* 1. Left Outer (Small) */}
+                        <motion.div
+                            initial={{ x: -100, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                            viewport={{ once: true }}
+                            className="w-[12%] h-[45%] md:h-[50%] rounded-lg md:rounded-xl overflow-hidden shadow-lg relative z-0"
+                        >
+                            <LazyImage src={detailImg2} className="w-full h-full object-cover" />
+                        </motion.div>
+
+                        {/* 2. Left Inner (Medium) */}
+                        <motion.div
+                            initial={{ x: -100, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
+                            viewport={{ once: true }}
+                            className="w-[18%] h-[65%] md:h-[70%] rounded-lg md:rounded-xl overflow-hidden shadow-xl relative z-10"
+                        >
+                            <LazyImage src={portraitImg1} className="w-full h-full object-cover" />
+                        </motion.div>
+
+                        {/* 3. Center (Full Family - The Reference) */}
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            whileInView={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                            viewport={{ once: true }}
+                            className="w-[30%] md:w-[25%] h-full rounded-lg md:rounded-2xl overflow-visible shadow-2xl relative z-20"
+                        >
+                            {/* Line Art: IMPORTED PNG - Fitted Top */}
+                            <motion.div
+                                animate={{ y: [0, -5, 0] }}
+                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute bottom-[88%] left-1/2 -translate-x-1/2 w-[80%] md:w-[80%] z-20 pointer-events-none"
+                            >
+                                <LazyImage src={lineArtImg} className="w-full h-auto object-contain opacity-90 drop-shadow-sm" />
+                            </motion.div>
+
+                            <div className="w-full h-full overflow-hidden rounded-lg md:rounded-2xl">
+                                <LazyImage src={storyImg} className="w-full h-full object-cover" />
+                                {/* Overlay text */}
+                                <div className="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                    <span className="font-display text-white text-xl md:text-3xl tracking-widest mt-12">Family</span>
+                                </div>
+                            </div>
+                        </motion.div>
+                        {/* 4. Right Inner (Medium) */}
+                        <motion.div
+                            initial={{ x: 100, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
+                            viewport={{ once: true }}
+                            className="w-[18%] h-[65%] md:h-[70%] rounded-lg md:rounded-xl overflow-hidden shadow-xl relative z-10"
+                        >
+                            <LazyImage src={portraitImg2} className="w-full h-full object-cover" />
+                        </motion.div>
+
+                        {/* 5. Right Outer (Small) */}
+                        <motion.div
+                            initial={{ x: 100, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                            viewport={{ once: true }}
+                            className="w-[12%] h-[45%] md:h-[50%] rounded-lg md:rounded-xl overflow-hidden shadow-lg relative z-0"
+                        >
+                            <LazyImage src={detailImg1} className="w-full h-full object-cover" />
+                        </motion.div>
+
+                    </div>
+
+                    <div className="text-center mt-16 md:mt-24">
+                        <h4 className="font-display text-2xl md:text-4xl text-[#1a1a1a] mb-6">Ready to frame your memories?</h4>
+                        <a href="/contact" className="inline-block border-b border-[#1a1a1a] pb-1 text-sm md:text-base font-outfit uppercase tracking-widest hover:text-[#88B8AF] hover:border-[#88B8AF] transition-colors">
+                            Get in Touch
+                        </a>
+                    </div>
+                </section>
             </div>
         </>
     );
