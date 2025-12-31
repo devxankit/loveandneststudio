@@ -12,6 +12,7 @@ import Blog from '../pages/Blog/Blog';
 import BlogDetails from '../pages/Blog/BlogDetails';
 import Offers from '../pages/Offers/Offers';
 import Contact from '../pages/Contact/Contact';
+import Testimonials from '../pages/Testimonials/Testimonials';
 import NotFound from '../pages/NotFound';
 
 const AppRoutes = () => {
@@ -28,6 +29,7 @@ const AppRoutes = () => {
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogDetails />} />
             <Route path="/offers" element={<Offers />} />
+            <Route path="/testimonials" element={<Testimonials />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
         </Routes>

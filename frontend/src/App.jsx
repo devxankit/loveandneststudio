@@ -5,7 +5,7 @@ import Footer from './components/layout/Footer';
 import ScrollToTop from './components/layout/ScrollToTop';
 import WhatsAppButton from './components/common/WhatsAppButton';
 import AppRoutes from './routes/AppRoutes';
-import './styles/global.css';
+
 
 function App() {
   return (

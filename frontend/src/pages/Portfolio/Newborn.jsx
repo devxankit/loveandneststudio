@@ -10,10 +10,10 @@ const Newborn = () => {
                 description="Professional newborn photography capturing your baby's first precious moments with care and expertise."
                 keywords="newborn photography, baby photos, newborn photoshoot"
             />
-            <div className="portfolio-category-page">
+            <div className="py-20 px-8 max-w-[1200px] mx-auto text-center">
                 <SectionTitle title="Newborn Photography" subtitle="Precious first moments" />
-                <div className="gallery-grid">
-                    <p className="gallery-placeholder">Gallery coming soon...</p>
+                <div className="mt-20">
+                    <p className="text-xl text-gray-400 italic">Gallery coming soon...</p>
                 </div>
             </div>
         </>

@@ -10,10 +10,10 @@ const Baby = () => {
                 description="Adorable baby photography capturing growing milestones and precious moments of your little one."
                 keywords="baby photography, infant photos, baby photoshoot, milestone photos"
             />
-            <div className="portfolio-category-page">
+            <div className="py-20 px-8 max-w-[1200px] mx-auto text-center">
                 <SectionTitle title="Baby Photography" subtitle="Growing milestones" />
-                <div className="gallery-grid">
-                    <p className="gallery-placeholder">Gallery coming soon...</p>
+                <div className="mt-20">
+                    <p className="text-xl text-gray-400 italic">Gallery coming soon...</p>
                 </div>
             </div>
         </>

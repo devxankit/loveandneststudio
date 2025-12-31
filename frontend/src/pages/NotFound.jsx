@@ -10,52 +10,16 @@ const NotFound = () => {
         title="404 - Page Not Found"
         description="The page you're looking for doesn't exist."
       />
-      <div className="not-found-page">
-        <div className="not-found-content">
-          <h1>404</h1>
-          <h2>Page Not Found</h2>
-          <p>Sorry, the page you're looking for doesn't exist.</p>
-          <Link to="/">
-            <Button variant="primary" size="large">Go Home</Button>
+      <div className="min-h-[80vh] flex items-center justify-center p-8 bg-gray-50">
+        <div className="text-center max-w-[500px] w-full bg-white p-12 rounded-[40px] shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-white">
+          <h1 className="text-8xl md:text-9xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent mb-6">404</h1>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Page Not Found</h2>
+          <p className="text-gray-500 text-lg mb-10 leading-relaxed">Sorry, the page you're looking for seems to have wandered off into a different session.</p>
+          <Link to="/" className="inline-block">
+            <Button variant="primary" size="large" className="px-10 rounded-2xl">Go Home</Button>
           </Link>
         </div>
       </div>
-
-      <style>{`
-        .not-found-page {
-          min-height: 80vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 2rem;
-        }
-
-        .not-found-content {
-          text-align: center;
-        }
-
-        .not-found-content h1 {
-          font-size: 8rem;
-          font-weight: 700;
-          background: linear-gradient(135deg, hsl(340, 80%, 60%), hsl(280, 70%, 50%));
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          margin-bottom: 1rem;
-        }
-
-        .not-found-content h2 {
-          font-size: 2.5rem;
-          color: hsl(0, 0%, 30%);
-          margin-bottom: 1rem;
-        }
-
-        .not-found-content p {
-          font-size: 1.2rem;
-          color: hsl(0, 0%, 50%);
-          margin-bottom: 2rem;
-        }
-      `}</style>
     </>
   );
 };

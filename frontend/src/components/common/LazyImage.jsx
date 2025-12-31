@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './LazyImage.css';
-
 const LazyImage = ({
     src,
     alt,
@@ -25,7 +23,6 @@ const LazyImage = ({
                 observer = new IntersectionObserver(
                     entries => {
                         entries.forEach(entry => {
-                            // When image is in viewport, load the actual image
                             if (
                                 !didCancel &&
                                 (entry.intersectionRatio > 0 || entry.isIntersecting)
@@ -43,13 +40,11 @@ const LazyImage = ({
                 );
                 observer.observe(imageRef);
             } else {
-                // Fallback for browsers that don't support IntersectionObserver
                 setImageSrc(src);
             }
         }
         return () => {
             didCancel = true;
-            // on component unmount, disconnect the observer
             if (observer && observer.unobserve) {
                 observer.unobserve(imageRef);
             }
@@ -68,7 +63,12 @@ const LazyImage = ({
             ref={setImageRef}
             src={imageSrc}
             alt={alt}
-            className={`lazy-image ${className} ${isLoaded ? 'loaded' : 'loading'} ${isInView ? 'in-view' : ''}`}
+            className={`
+                transition-all duration-500 ease-in-out will-change-[opacity,filter]
+                ${isLoaded ? 'opacity-100 blur-0' : 'opacity-60 blur-lg'}
+                ${isInView ? 'animate-fadeIn' : ''}
+                block w-full h-auto ${className}
+            `}
             onLoad={handleImageLoad}
             style={style}
         />

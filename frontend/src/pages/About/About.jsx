@@ -1,7 +1,7 @@
 import React from 'react';
 import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
-import './About.css';
+
 
 // Import all about images
 import aboutImg1 from '../../assets/images/about/01-1.jpg';
@@ -34,26 +34,34 @@ import familyImg from '../../assets/images/hero/Screenshot 2025-12-30 141721.png
 
 const About = () => {
     const portfolioCategories = [
-        {
-            id: 1,
-            name: 'Newborn',
-            image: newbornImg
-        },
-        {
-            id: 2,
-            name: 'Maternity',
-            image: maternityImg
-        },
-        {
-            id: 3,
-            name: 'Baby',
-            image: babyImg
-        },
-        {
-            id: 4,
-            name: 'Family',
-            image: familyImg
-        }
+        { id: 1, name: 'Newborn', image: newbornImg },
+        { id: 2, name: 'Maternity', image: maternityImg },
+        { id: 3, name: 'Baby', image: babyImg },
+        { id: 4, name: 'Family', image: familyImg }
+    ];
+
+    const aboutImages = [
+        { src: aboutImg1, className: "w-[90px] h-[130px] top-[12%] left-[7%] animate-float1" },
+        { src: aboutImg2, className: "w-[85px] h-[120px] top-[68%] left-[23%] animate-float2 [animation-delay:1s]" },
+        { src: aboutImg3, className: "w-[95px] h-[135px] top-[28%] left-[82%] animate-float3 [animation-delay:2s]" },
+        { src: aboutImg4, className: "w-[80px] h-[115px] top-[75%] left-[51%] animate-float4 [animation-delay:0.5s]" },
+        { src: aboutImg5, className: "w-[100px] h-[140px] top-[18%] left-[38%] animate-float5 [animation-delay:1.5s]" },
+        { src: aboutImg6, className: "w-[90px] h-[125px] top-[55%] left-[89%] animate-float6 [animation-delay:2.5s]" },
+        { src: aboutImg7, className: "w-[85px] h-[120px] top-[8%] left-[63%] animate-float1 [animation-delay:3s]" },
+        { src: aboutImg8, className: "w-[95px] h-[130px] top-[42%] left-[14%] animate-float2 [animation-delay:1.8s]" },
+        { src: aboutImg9, className: "w-[88px] h-[125px] top-[82%] left-[70%] animate-float3 [animation-delay:2.2s]" },
+        { src: aboutImg10, className: "w-[92px] h-[132px] top-[35%] left-[48%] animate-float4 [animation-delay:0.8s]" },
+        { src: aboutImg11, className: "w-[85px] h-[118px] top-[15%] left-[91%] animate-float5 [animation-delay:1.2s]" },
+        { src: aboutImg12, className: "w-[98px] h-[138px] top-[62%] left-[6%] animate-float6 [animation-delay:2.8s]" },
+        { src: aboutImg13, className: "w-[90px] h-[128px] top-[48%] left-[76%] animate-float1 [animation-delay:3.5s]" },
+        { src: aboutImg14, className: "w-[95px] h-[135px] top-[25%] left-[19%] animate-float2 [animation-delay:1.5s]" },
+        { src: aboutImg15, className: "w-[87px] h-[122px] top-[71%] left-[43%] animate-float3 [animation-delay:2.5s]" },
+        { src: aboutImg16, className: "w-[93px] h-[130px] top-[9%] left-[29%] animate-float4 [animation-delay:0.7s]" },
+        { src: aboutImg17, className: "w-[90px] h-[127px] top-[58%] left-[62%] animate-float5 [animation-delay:1.8s]" },
+        { src: aboutImg18, className: "w-[88px] h-[124px] top-[38%] left-[8%] animate-float6 [animation-delay:3.2s]" },
+        { src: aboutImg19, className: "w-[96px] h-[136px] top-[78%] left-[86%] animate-float1 [animation-delay:1.2s]" },
+        { src: aboutImg20, className: "w-[85px] h-[120px] top-[22%] left-[52%] animate-float2 [animation-delay:2.8s]" },
+        { src: aboutImg21, className: "w-[92px] h-[130px] top-[65%] left-[31%] animate-float3 [animation-delay:0.9s]" }
     ];
 
     return (
@@ -63,157 +71,117 @@ const About = () => {
                 description="Meet Anamika, the founder of Love & Nest Studio, specializing in newborn, maternity, and family photography with grace and refinement."
                 keywords="about anamika, photography studio founder, newborn photographer, refined photography, family heirlooms"
             />
-            <div className="about-page">
-                <section className="about-hero">
-                    {/* Floating Animated Images - All 21 images */}
-                    <div className="hero-images-container">
-                        <div className="floating-image float-1">
-                            <LazyImage src={aboutImg1} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-2">
-                            <LazyImage src={aboutImg2} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-3">
-                            <LazyImage src={aboutImg3} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-4">
-                            <LazyImage src={aboutImg4} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-5">
-                            <LazyImage src={aboutImg5} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-6">
-                            <LazyImage src={aboutImg6} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-7">
-                            <LazyImage src={aboutImg7} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-8">
-                            <LazyImage src={aboutImg8} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-9">
-                            <LazyImage src={aboutImg9} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-10">
-                            <LazyImage src={aboutImg10} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-11">
-                            <LazyImage src={aboutImg11} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-12">
-                            <LazyImage src={aboutImg12} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-13">
-                            <LazyImage src={aboutImg13} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-14">
-                            <LazyImage src={aboutImg14} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-15">
-                            <LazyImage src={aboutImg15} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-16">
-                            <LazyImage src={aboutImg16} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-17">
-                            <LazyImage src={aboutImg17} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-18">
-                            <LazyImage src={aboutImg18} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-19">
-                            <LazyImage src={aboutImg19} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-20">
-                            <LazyImage src={aboutImg20} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
-                        <div className="floating-image float-21">
-                            <LazyImage src={aboutImg21} alt="Photography" threshold={0.1} rootMargin="100px" />
-                        </div>
+            <div className="w-full">
+                <section className="bg-gradient-to-br from-[#D6A9B4] to-[#B7C1B8] text-white text-center py-10 px-8 relative overflow-hidden min-h-[35vh] flex items-center justify-center">
+                    {/* Floating Animated Images */}
+                    <div className="absolute inset-0 z-0 opacity-30 select-none pointer-events-none">
+                        {aboutImages.map((img, index) => (
+                            <div key={index} className={`absolute rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.15)] will-change-transform transition-all duration-600 cursor-pointer hover:opacity-100 hover:brightness-110 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] hover:scale-[1.03] hover:z-10 ${img.className}`}>
+                                <LazyImage src={img.src} alt="Photography" className="w-full h-full object-cover block" />
+                            </div>
+                        ))}
                     </div>
+
+
                 </section>
 
-                <section className="about-content">
-                    {/* Main Content Wrapper - Left content + Right categories */}
-                    <div className="about-main-wrapper">
-                        {/* Left Side - All About Content */}
-                        <div className="about-left-content">
-                            {/* All About Content in One Pink Card */}
-                            <div className="intro-photographer-card-text-only">
-                                {/* Intro Section */}
-                                <div className="about-intro">
-                                    <p className="lead-text">
+                <section className="max-w-full mx-auto px-4 py-24 bg-gradient-to-b from-[#FAFAF7] to-white">
+                    <div className="flex flex-col lg:flex-row gap-16 items-start px-2 md:px-4">
+                        {/* Left Side Content */}
+                        <div className="flex-1 w-full">
+                            <div className="bg-gradient-to-br from-[#B77A8C] to-[#D6A9B4] p-8 md:p-10 rounded-[30px] shadow-[0_15px_50px_rgba(0,0,0,0.1)] mb-20 relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_30%,rgba(255,255,255,0.4)_50%,transparent_70%)] animate-sheen skew-x-[-20deg] pointer-events-none z-0"></div>
+
+                                <div className="relative z-10 text-left mb-8">
+                                    <p className="text-white text-[clamp(1.1rem,2vw,1.3rem)] leading-relaxed italic drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
                                         Welcome to Love & Nest Studio, a photography studio dedicated to capturing life's most precious beginnings with grace and refinement.
                                     </p>
                                 </div>
 
-                                {/* Photographer Section */}
-                                <div className="photographer-section">
-                                    <h2>The Photographer</h2>
-                                    <p>
-                                        I'm Anamika, the founder and photographer behind Love & Nest, with over 13 years of professional experience and 8 years of specialized expertise in newborn and baby photography.
-                                    </p>
+                                <div className="relative z-10 space-y-10 text-white">
+                                    <div className="relative">
+                                        <h2 className="font-display text-[clamp(1.8rem,2.5vw,2.2rem)] font-semibold mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.1)] pb-3">The Photographer</h2>
+                                        <div className="absolute bottom-0 left-0 w-[60px] h-0.5 bg-white/80 rounded-full"></div>
+                                        <p className="font-outfit text-base md:text-lg leading-relaxed text-white/95">
+                                            I'm Anamika, the founder and photographer behind Love & Nest, with over 13 years of professional experience and 8 years of specialized expertise in newborn and baby photography.
+                                        </p>
+                                    </div>
+
+                                    <div className="relative">
+                                        <h2 className="font-display text-[clamp(1.8rem,2.5vw,2.2rem)] font-semibold mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.1)] pb-3">Philosophy</h2>
+                                        <div className="absolute bottom-0 left-0 w-[60px] h-0.5 bg-white/80 rounded-full"></div>
+                                        <p className="font-outfit text-base md:text-lg leading-relaxed text-white/95">
+                                            My work is inspired by the belief that true luxury lies in moments that are quiet, meaningful, and deeply personal—the gentle glow of motherhood, the first days of a newborn's life, and the intimate bonds shared within a family. These moments pass quickly, yet their significance lasts forever. My purpose is to preserve them with elegance, sensitivity, and timeless artistry.
+                                        </p>
+                                    </div>
+
+                                    <div className="relative">
+                                        <h2 className="font-display text-[clamp(1.8rem,2.5vw,2.2rem)] font-semibold mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.1)] pb-3">Our Approach</h2>
+                                        <div className="absolute bottom-0 left-0 w-[60px] h-0.5 bg-white/80 rounded-full"></div>
+                                        <p className="font-outfit text-base md:text-lg leading-relaxed text-white/95">
+                                            At Love & Nest, I offer maternity, newborn, baby, and family portraiture, thoughtfully crafted in a calm, refined environment. Newborn sessions are always baby-led and safety-focused, guided by years of experience, patience, and a deep understanding of infant comfort. Maternity and family sessions are approached with the same intentional care, allowing natural emotion, connection, and authenticity to unfold effortlessly.
+                                        </p>
+                                    </div>
+
+                                    <div className="relative">
+                                        <h2 className="font-display text-[clamp(1.8rem,2.5vw,2.2rem)] font-semibold mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.1)] pb-3">Style & Experience</h2>
+                                        <div className="absolute bottom-0 left-0 w-[60px] h-0.5 bg-white/80 rounded-full"></div>
+                                        <p className="font-outfit text-base md:text-lg leading-relaxed text-white/95 mb-4">
+                                            My photographic style is soft, refined, and enduring—designed to transcend trends and remain relevant across generations. Every detail of the experience, from lighting and styling to the overall flow of the session, is carefully curated to ensure families feel relaxed, valued, and impeccably cared for.
+                                        </p>
+                                        <div className="bg-white/15 backdrop-blur-md p-6 border-l-4 border-white/80 rounded-r-xl italic font-normal text-white mt-6">
+                                            Love & Nest Studio is more than a photography studio—it is a space where trust is honored, stories are preserved, and memories are transformed into heirlooms.
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* Philosophy Section */}
-                                <div className="content-section">
-                                    <h2>Philosophy</h2>
-                                    <p>
-                                        My work is inspired by the belief that true luxury lies in moments that are quiet, meaningful, and deeply personal—the gentle glow of motherhood, the first days of a newborn's life, and the intimate bonds shared within a family. These moments pass quickly, yet their significance lasts forever. My purpose is to preserve them with elegance, sensitivity, and timeless artistry.
-                                    </p>
-                                </div>
-
-                                {/* Our Approach Section */}
-                                <div className="content-section">
-                                    <h2>Our Approach</h2>
-                                    <p>
-                                        At Love & Nest, I offer maternity, newborn, baby, and family portraiture, thoughtfully crafted in a calm, refined environment. Newborn sessions are always baby-led and safety-focused, guided by years of experience, patience, and a deep understanding of infant comfort. Maternity and family sessions are approached with the same intentional care, allowing natural emotion, connection, and authenticity to unfold effortlessly.
-                                    </p>
-                                </div>
-
-                                {/* Style & Experience Section */}
-                                <div className="content-section">
-                                    <h2>Style & Experience</h2>
-                                    <p>
-                                        My photographic style is soft, refined, and enduring—designed to transcend trends and remain relevant across generations. Every detail of the experience, from lighting and styling to the overall flow of the session, is carefully curated to ensure families feel relaxed, valued, and impeccably cared for.
-                                    </p>
-                                    <p className="mission-highlight-white">
-                                        Love & Nest Studio is more than a photography studio—it is a space where trust is honored, stories are preserved, and memories are transformed into heirlooms.
-                                    </p>
-                                </div>
-
-                                {/* Signature Section */}
-                                <div className="signature-section-white">
-                                    <p className="signature-text-white">
+                                <div className="mt-12 text-center p-8 bg-white/10 backdrop-blur-md rounded-2xl relative z-10 shadow-inner">
+                                    <div className="absolute top-2 left-4 text-6xl text-white/20 font-display">"</div>
+                                    <p className="font-display text-[clamp(1.4rem,2.5vw,1.8rem)] leading-tight text-white font-normal italic drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
                                         Timeless portraits of love, crafted with care, meant to be cherished for generations.
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Right Side - Portfolio Categories with Ribbon Style */}
-                        <div className="about-right-categories">
-                            <div className="categories-ribbon-container">
+                        {/* Right Side - Portfolio Categories */}
+                        <div className="lg:flex-[0_0_260px] w-full lg:sticky lg:top-24 flex lg:flex-col items-center">
+                            <div className="flex flex-col gap-12 w-full max-w-[320px] mx-auto">
                                 {portfolioCategories.map((category) => (
-                                    <div key={category.id} className="category-ribbon-item">
-                                        {/* Ribbon Banner - Outside the image */}
-                                        <div className="ribbon-banner-outside">
-                                            <div className="ribbon-dots-left"></div>
-                                            <span className="ribbon-text">{category.name}</span>
-                                            <div className="ribbon-dots-right"></div>
+                                    <div key={category.id} className="relative w-full group">
+                                        {/* Ribbon Banner */}
+                                        <div className="relative bg-gradient-to-br from-[#D6A9B4] to-[#C89AA8] py-3 px-8 text-center -mb-px z-10 shadow-[0_4px_12px_rgba(214,169,180,0.3)] flex items-center justify-center gap-4 transition-all duration-300 group-hover:translate-y-[-2px] group-hover:shadow-[0_6px_18px_rgba(214,169,180,0.5)]">
+                                            <div className="flex gap-1">
+                                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)]"></div>
+                                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)]"></div>
+                                            </div>
+                                            <span className="font-display text-[1.1rem] font-semibold text-white uppercase tracking-[2.5px] drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+                                                {category.name}
+                                            </span>
+                                            <div className="flex gap-1">
+                                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)]"></div>
+                                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)]"></div>
+                                            </div>
                                         </div>
                                         {/* Image Frame */}
-                                        <div className="category-image-frame">
+                                        <div className="bg-white p-3 rounded-[20px] shadow-[0_8px_30px_rgba(0,0,0,0.15)] relative z-0 overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[linear-gradient(120deg,transparent_30%,rgba(255,255,255,0.6)_50%,transparent_70%)] after:skew-x-[-20deg] after:-left-[150%] after:pointer-events-none group-hover:after:animate-[sheen-hover_1.5s_cubic-bezier(0.4,0,0.2,1)_forwards]">
                                             <LazyImage
                                                 src={category.image}
                                                 alt={category.name}
-                                                threshold={0.1}
+                                                className="w-full h-[200px] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
                                             />
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
+                    </div>
+
+                    <div className="mt-32 mb-12 flex flex-col items-center gap-6 text-center select-none">
+                        <span className="font-display text-[clamp(3rem,7vw,5rem)] font-normal italic text-[#B77A8C] tracking-wide opacity-90 drop-shadow-[0_10px_30px_rgba(183,122,140,0.1)]">
+                            Thank You
+                        </span>
+                        <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B77A8C] to-transparent opacity-50"></div>
                     </div>
                 </section>
             </div>

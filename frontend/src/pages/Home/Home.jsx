@@ -4,8 +4,6 @@ import Hero from './Hero';
 import FeaturedPortfolio from './FeaturedPortfolio';
 import Testimonials from './Testimonials';
 import ContactCTA from '../../components/common/ContactCTA';
-import './Home.css';
-
 const Home = () => {
     return (
         <>
@@ -14,7 +12,7 @@ const Home = () => {
                 description="Professional newborn, maternity, baby, and family photography services. Capturing your precious moments beautifully."
                 keywords="photography studio, newborn photography, maternity photography, family photographer"
             />
-            <div className="home-page">
+            <div className="w-full">
                 <Hero />
                 <FeaturedPortfolio />
                 <Testimonials />
