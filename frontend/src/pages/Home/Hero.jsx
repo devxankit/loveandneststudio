@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import useCarousel from '../../hooks/useCarousel';
 import Button from '../../components/common/Button';
 import LazyImage from '../../components/common/LazyImage';
 
@@ -15,15 +16,7 @@ import img7 from '../../assets/images/hero/Screenshot 2025-12-30 141842.png';
 const heroImages = [img1, img2, img3, img4, img5, img6, img7];
 
 const Hero = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
-
-    useEffect(() => {
-        const slideInterval = setInterval(() => {
-            setCurrentSlide((prev) => (prev === heroImages.length - 1 ? 0 : prev + 1));
-        }, 4000); // Change image every 4 seconds
-
-        return () => clearInterval(slideInterval);
-    }, []);
+    const { currentIndex: currentSlide } = useCarousel(heroImages.length, true, 4000);
 
     return (
         <section className="w-full h-screen min-h-[600px] relative overflow-hidden flex items-center justify-center">

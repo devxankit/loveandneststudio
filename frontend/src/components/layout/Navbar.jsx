@@ -117,7 +117,7 @@ const Navbar = () => {
                                     exit={{ opacity: 0, scaleY: 0.8, y: -5 }}
                                     transition={{ duration: 0.2, ease: "easeOut" }}
                                     style={{ transformOrigin: "top center" }}
-                                    className="hidden md:block absolute top-[100%] left-1/2 -translate-x-1/2 w-[240px] bg-white shadow-lg rounded-b-xl border-t-2 border-primary pt-2 pb-2 z-50"
+                                    className="hidden md:block absolute top-[100%] left-1/2 -translate-x-1/2 min-w-full w-auto bg-white shadow-lg rounded-b-xl border-t-2 border-primary pt-2 pb-2 z-50"
                                 >
                                     {/* Invisible bridge to prevent mouse gap issues */}
                                     <div className="absolute top-[-10px] left-0 w-full h-[10px] bg-transparent" />
@@ -137,7 +137,7 @@ const Navbar = () => {
                                             >
                                                 <NavLink
                                                     to={item.path}
-                                                    className="block px-6 py-3 text-gray-600 hover:text-white hover:bg-primary transition-all duration-200 text-sm font-medium flex items-center justify-between group/item"
+                                                    className="block px-6 py-3 text-gray-600 hover:text-white hover:bg-primary hover:shadow-[0_0_15px_theme('colors.primary')] hover:brightness-110 hover:tracking-wide transition-all duration-300 text-sm font-medium flex items-center justify-between group/item whitespace-nowrap"
                                                     onClick={() => setIsMenuOpen(false)}
                                                 >
                                                     {item.name}

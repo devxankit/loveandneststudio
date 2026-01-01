@@ -1,42 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useForm from '../../hooks/useForm';
 import Button from '../../components/common/Button';
 
 const ContactForm = () => {
-    const [formData, setFormData] = useState({
+    const submitContactForm = async (values) => {
+        // Simulation of API call
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, 1000);
+        });
+    };
+
+    const { values: formData, handleChange, handleSubmit, status } = useForm({
         name: '',
         email: '',
         phone: '',
         service: '',
         message: ''
-    });
-
-    const [status, setStatus] = useState('');
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setStatus('sending');
-
-        // TODO: Implement actual form submission
-        setTimeout(() => {
-            setStatus('success');
-            setFormData({
-                name: '',
-                email: '',
-                phone: '',
-                service: '',
-                message: ''
-            });
-
-            setTimeout(() => setStatus(''), 3000);
-        }, 1000);
-    };
+    }, submitContactForm);
 
     return (
         <form className="max-w-[600px] mx-auto bg-white p-10 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100" onSubmit={handleSubmit}>

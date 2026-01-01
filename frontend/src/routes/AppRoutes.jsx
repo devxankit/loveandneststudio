@@ -1,38 +1,45 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from '../pages/Home/Home';
-import About from '../pages/About/About';
-import Portfolio from '../pages/Portfolio/Portfolio';
-import Newborn from '../pages/Portfolio/Newborn';
-import Maternity from '../pages/Portfolio/Maternity';
-import Baby from '../pages/Portfolio/Baby';
-import Family from '../pages/Portfolio/Family';
-import Services from '../pages/Services/Services';
-import Blog from '../pages/Blog/Blog';
-import BlogDetails from '../pages/Blog/BlogDetails';
-import Offers from '../pages/Offers/Offers';
-import Contact from '../pages/Contact/Contact';
-import Testimonials from '../pages/Testimonials/Testimonials';
-import NotFound from '../pages/NotFound';
+
+// Lazy load pages
+const Home = lazy(() => import('../pages/Home/Home'));
+const About = lazy(() => import('../pages/About/About'));
+const Portfolio = lazy(() => import('../pages/Portfolio/Portfolio'));
+const Newborn = lazy(() => import('../pages/Portfolio/Newborn'));
+const Maternity = lazy(() => import('../pages/Portfolio/Maternity'));
+const Baby = lazy(() => import('../pages/Portfolio/Baby'));
+const Family = lazy(() => import('../pages/Portfolio/Family'));
+const Services = lazy(() => import('../pages/Services/Services'));
+const Blog = lazy(() => import('../pages/Blog/Blog'));
+const BlogDetails = lazy(() => import('../pages/Blog/BlogDetails'));
+const Offers = lazy(() => import('../pages/Offers/Offers'));
+const Contact = lazy(() => import('../pages/Contact/Contact'));
+const Testimonials = lazy(() => import('../pages/Testimonials/Testimonials'));
+const NotFound = lazy(() => import('../pages/NotFound'));
+
+// Loading Component
+import PageLoader from '../components/common/PageLoader';
 
 const AppRoutes = () => {
     return (
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/portfolio/newborn" element={<Newborn />} />
-            <Route path="/portfolio/maternity" element={<Maternity />} />
-            <Route path="/portfolio/baby" element={<Baby />} />
-            <Route path="/portfolio/family" element={<Family />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<BlogDetails />} />
-            <Route path="/offers" element={<Offers />} />
-            <Route path="/testimonials" element={<Testimonials />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/portfolio" element={<Portfolio />} />
+                <Route path="/portfolio/newborn" element={<Newborn />} />
+                <Route path="/portfolio/maternity" element={<Maternity />} />
+                <Route path="/portfolio/baby" element={<Baby />} />
+                <Route path="/portfolio/family" element={<Family />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogDetails />} />
+                <Route path="/offers" element={<Offers />} />
+                <Route path="/testimonials" element={<Testimonials />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </Suspense>
     );
 };
 

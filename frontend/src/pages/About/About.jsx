@@ -145,30 +145,30 @@ const About = () => {
                         </div>
 
                         {/* Right Side - Portfolio Categories */}
-                        <div className="lg:flex-[0_0_260px] w-full lg:sticky lg:top-24 flex lg:flex-col items-center">
-                            <div className="flex flex-col gap-12 w-full max-w-[320px] mx-auto">
+                        <div className="lg:flex-[0_0_220px] w-full lg:sticky lg:top-24 flex lg:flex-col items-center">
+                            <div className="flex flex-col gap-4 w-full max-w-[220px] mx-auto">
                                 {portfolioCategories.map((category) => (
                                     <div key={category.id} className="relative w-full group">
                                         {/* Ribbon Banner */}
-                                        <div className="relative bg-gradient-to-br from-[#D6A9B4] to-[#C89AA8] py-3 px-8 text-center -mb-px z-10 shadow-[0_4px_12px_rgba(214,169,180,0.3)] flex items-center justify-center gap-4 transition-all duration-300 group-hover:translate-y-[-2px] group-hover:shadow-[0_6px_18px_rgba(214,169,180,0.5)]">
-                                            <div className="flex gap-1">
-                                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)]"></div>
-                                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)]"></div>
+                                        <div className="relative bg-gradient-to-br from-[#D6A9B4] to-[#C89AA8] py-1.5 px-4 text-center -mb-px z-10 shadow-[0_2px_8px_rgba(214,169,180,0.3)] flex items-center justify-center gap-3 transition-all duration-300 group-hover:translate-y-[-2px] group-hover:shadow-[0_4px_12px_rgba(214,169,180,0.5)]">
+                                            <div className="flex gap-0.5">
+                                                <div className="w-1 h-1 bg-white/60 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.2)]"></div>
+                                                <div className="w-1 h-1 bg-white/60 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.2)]"></div>
                                             </div>
-                                            <span className="font-display text-[1.1rem] font-semibold text-white uppercase tracking-[2.5px] drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+                                            <span className="font-display text-[0.9rem] font-semibold text-white uppercase tracking-[1.5px] drop-shadow-[0_1px_3px_rgba(0,0,0,0.2)]">
                                                 {category.name}
                                             </span>
-                                            <div className="flex gap-1">
-                                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)]"></div>
-                                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)]"></div>
+                                            <div className="flex gap-0.5">
+                                                <div className="w-1 h-1 bg-white/60 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.2)]"></div>
+                                                <div className="w-1 h-1 bg-white/60 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.2)]"></div>
                                             </div>
                                         </div>
                                         {/* Image Frame */}
-                                        <div className="bg-white p-3 rounded-[20px] shadow-[0_8px_30px_rgba(0,0,0,0.15)] relative z-0 overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[linear-gradient(120deg,transparent_30%,rgba(255,255,255,0.6)_50%,transparent_70%)] after:skew-x-[-20deg] after:-left-[150%] after:pointer-events-none group-hover:after:animate-[sheen-hover_1.5s_cubic-bezier(0.4,0,0.2,1)_forwards]">
+                                        <div className="bg-white p-2 rounded-[15px] shadow-[0_5px_20px_rgba(0,0,0,0.1)] relative z-0 overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[linear-gradient(120deg,transparent_30%,rgba(255,255,255,0.6)_50%,transparent_70%)] after:skew-x-[-20deg] after:-left-[150%] after:pointer-events-none group-hover:after:animate-[sheen-hover_1.5s_cubic-bezier(0.4,0,0.2,1)_forwards]">
                                             <LazyImage
                                                 src={category.image}
                                                 alt={category.name}
-                                                className="w-full h-[200px] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+                                                className="w-full aspect-[4/5] object-cover rounded-lg transition-transform duration-500 group-hover:scale-105"
                                             />
                                         </div>
                                     </div>
