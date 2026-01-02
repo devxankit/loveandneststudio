@@ -5,34 +5,130 @@ import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
 import WhatsAppIntroPopup from '../../components/popups/WhatsAppIntroPopup';
 
+// Global Styles for Premium Feel
+const GrainOverlay = () => (
+    <div className="fixed inset-0 pointer-events-none z-[9999] opacity-[0.03] animate-grain"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
+    </div>
+);
+
+const SpecimenTag = ({ text, className = "" }) => (
+    <div className={`absolute z-30 font-outfit text-[8px] uppercase tracking-[0.4em] bg-white/80 backdrop-blur-md px-3 py-1.5 border border-black/5 rounded-full shadow-sm text-black/40 ${className}`}>
+        {text}
+    </div>
+);
+
 // Images (Hero)
-import heroImg1 from '../../assets/images/hero/Screenshot 2025-12-30 141652.png';
-import heroImg2 from '../../assets/images/hero/Screenshot 2025-12-30 141700.png';
-import heroImg3 from '../../assets/images/hero/Screenshot 2025-12-30 141711.png';
-import heroImg4 from '../../assets/images/hero/Screenshot 2025-12-30 141721.png';
-import heroImg5 from '../../assets/images/hero/Screenshot 2025-12-30 141756.png'; // Added more for grid
-import heroImg6 from '../../assets/images/hero/Screenshot 2025-12-30 141833.png'; // Added more for grid
+import hero1 from '../../assets/images/hero/Screenshot 2025-12-30 141652.png';
+import hero2 from '../../assets/images/hero/Screenshot 2025-12-30 141700.png';
+import hero3 from '../../assets/images/hero/Screenshot 2025-12-30 141711.png';
+import hero4 from '../../assets/images/hero/Screenshot 2025-12-30 141721.png';
+import hero5 from '../../assets/images/hero/Screenshot 2025-12-30 141756.png';
+import hero6 from '../../assets/images/hero/Screenshot 2025-12-30 141833.png';
+import hero7 from '../../assets/images/hero/Screenshot 2025-12-30 141842.png';
+
+const HorizontalCollage = () => {
+    const images = [hero1, hero2, hero3, hero4, hero5, hero6, hero7];
+    const row1 = [...images, ...images, hero1, hero2];
+    const row2 = [hero3, hero4, hero5, hero6, hero7, hero1, hero2, hero3, hero4, hero5, hero6, hero7];
+
+    return (
+        <section className="relative pt-24 pb-48 bg-[#F1EBDD] overflow-hidden flex flex-col gap-6">
+            {/* Silk Texture Background Effect */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+
+            {/* Floating Editorial Text */}
+            <div className="absolute top-10 left-10 z-0 select-none">
+                <span className="font-display text-[18vw] leading-none opacity-[0.05] text-[#5A2A45] pointer-events-none font-bold italic uppercase tracking-tighter">Editorial</span>
+            </div>
+
+            {/* Strip 1 - Cinematic Frame Style */}
+            <div className="flex gap-4 overflow-hidden">
+                <motion.div
+                    animate={{ x: [0, -1500] }}
+                    transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                    className="flex gap-2 md:gap-4 shrink-0"
+                >
+                    {row1.map((img, i) => (
+                        <div key={i} className="group relative w-[180px] md:w-[260px] h-[120px] md:h-[160px] bg-white p-1 md:p-1.5 shadow-[0_10px_25px_rgba(0,0,0,0.06)] overflow-hidden transition-all duration-700">
+                            <LazyImage src={img} className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000" />
+                        </div>
+                    ))}
+                </motion.div>
+            </div>
+
+            {/* Strip 2 - Larger Format */}
+            <div className="flex gap-4 md:gap-8 overflow-hidden">
+                <motion.div
+                    animate={{ x: [-1500, 0] }}
+                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                    className="flex gap-4 md:gap-8 shrink-0 items-center"
+                >
+                    {row2.map((img, i) => (
+                        <div key={i} className="flex items-center gap-4 md:gap-8">
+                            <div className="w-[280px] md:w-[380px] h-[180px] md:h-[240px] bg-white p-1.5 md:p-2.5 shadow-[0_15px_45px_rgba(90,42,69,0.08)]">
+                                <LazyImage src={img} className="w-full h-full object-cover" />
+                            </div>
+                            {i % 3 === 0 && (
+                                <span className="font-display text-3xl md:text-5xl text-[#5A2A45]/5 italic select-none">Visual Poetry</span>
+                            )}
+                        </div>
+                    ))}
+                </motion.div>
+            </div>
+
+            {/* Aesthetic UI Elements (Unified Collection CTA) */}
+            <div className="absolute bottom-12 left-0 w-full flex justify-center z-30 pointer-events-none px-6">
+                <Link to="/portfolio" className="pointer-events-auto group">
+                    <motion.div
+                        whileHover={{ scale: 1.05, y: -4 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="px-12 py-5 bg-[#5A2A45] text-[#F1EBDD] rounded-full shadow-[0_25px_60px_-15px_rgba(90,42,69,0.4)] flex items-center gap-8 border border-white/5 overflow-hidden relative"
+                    >
+                        <span className="font-outfit text-[10px] md:text-[12px] font-bold uppercase tracking-[0.4em] relative z-10 transition-colors group-hover:text-white">Open The Archive</span>
+                        <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center transition-all duration-700 group-hover:bg-[#B77A8C] relative z-10">
+                            <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 text-white group-hover:rotate-45 transition-transform duration-500" stroke="currentColor" strokeWidth="2.5"><path d="M7 17l10-10M7 7h10v10" /></svg>
+                        </div>
+                        {/* Subtle Premium Shine */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+                    </motion.div>
+                </Link>
+            </div>
+
+            {/* Side Fade Gradients */}
+            <div className="absolute inset-y-0 left-0 w-60 bg-gradient-to-r from-[#F1EBDD] via-[#F1EBDD]/80 to-transparent z-10"></div>
+            <div className="absolute inset-y-0 right-0 w-60 bg-gradient-to-l from-[#F1EBDD] via-[#F1EBDD]/80 to-transparent z-10"></div>
+        </section>
+    );
+};
 
 // Other Section Images (Existing)
 import aboutImg from '../../assets/images/about/01-1.jpg';
 import babyImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153257.png';
 import familyImg from '../../assets/images/portfolio/family/Screenshot 2025-12-31 111323.png';
 
-// Reusable Sticky Card Component
+// Reusable Sticky Card Component (Ultra-Smooth Performance Version)
 const HomeSection = ({ children, className = "", index = 0, style = {}, isSticky = true }) => {
     return (
         <motion.div
-            className={`${isSticky ? 'sticky top-0' : 'relative'} h-screen w-full flex flex-col justify-center overflow-hidden border-t-[1px] border-white/20 shadow-2xl ${className}`}
+            className={`${isSticky ? 'sticky top-0' : 'relative'} h-screen w-full flex flex-col justify-center overflow-hidden border-none ${className}`}
             style={{
                 zIndex: index,
                 ...style
             }}
-            initial={isSticky ? { y: 100, opacity: 0 } : { opacity: 1 }} // Only animate entrance if sticky/stacking
-            whileInView={isSticky ? { y: 0, opacity: 1 } : { opacity: 1 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: false, amount: 0.1 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-            {children}
+            <motion.div
+                initial={{ scale: 1.05, filter: "blur(10px)" }}
+                whileInView={{ scale: 1, filter: "blur(0px)" }}
+                transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
+                className="w-full h-full flex items-center justify-center will-change-transform transform-gpu"
+            >
+                {children}
+            </motion.div>
         </motion.div>
     );
 };
@@ -48,21 +144,25 @@ const HeroImageSlider = ({ images }) => {
     }, [images.length]);
 
     return (
-        <div className="absolute inset-0 w-full h-full">
-            <AnimatePresence mode="wait">
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+            <AnimatePresence mode="sync">
                 <motion.div
                     key={currentIndex}
-                    initial={{ opacity: 0.8, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 1.15 }}
+                    animate={{ opacity: 1, scale: 1.05 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 1.5 }}
+                    transition={{
+                        duration: 2.5,
+                        ease: [0.4, 0, 0.2, 1]
+                    }}
                     className="absolute inset-0 w-full h-full"
                 >
-                    <div className="absolute inset-0 bg-black/20 z-10"></div>
+                    {/* Soft Vignette Overlay for Depth */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 z-10" />
                     <LazyImage
                         src={images[currentIndex]}
                         alt="Hero Slide"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover will-change-transform"
                     />
                 </motion.div>
             </AnimatePresence>
@@ -84,17 +184,30 @@ const Home = () => {
     const scrollRef = useRef(null);
     const [isAutoScrolling, setIsAutoScrolling] = React.useState(true);
 
-    // Automatic Smooth Scroll
+    // Refs for split-screen sections
+    const introRef = useRef(null);
+    const artistRef = useRef(null);
+    const philosophyRef = useRef(null);
+    const contactRef = useRef(null);
+    const [activeSection, setActiveSection] = useState("01");
+    const [lastScrollPos, setLastScrollPos] = useState(0);
+
+    const scrollToRef = (ref, id) => {
+        setIsAutoScrolling(false);
+        setActiveSection(id);
+        ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // Automatic Smooth Scroll (Optimized)
     React.useEffect(() => {
         let animationFrameId;
-        const speed = 0.5; // Adjust speed (smaller = slower)
+        const speed = 0.8; // Increased for 'fast and smooth' request
 
         const autoScroll = () => {
             if (isAutoScrolling) {
                 window.scrollBy(0, speed);
 
-                // Stop if reached bottom
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
                     setIsAutoScrolling(false);
                 } else {
                     animationFrameId = requestAnimationFrame(autoScroll);
@@ -106,7 +219,9 @@ const Home = () => {
             animationFrameId = requestAnimationFrame(autoScroll);
         }
 
-        return () => cancelAnimationFrame(animationFrameId);
+        return () => {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        };
     }, [isAutoScrolling]);
 
     // Cleanup and control handlers
@@ -127,6 +242,7 @@ const Home = () => {
             onWheel={stopScroll}
             onClick={stopScroll}
         >
+            <GrainOverlay />
             <SEO
                 title="Love & Nest Studio | Timeless Photography"
                 description="Capturing the beautiful in-between moments of motherhood, newborn, and family life."
@@ -134,71 +250,355 @@ const Home = () => {
             />
             <WhatsAppIntroPopup />
 
-            <div className="bg-[#1a1a1a] min-h-screen font-outfit text-[#FAF9F6]">
+            <div className="bg-[#F1EBDD] min-h-screen font-outfit text-[#6E5A52]">
 
-                {/* 01. NEW HERO SLIDER SECTION - Normal Scroll */}
-                <HomeSection index={10} className="bg-[#FAF9F6] text-[#1a1a1a] relative p-0 border-none" isSticky={false}>
-                    <HeroImageSlider images={[heroImg1, heroImg2, heroImg3, heroImg4]} />
+                {/* 01. HERO SLIDER SECTION (Refined Smoothness) */}
+                <HomeSection index={10} className="bg-[#F1EBDD] text-white relative p-0 border-none" isSticky={false}>
+                    <HeroImageSlider images={[hero1, hero2, hero3, hero4]} />
 
                     <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center text-white pointer-events-none">
                         <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.5, duration: 1 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 2.5 }}
+                            className="relative"
                         >
-                            <h1 className="font-display text-[12vw] lg:text-[10rem] leading-[0.8] mix-blend-overlay opacity-90">
-                                Love &<br />Nest
-                            </h1>
-                            <p className="mt-4 text-sm md:text-xl font-light tracking-[0.3em] uppercase opacity-80">
-                                Fine Art Photography
-                            </p>
+                            {/* Masked Title Layer Split Reveal (Smooth Version) */}
+                            <div className="overflow-hidden py-4 px-6 md:px-10">
+                                <motion.h1
+                                    initial={{ y: "110%", opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
+                                    className="font-display text-[18vw] md:text-[15vw] lg:text-[11rem] leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
+                                >
+                                    Love &
+                                </motion.h1>
+                            </div>
+                            <div className="overflow-hidden py-4 -mt-4 md:-mt-6 lg:-mt-10">
+                                <motion.h1
+                                    initial={{ y: "-110%", opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1], delay: 0.1 }}
+                                    className="font-display text-[18vw] md:text-[15vw] lg:text-[11rem] leading-[0.85] tracking-tighter italic font-light opacity-90 drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
+                                >
+                                    Nest
+                                </motion.h1>
+                            </div>
+
+                            <motion.div
+                                initial={{ width: 0, opacity: 0 }}
+                                animate={{ width: "100%", opacity: 1 }}
+                                transition={{ duration: 1.5, delay: 0.8, ease: "circOut" }}
+                                className="h-[2px] bg-white/60 mx-auto my-12"
+                            />
+
+                            <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 0.6, y: 0 }}
+                                transition={{ duration: 1, delay: 1.2 }}
+                                className="text-[10px] md:text-sm font-light tracking-[0.8em] uppercase"
+                            >
+                                Artistic Motherhood · Lifestyle Photography
+                            </motion.p>
                         </motion.div>
+
+                        {/* Floating Coordinates Style tag */}
+                        <div className="absolute top-[10%] right-[10%] opacity-20 hidden md:block">
+                            <span className="text-[10px] tracking-[0.5em] font-light">18.5204° N, 73.8567° E</span>
+                        </div>
                     </div>
 
                     <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 pointer-events-auto cursor-pointer" onClick={scrollToContent}>
                         <div className="flex flex-col items-center gap-2 text-white animate-bounce-slow">
-                            <span className="text-[10px] uppercase tracking-widest">Scroll</span>
-                            <div className="w-8 h-8 rounded-full border border-white flex items-center justify-center">
+                            <span className="text-[10px] uppercase tracking-widest opacity-50">Discovery</span>
+                            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm">
                                 ↓
                             </div>
                         </div>
                     </div>
                 </HomeSection>
 
-                {/* SPLIT SCREEN LAYOUT CONTAINER */}
-                <div className="flex flex-col lg:flex-row bg-[#1a1a1a] relative z-20">
+                {/* 02. ELENA-INSPIRED STANDALONE SECTIONS (Directly below Hero) */}
 
-                    {/* LEFT SIDE - STICKY CONTENT */}
-                    <div className="hidden lg:flex lg:w-1/2 h-screen sticky top-0 items-center justify-center p-20 border-r border-white/10 z-0 bg-[#F9F7F2]">
-                        <div className="text-center space-y-12">
+                {/* 02a. THE EXPERTISE SECTION */}
+                <section className="bg-[#5A2A45] text-[#F1EBDD] py-24 lg:py-40 border-none relative overflow-hidden">
+                    <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div className="relative group/exp">
+                            {/* Main Image with Cinematic Shutter Reveal */}
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                transition={{ duration: 1 }}
-                                className="space-y-4"
+                                initial={{ clipPath: 'polygon(0 0, 0 0, 0 100%, 0% 100%)', scale: 1.2, filter: 'blur(20px)' }}
+                                whileInView={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', scale: 1, filter: 'blur(0px)' }}
+                                transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+                                className="w-full aspect-[4/5] overflow-hidden shadow-2xl relative z-10"
                             >
-                                <span className="block text-xs font-bold uppercase tracking-[0.4em] text-[#B77A8C]">The Journey</span>
-                                <h2 className="font-display text-7xl text-[#5A2A45] leading-tight">
-                                    Curated<br />Moments
-                                </h2>
+                                <SpecimenTag text="Artist Choice // 01" className="top-8 left-8" />
+                                <LazyImage src={aboutImg} className="w-full h-full object-cover grayscale brightness-75 transition-all duration-1000 group-hover/exp:brightness-100 group-hover/exp:scale-105" />
+
+                                {/* Inner Ambient Glow */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-[#5A2A45]/40 to-transparent pointer-events-none"></div>
                             </motion.div>
 
-                            <div className="w-[1px] h-32 bg-[#6E5A52]/20 mx-auto"></div>
+                            {/* Secondary Image with 3D Depth Reveal */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -100, rotateY: -30, scale: 0.8 }}
+                                whileInView={{ opacity: 1, x: 0, rotateY: 0, scale: 1 }}
+                                transition={{ duration: 1.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                                className="absolute -bottom-10 -left-10 w-2/3 aspect-square overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] z-20 border-[15px] border-[#5A2A45] hidden md:block perspective-1000"
+                            >
+                                <motion.div
+                                    className="w-full h-full"
+                                    whileHover={{ scale: 1.1, rotate: 2 }}
+                                    transition={{ duration: 0.8 }}
+                                >
+                                    <LazyImage src={hero3} className="w-full h-full object-cover rounded-none" />
+                                </motion.div>
+                                {/* Glass Reflection Effect */}
+                                <div className="absolute inset-0 bg-white/5 pointer-events-none"></div>
+                            </motion.div>
 
-                            <div className="space-y-2 text-[#6E5A52] font-light text-sm tracking-widest uppercase">
-                                <p>01 — Introduction</p>
-                                <p>02 — The Artist</p>
-                                <p>03 — Philosophy</p>
-                                <p>04 — Contact</p>
+                            {/* Abstract Floating Ornament */}
+                            <motion.div
+                                animate={{ y: [0, -20, 0], opacity: [0.1, 0.3, 0.1] }}
+                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute -top-10 -right-10 w-32 h-32 border border-white/10 rounded-full z-0 pointer-events-none"
+                            />
+                        </div>
+                        <div className="space-y-10 lg:pl-12">
+                            <div className="space-y-4">
+                                <motion.span
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    className="block text-[10px] font-bold uppercase tracking-[0.5em] text-[#B77A8C]"
+                                >Our Mission</motion.span>
+                                <motion.h2
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="font-display text-5xl lg:text-8xl text-white leading-[0.9]"
+                                >
+                                    Creating <br /> <span className="italic font-light opacity-60 font-serif">A Legacy.</span>
+                                </motion.h2>
+                            </div>
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                                className="font-outfit text-[#E8CBB6] text-lg leading-relaxed max-w-md font-light opacity-80 border-l-[1px] border-white/20 pl-8"
+                            >
+                                We specialize in elevating your most precious memories into a visual narrative that stands out. Our approach blends technical precision with raw emotional depth.
+                            </motion.p>
+                            <div className="pt-6">
+                                <Link to="/contact" className="px-12 py-5 border border-white/20 text-white text-[11px] uppercase font-bold tracking-[0.3em] hover:bg-[#F1EBDD] hover:text-[#5A2A45] transition-all rounded-sm relative group overflow-hidden inline-block">
+                                    <span className="relative z-10">Inquire Now</span>
+                                    <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                                </Link>
                             </div>
                         </div>
                     </div>
+                </section>
 
-                    {/* RIGHT SIDE - SCROLLABLE SECTIONS */}
-                    <div className="w-full lg:w-1/2 z-10 relative bg-[#1a1a1a]">
+                {/* 02b. CHECKLIST SECTION */}
+                <section className="bg-[#B77A8C] text-white py-24 lg:py-40 border-none">
+                    <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                        <div className="lg:col-span-7 space-y-12">
+                            <h2 className="font-display text-4xl lg:text-6xl leading-tight">
+                                Your Experience <br />
+                                <span className="text-[#5A2A45] italic font-light">with us includes</span>
+                            </h2>
 
-                        {/* 02. HELLO AND WELCOME */}
-                        <HomeSection index={20} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-16 min-h-screen border-t border-white/10">
+                            <div className="space-y-8">
+                                {[
+                                    "Personalized Moodboarding & Directing",
+                                    "Professional On-Site Art Direction",
+                                    "Bespoke Retouching & Color Grading",
+                                    "High-End Physical Gallery Artifacts",
+                                    "Lifetime Access to Digital Archives"
+                                ].map((item, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                        className="flex items-center gap-6 group"
+                                    >
+                                        <div className="w-6 h-6 border border-[#5A2A45]/30 rounded-full flex items-center justify-center group-hover:border-[#5A2A45] transition-colors">
+                                            <div className="w-2 h-2 bg-[#5A2A45] rounded-full scale-0 group-hover:scale-100 transition-transform"></div>
+                                        </div>
+                                        <p className="text-[11px] font-medium text-white opacity-70 uppercase tracking-[0.3em] group-hover:text-white transition-opacity">
+                                            {item}
+                                        </p>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1.5 }}
+                            className="lg:col-span-5 h-[70vh] overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
+                        >
+                            <LazyImage src={hero6} className="w-full h-full object-cover" />
+                        </motion.div>
+                    </div>
+                </section>
+
+                {/* 02c. MODERN GALLERY UI */}
+                <section className="bg-[#E6D1CB] py-32 relative overflow-hidden">
+                    <div className="max-w-[1200px] mx-auto text-center mb-16 space-y-8 flex flex-col items-center">
+                        <div className="space-y-4">
+                            <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-[#5A2A45]">The Digital Lens</span>
+                            <h2 className="font-display text-5xl lg:text-8xl text-[#5A2A45] leading-none">Curated Gallery</h2>
+                        </div>
+
+                        <Link to="/portfolio" className="group px-6">
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                whileHover={{ scale: 1.05 }}
+                                className="px-6 md:px-10 py-4 md:py-5 bg-white/95 backdrop-blur-2xl border border-[#5A2A45]/10 rounded-full text-[#5A2A45] shadow-[0_20px_40px_-10px_rgba(90,42,69,0.1)] flex items-center gap-4 md:gap-6 transition-all duration-500 cursor-pointer"
+                            >
+                                <span className="font-display text-xl md:text-2xl tracking-wide">Explore Collection</span>
+                                <span className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-[#5A2A45] text-[#F1EBDD] flex items-center justify-center text-[6px] md:text-[7px] group-hover:rotate-[360deg] transition-transform duration-1000 italic font-bold shrink-0">NEST</span>
+                            </motion.div>
+                        </Link>
+                    </div>
+
+                    <div className="flex gap-4 overflow-hidden py-16 relative z-10 px-4">
+                        <motion.div
+                            animate={{ x: [0, -1200] }}
+                            transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+                            className="flex gap-3 md:gap-4 shrink-0"
+                        >
+                            {[hero1, hero2, hero3, hero4, hero5, hero6, hero7, hero1, hero2, hero3, hero4].map((img, i) => (
+                                <motion.div
+                                    key={i}
+                                    whileHover={{ scale: 1.05, rotate: 1, zIndex: 20 }}
+                                    className="relative w-[160px] md:w-[220px] h-[240px] md:h-[320px] rounded-2xl overflow-hidden border border-white/10 shadow-xl group transition-all duration-700 bg-black/5"
+                                >
+                                    <div className="absolute inset-0 bg-[#5A2A45]/10 group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none"></div>
+                                    <LazyImage
+                                        src={img}
+                                        className="w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 transition-all duration-1000 scale-110 group-hover:scale-100"
+                                    />
+                                    {/* Aesthetic Frame Label */}
+                                    <div className="absolute bottom-4 left-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                        <span className="text-[8px] uppercase tracking-[0.4em] text-white bg-[#5A2A45]/40 backdrop-blur-md px-2 py-1 rounded-sm">L+N // ARCHIVE</span>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    </div>
+
+                    {/* Lighting glows */}
+                    <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#B77A8C]/20 rounded-full blur-[150px]"></div>
+                    <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#E8CBB6]/20 rounded-full blur-[180px]"></div>
+                </section>
+
+
+                {/* 05. THE SPLIT SCREEN EXPERIENCE (Curated Moments) */}
+                <div className="flex flex-col lg:flex-row bg-[#F1EBDD] relative z-20">
+
+                    {/* LEFT SIDE - THE STICKY NAVIGATOR (Seamless Editorial Style) */}
+                    <div className="hidden lg:flex lg:w-1/2 h-screen sticky top-0 items-center justify-center p-20 z-0 bg-[#F1EBDD]">
+                        <div className="absolute top-0 left-0 w-full h-[15px] p-[2px]">
+                            <motion.div
+                                className="h-full bg-[#5A2A45]/10"
+                                style={{
+                                    scaleX: useScroll().scrollYProgress,
+                                    transformOrigin: "left"
+                                }}
+                            />
+                            <motion.div
+                                className="absolute top-[2px] left-0 h-[2px] bg-[#B77A8C]"
+                                style={{
+                                    scaleX: useScroll().scrollYProgress,
+                                    transformOrigin: "left"
+                                }}
+                            />
+                        </div>
+
+                        <div className="text-center space-y-24 relative">
+                            {/* Technical Stamps */}
+                            <div className="absolute top-[-40px] left-1/2 -translate-x-1/2 text-[8px] tracking-[0.4em] opacity-40 whitespace-nowrap">
+                                L+N // ARCHIVE PORTFOLIO 2025
+                            </div>
+
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 1.5 }}
+                                className="space-y-6"
+                            >
+                                <span className="block text-[10px] font-bold uppercase tracking-[0.6em] text-[#B77A8C]/60">The Portfolio</span>
+                                <h2 className="font-display text-[7vw] text-[#5A2A45] leading-[0.9] tracking-tighter">
+                                    Curated<br /> <span className="italic font-light font-serif opacity-30">Moments</span>
+                                </h2>
+                            </motion.div>
+
+                            <div className="relative py-10">
+                                <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[1px] h-full bg-[#6E5A52]/10"></div>
+                                <div className="space-y-12 relative z-10">
+                                    {[
+                                        { id: "01", label: "Introduction", ref: introRef },
+                                        { id: "02", label: "The Artist", ref: artistRef },
+                                        { id: "03", label: "Philosophy", ref: philosophyRef },
+                                        { id: "04", label: "Contact", ref: contactRef }
+                                    ].map((item, i) => (
+                                        <motion.div
+                                            key={i}
+                                            onClick={() => scrollToRef(item.ref, item.id)}
+                                            whileHover={{ x: 10 }}
+                                            className="flex items-center justify-center gap-6 cursor-pointer group"
+                                        >
+                                            <span className={`text-[9px] font-bold transition-opacity uppercase tracking-[0.3em] ${activeSection === item.id ? 'opacity-100 text-[#B77A8C]' : 'opacity-20'}`}>{item.id}</span>
+                                            <div className={`h-[1px] transition-all duration-500 ${activeSection === item.id ? 'w-20 bg-[#B77A8C]' : 'w-12 bg-[#6E5A52]/10 group-hover:bg-[#B77A8C] group-hover:w-20'}`}></div>
+                                            <span className={`text-[11px] font-bold uppercase tracking-[0.4em] transition-colors ${activeSection === item.id ? 'text-[#5A2A45]' : 'text-[#6E5A52] group-hover:text-[#5A2A45]'}`}>{item.label}</span>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <motion.div
+                                animate={{ y: [0, 10, 0] }}
+                                transition={{ duration: 3, repeat: Infinity }}
+                                className="text-[9px] uppercase tracking-[0.5em] text-[#6E5A52]/40"
+                            >
+                                Scroll to Explore
+                            </motion.div>
+                        </div>
+                    </div>
+
+                    {/* RIGHT SIDE - THE IMMERSIVE STORYTELLING */}
+                    <div className="w-full lg:w-1/2 z-10 relative bg-[#F9F7F2]">
+
+                        <div ref={introRef} onMouseEnter={() => setActiveSection("01")}>
+                            <HomeSection index={20} className="bg-[#F1EBDD] text-[#5A2A45] p-8 lg:p-24 min-h-screen border-none shadow-none" isSticky={true}>
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 1.15, y: 30 }}
+                                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                                    transition={{
+                                        duration: 1.8,
+                                        ease: [0.165, 0.84, 0.44, 1], // Custom Ease-Out Expo
+                                    }}
+                                    className="w-full h-full relative group perspective-1000"
+                                >
+                                    {/* The unique 'Floating Frame' */}
+                                    <div className="absolute -inset-4 border border-[#5A2A45]/5 z-0 transition-transform duration-1000 group-hover:scale-110"></div>
+                                    <div className="relative z-10 w-full h-full overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)]">
+                                        <LazyImage
+                                            src={hero1}
+                                            alt="Excellence"
+                                            className="w-full h-full object-cover grayscale transition-all duration-[2000ms] group-hover:scale-110 group-hover:grayscale-0"
+                                        />
+                                    </div>
+                                    {/* Abstract Accent */}
+                                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#B77A8C]/5 rounded-full blur-3xl group-hover:bg-[#B77A8C]/10 transition-colors duration-1000"></div>
+                                </motion.div>
+                            </HomeSection>
+                        </div>
+
+                        {/* 05b. HELLO AND WELCOME */}
+                        <HomeSection index={21} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-16 min-h-screen border-t border-black/5">
                             <div className="flex justify-between items-end mb-12 border-b border-black/10 pb-6">
                                 <h2 className="font-display text-4xl lg:text-5xl uppercase">Hello and <br /> Welcome</h2>
                                 <span className="text-4xl font-display opacity-30">0.1</span>
@@ -227,116 +627,122 @@ const Home = () => {
                         </HomeSection>
 
 
-                        {/* 03. ABOUT ME / ARTIST */}
-                        <HomeSection index={30} className="bg-[#C9D0C3] text-[#1a1a1a] p-6 lg:p-16 min-h-screen">
-                            <div className="flex justify-between items-end mb-12 border-b border-black/10 pb-6">
-                                <h2 className="font-display text-4xl lg:text-5xl uppercase text-[#1a1a1a]">The Artist</h2>
-                                <span className="text-4xl font-display opacity-30">0.2</span>
-                            </div>
+                        {/* 05c. THE ARTIST SECTION (Anchor for 02) */}
+                        <div ref={artistRef} onMouseEnter={() => setActiveSection("02")}>
+                            <HomeSection index={30} className="bg-[#C9D0C3] text-[#1a1a1a] p-6 lg:p-16 min-h-screen">
+                                <div className="flex justify-between items-end mb-12 border-b border-black/10 pb-6">
+                                    <h2 className="font-display text-4xl lg:text-5xl uppercase text-[#1a1a1a]">The Artist</h2>
+                                    <span className="text-4xl font-display opacity-30">0.2</span>
+                                </div>
 
-                            <div className="flex flex-col gap-8 h-full">
-                                <div className="h-[40vh] w-full overflow-hidden relative">
-                                    <LazyImage src={aboutImg} alt="Anamika" className="w-full h-full object-cover grayscale contrast-125" />
-                                    <div className="absolute bottom-0 left-0 bg-[#5A2A45] text-[#FAF9F6] px-4 py-2 text-[10px] uppercase tracking-widest">
-                                        Pune, MH
+                                <div className="flex flex-col gap-8 h-full">
+                                    <div className="h-[40vh] w-full overflow-hidden relative">
+                                        <LazyImage src={aboutImg} alt="Anamika" className="w-full h-full object-cover grayscale contrast-125" />
+                                        <div className="absolute bottom-0 left-0 bg-[#5A2A45] text-[#FAF9F6] px-4 py-2 text-[10px] uppercase tracking-widest">
+                                            Pune, MH
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <div>
+                                            <h4 className="text-xs font-bold uppercase tracking-widest mb-1 opacity-50">Lead Photographer</h4>
+                                            <p className="font-display text-2xl">Anamika</p>
+                                        </div>
+                                        <p className="text-sm leading-relaxed text-gray-600">
+                                            A photographer with a deep passion for capturing the authentic essence of life's journey.
+                                        </p>
+                                        <Link to="/about" className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                                            <span>Read Full Bio</span>
+                                            <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                        </Link>
                                     </div>
                                 </div>
+                            </HomeSection>
+                        </div>
 
-                                <div className="space-y-6">
-                                    <div>
-                                        <h4 className="text-xs font-bold uppercase tracking-widest mb-1 opacity-50">Lead Photographer</h4>
-                                        <p className="font-display text-2xl">Anamika</p>
+
+                        {/* 05d. PHILOSOPHY SECTION (Anchor for 03) */}
+                        <div ref={philosophyRef} onMouseEnter={() => setActiveSection("03")}>
+                            <HomeSection index={40} className="bg-[#E6D1CB] text-[#5A2A45] p-6 lg:p-16 min-h-screen">
+                                <div className="flex justify-between items-end mb-12 border-b border-[#5A2A45]/20 pb-6">
+                                    <h2 className="font-display text-4xl lg:text-5xl uppercase">Our <br /> Philosophy</h2>
+                                    <span className="text-4xl font-display opacity-30">0.3</span>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                                    <div className="space-y-6">
+                                        <h3 className="font-display text-3xl italic">"We preserve feelings."</h3>
+                                        <p className="text-[#6E5A52] leading-relaxed font-light">
+                                            We believe that every photograph should evoke emotion. It’s not just about how it looks, but how it feels when you look back at it years from now.
+                                        </p>
                                     </div>
-                                    <p className="text-sm leading-relaxed text-gray-600">
-                                        A photographer with a deep passion for capturing the authentic essence of life's journey.
-                                    </p>
-                                    <Link to="/about" className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
-                                        <span>Read Full Bio</span>
-                                        <span className="group-hover:translate-x-1 transition-transform">→</span>
-                                    </Link>
+                                    <div className="flex flex-col justify-end">
+                                        <ul className="space-y-4">
+                                            <li className="flex items-center gap-4 border-b border-[#5A2A45]/10 pb-2">
+                                                <span className="text-[#B77A8C]">01</span>
+                                                <span className="uppercase tracking-widest text-xs">Maternity Sessions</span>
+                                            </li>
+                                            <li className="flex items-center gap-4 border-b border-[#5A2A45]/10 pb-2">
+                                                <span className="text-[#B77A8C]">02</span>
+                                                <span className="uppercase tracking-widest text-xs">Newborn Art</span>
+                                            </li>
+                                            <li className="flex items-center gap-4 border-b border-[#5A2A45]/10 pb-2">
+                                                <span className="text-[#B77A8C]">03</span>
+                                                <span className="uppercase tracking-widest text-xs">Family Tales</span>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                        </HomeSection>
+                            </HomeSection>
+                        </div>
 
+                        {/* 06. CLOSING CONTACT SECTION (Anchor for 04) */}
+                        <div ref={contactRef} onMouseEnter={() => setActiveSection("04")}>
+                            <HomeSection index={50} className="bg-[#5A2A45] text-[#F1EBDD] p-6 lg:p-16 relative overflow-hidden min-h-screen flex flex-col justify-between">
+                                {/* Premium Background Effects */}
+                                <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+                                <div className="absolute top-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-[#B77A8C] rounded-full blur-[180px] opacity-20 pointer-events-none animate-pulse"></div>
+                                <div className="absolute bottom-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-[#E8CBB6] rounded-full blur-[150px] opacity-10 pointer-events-none"></div>
 
-                        {/* 04. PHILOSOPHY / SERVICES */}
-                        <HomeSection index={40} className="bg-[#E6D1CB] text-[#5A2A45] p-6 lg:p-16 min-h-screen">
-                            <div className="flex justify-between items-end mb-12 border-b border-[#5A2A45]/20 pb-6">
-                                <h2 className="font-display text-4xl lg:text-5xl uppercase">Our <br /> Philosophy</h2>
-                                <span className="text-4xl font-display opacity-30">0.3</span>
-                            </div>
+                                {/* Main CTA Content (Centered) */}
+                                <div className="flex-grow flex flex-col justify-center items-center text-center relative z-10 w-full mt-10 md:mt-0">
+                                    <motion.div
+                                        initial={{ scale: 0.9, opacity: 0 }}
+                                        whileInView={{ scale: 1, opacity: 1 }}
+                                        transition={{ duration: 0.8 }}
+                                        className="space-y-8"
+                                    >
+                                        <span className="inline-block px-4 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-xs font-outfit uppercase tracking-widest text-[#E8CBB6]">
+                                            Start Your Journey
+                                        </span>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                <div className="space-y-6">
-                                    <h3 className="font-display text-3xl italic">"We preserve feelings."</h3>
-                                    <p className="text-[#6E5A52] leading-relaxed font-light">
-                                        We believe that every photograph should evoke emotion. It’s not just about how it looks, but how it feels when you look back at it years from now.
-                                    </p>
+                                        <h2 className="font-display text-[18vw] md:text-[13vw] lg:text-[9rem] leading-[0.85] text-transparent bg-clip-text bg-gradient-to-br from-[#F1EBDD] to-[#B77A8C] drop-shadow-2xl">
+                                            Let's<br /> <span className="italic font-light">Create</span>
+                                        </h2>
+
+                                        <p className="max-w-md mx-auto text-base md:text-xl text-[#F1EBDD]/60 leading-relaxed font-outfit font-light tracking-wide">
+                                            Capturing the poetry of your life,<br /> one frame at a time.
+                                        </p>
+
+                                        <Link to="/contact">
+                                            <button className="group relative mt-8 px-14 py-6 bg-[#F1EBDD] text-[#5A2A45] overflow-hidden rounded-full shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] transition-transform duration-500 hover:scale-105">
+                                                <span className="relative z-10 text-xs font-bold uppercase tracking-widest group-hover:text-[#F1EBDD] transition-colors duration-300 flex items-center gap-3">
+                                                    Book a Session <span className="text-lg leading-none">↗</span>
+                                                </span>
+                                                <div className="absolute inset-0 bg-[#B77A8C] translate-y-full group-hover:translate-y-0 transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1)"></div>
+                                            </button>
+                                        </Link>
+                                    </motion.div>
                                 </div>
-                                <div className="flex flex-col justify-end">
-                                    <ul className="space-y-4">
-                                        <li className="flex items-center gap-4 border-b border-[#5A2A45]/10 pb-2">
-                                            <span className="text-[#B77A8C]">01</span>
-                                            <span className="uppercase tracking-widest text-xs">Maternity Sessions</span>
-                                        </li>
-                                        <li className="flex items-center gap-4 border-b border-[#5A2A45]/10 pb-2">
-                                            <span className="text-[#B77A8C]">02</span>
-                                            <span className="uppercase tracking-widest text-xs">Newborn Art</span>
-                                        </li>
-                                        <li className="flex items-center gap-4 border-b border-[#5A2A45]/10 pb-2">
-                                            <span className="text-[#B77A8C]">03</span>
-                                            <span className="uppercase tracking-widest text-xs">Family Tales</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </HomeSection>
-
-
-                        {/* 05. CONTACT / FOOTER CARD */}
-                        <HomeSection index={50} className="bg-[#1a0f16] text-[#FAF9F6] p-6 lg:p-16 relative overflow-hidden min-h-screen flex flex-col justify-between">
-                            {/* Premium Background Effects */}
-                            <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
-                            <div className="absolute top-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-[#5A2A45] rounded-full blur-[180px] opacity-20 pointer-events-none animate-pulse"></div>
-                            <div className="absolute bottom-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-[#B77A8C] rounded-full blur-[150px] opacity-10 pointer-events-none"></div>
-
-                            {/* Main CTA Content (Centered) */}
-                            <div className="flex-grow flex flex-col justify-center items-center text-center relative z-10 w-full mt-10 md:mt-0">
-                                <motion.div
-                                    initial={{ scale: 0.9, opacity: 0 }}
-                                    whileInView={{ scale: 1, opacity: 1 }}
-                                    transition={{ duration: 0.8 }}
-                                    className="space-y-8"
-                                >
-                                    <span className="inline-block px-4 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-xs font-outfit uppercase tracking-widest text-[#E8CBB6]">
-                                        Start Your Journey
-                                    </span>
-
-                                    <h2 className="font-display text-[13vw] lg:text-[9rem] leading-[0.85] text-transparent bg-clip-text bg-gradient-to-br from-[#FAF9F6] to-[#B77A8C] drop-shadow-2xl">
-                                        Let's<br /> <span className="italic font-light">Create</span>
-                                    </h2>
-
-                                    <p className="max-w-md mx-auto text-base md:text-xl text-white/60 leading-relaxed font-outfit font-light tracking-wide">
-                                        Capturing the poetry of your life,<br /> one frame at a time.
-                                    </p>
-
-                                    <Link to="/contact">
-                                        <button className="group relative mt-8 px-14 py-6 bg-[#FAF9F6] text-[#5A2A45] overflow-hidden rounded-full shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] transition-transform duration-500 hover:scale-105">
-                                            <span className="relative z-10 text-xs font-bold uppercase tracking-widest group-hover:text-white transition-colors duration-300 flex items-center gap-3">
-                                                Book a Session <span className="text-lg leading-none">↗</span>
-                                            </span>
-                                            <div className="absolute inset-0 bg-[#B77A8C] translate-y-full group-hover:translate-y-0 transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1)"></div>
-                                        </button>
-                                    </Link>
-                                </motion.div>
-                            </div>
-                        </HomeSection>
-
+                            </HomeSection>
+                        </div>
                     </div>
                 </div>
 
+                {/* 04. HORIZONTAL COLLAGE STRIPS (Moved to Footer Position) */}
+                <HorizontalCollage />
             </div>
-        </div >
+        </div>
     );
 };
 

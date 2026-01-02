@@ -290,6 +290,17 @@
         @apply font-display font-bold leading-tight;
     }
 
+    section {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 1000px;
+    }
+
+    .transform-gpu {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000;
+    }
+
     ::selection {
         @apply bg-primary text-white;
     }

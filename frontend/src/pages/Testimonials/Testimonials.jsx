@@ -74,9 +74,8 @@ const Testimonials = () => {
             <div className="w-full bg-[#FAF9F6]">
 
                 {/* Hero Section - Wall of Love Layout */}
-                {/* Hero Section - Wall of Love Layout (Full Screen - Miniature Grid) */}
                 <section className="relative min-h-[500px] h-[65vh] flex flex-col justify-center items-center overflow-hidden bg-[#FFFCF8]">
-                    {/* Vertical Dashed Lines Background - Dense for small grid */}
+                    {/* Vertical Dashed Lines Background */}
                     <div className="absolute inset-0 flex justify-between px-4 max-w-[1600px] mx-auto pointer-events-none opacity-[0.07]">
                         {[...Array(12)].map((_, i) => (
                             <div key={i} className="w-[0.5px] h-full border-l border-dashed border-[#5A2A45]"></div>

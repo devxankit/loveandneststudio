@@ -10,6 +10,17 @@ import maternityImg from '../../assets/images/portfolio/maternity/Screenshot 202
 import babyImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153257.png';
 import familyImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153401.png';
 
+// Extra images for the archive strips to prevent black space
+import m1 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225745.png';
+import m2 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225753.png';
+import m3 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225807.png';
+import b1 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153305.png';
+import b2 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153316.png';
+import b3 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153323.png';
+import f1 from '../../assets/images/portfolio/family/Screenshot 2025-12-31 111330.png';
+import f2 from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120803.png';
+import f3 from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120811.png';
+
 const Portfolio = () => {
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({
@@ -17,9 +28,15 @@ const Portfolio = () => {
         offset: ["start start", "end start"]
     });
 
-    const column1Y = useTransform(scrollYProgress, [0, 1], ["0%", "-40%"]);
-    const column2Y = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
-    const column3Y = useTransform(scrollYProgress, [0, 1], ["0%", "-60%"]);
+    // Parallax ranges adjusted to accommodate longer strips and prevent revealing bottom gaps
+    const column1Y = useTransform(scrollYProgress, [0, 1], ["0%", "-45%"]);
+    const column2Y = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
+    const column3Y = useTransform(scrollYProgress, [0, 1], ["0%", "-55%"]);
+
+    // Archive strips data
+    const strip1 = [newbornImg, b1, babyImg, b2, familyImg, b3, newbornImg, newbornImg, b1, babyImg];
+    const strip2 = [maternityImg, m1, m2, newbornImg, m3, babyImg, maternityImg, m1, m2, newbornImg];
+    const strip3 = [familyImg, f1, f2, maternityImg, f3, babyImg, familyImg, familyImg, f1, f2];
     const categories = [
         {
             id: 'newborn',
@@ -102,9 +119,9 @@ const Portfolio = () => {
                     {/* Column 1: Newborn (Fast Scroller) */}
                     <motion.div
                         style={{ y: column1Y }}
-                        className="w-1/3 md:w-1/4 h-[200vh] flex flex-col gap-4"
+                        className="w-1/3 md:w-1/4 h-[350vh] flex flex-col gap-4"
                     >
-                        {[newbornImg, babyImg, familyImg, newbornImg, maternityImg].map((img, i) => (
+                        {strip1.map((img, i) => (
                             <div key={i} className="w-full aspect-[3/5] rounded-sm overflow-hidden grayscale contrast-125">
                                 <LazyImage src={img} className="w-full h-full object-cover" />
                             </div>
@@ -114,9 +131,9 @@ const Portfolio = () => {
                     {/* Column 2: Maternity (Center - Static/Slow) */}
                     <motion.div
                         style={{ y: column2Y }}
-                        className="w-1/3 md:w-1/4 h-[200vh] flex flex-col gap-4 mt-[-50vh]"
+                        className="w-1/3 md:w-1/4 h-[350vh] flex flex-col gap-4 mt-[-50vh]"
                     >
-                        {[maternityImg, newbornImg, babyImg, familyImg, maternityImg].map((img, i) => (
+                        {strip2.map((img, i) => (
                             <div key={i} className="w-full aspect-[3/5] rounded-sm overflow-hidden grayscale contrast-125">
                                 <LazyImage src={img} className="w-full h-full object-cover" />
                             </div>
@@ -126,9 +143,9 @@ const Portfolio = () => {
                     {/* Column 3: Baby/Family (Opposite Scroller) */}
                     <motion.div
                         style={{ y: column3Y }}
-                        className="w-1/3 md:w-1/4 h-[200vh] flex flex-col gap-4 mt-[-100vh]"
+                        className="w-1/3 md:w-1/4 h-[350vh] flex flex-col gap-4 mt-[-100vh]"
                     >
-                        {[familyImg, maternityImg, newbornImg, babyImg, familyImg].map((img, i) => (
+                        {strip3.map((img, i) => (
                             <div key={i} className="w-full aspect-[3/5] rounded-sm overflow-hidden grayscale contrast-125">
                                 <LazyImage src={img} className="w-full h-full object-cover" />
                             </div>

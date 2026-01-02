@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import logo from '../../assets/logo/Gemini_Generated_Image_adt2l4adt2l4adt2-removebg-preview.png';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isPortfolioHovered, setIsPortfolioHovered] = useState(false);
-    const [isPortfolioOpen, setIsPortfolioOpen] = useState(false); // State for mobile accordion
+    const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const { scrollY } = useScroll();
+    const location = useLocation();
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        setIsScrolled(latest > 50);
+    });
+
+    useEffect(() => {
+        setIsMenuOpen(false);
+    }, [location.pathname]);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -17,9 +28,9 @@ const Navbar = () => {
     };
 
     const navLinkClasses = ({ isActive }) =>
-        `relative py-2 font-medium transition-colors duration-300 hover:text-primary ${isActive ? 'text-primary' : 'text-gray-700'
+        `relative py-2 font-medium transition-all duration-500 hover:text-primary ${isActive ? 'text-primary' : (isScrolled ? 'text-gray-700' : 'text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]')
         } after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'
-        }`;
+        } ${!isScrolled ? 'hover:brightness-110 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : ''}`;
 
     const dropdownVariants = {
         hidden: {
@@ -48,14 +59,24 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] sticky top-0 z-[100]">
-            <div className="max-w-[1400px] mx-auto px-6 md:px-8 flex justify-between items-center h-20">
-                <Link to="/" className="flex items-center transition-opacity duration-300 hover:opacity-80">
-                    <img src={logo} alt="Love & Nest Studio" className="h-[45px] md:h-[50px] lg:h-[60px] w-auto object-contain max-w-[140px] md:max-w-[160px] lg:max-w-[200px]" />
+        <motion.nav
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className={`fixed top-0 left-0 w-full z-[1000] border-b border-transparent transition-all duration-700 ${isScrolled ? 'bg-white/80 backdrop-blur-2xl py-2 border-[#5A2A45]/5 shadow-sm' : 'bg-transparent py-4'
+                }`}
+        >
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex justify-between items-center h-16 md:h-20">
+                <Link to="/" className="flex items-center transition-all duration-500 hover:scale-105 active:scale-95 group">
+                    <img
+                        src={logo}
+                        alt="Love & Nest Studio"
+                        className={`transition-all duration-700 ${isScrolled ? 'h-12 md:h-14 lg:h-16' : 'h-16 md:h-20 lg:h-24'} w-auto object-contain filter group-hover:drop-shadow-sm`}
+                    />
                 </Link>
 
                 <button
-                    className="md:hidden bg-none border-none text-3xl text-gray-700 cursor-pointer"
+                    className={`md:hidden bg-none border-none text-3xl transition-colors duration-500 cursor-pointer ${isScrolled ? 'text-gray-700' : 'text-white drop-shadow-md'}`}
                     onClick={toggleMenu}
                     aria-label="Toggle navigation"
                 >
@@ -85,23 +106,22 @@ const Navbar = () => {
                         onMouseEnter={() => setIsPortfolioHovered(true)}
                         onMouseLeave={() => setIsPortfolioHovered(false)}
                     >
-                        {/* Desktop & Mobile Toggle Button */}
                         <div
                             className="flex items-center justify-between w-full md:w-auto cursor-pointer"
                             onClick={togglePortfolio} // Mobile Click
                         >
-                            <span className={`text-gray-700 font-medium py-2 md:group-hover:text-primary transition-colors block ${isPortfolioHovered || isPortfolioOpen ? 'text-primary' : ''}`}>
+                            <span className={`font-medium py-2 transition-all duration-500 block ${isPortfolioHovered || isPortfolioOpen ? 'text-primary' : (isScrolled ? 'text-gray-700' : 'text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]')
+                                }`}>
                                 Portfolio
                             </span>
-                            {/* Chevron Arrow */}
                             <svg
-                                className={`w-4 h-4 ml-1 transition-transform duration-300 ${isPortfolioHovered || isPortfolioOpen ? 'rotate-180' : ''} md:hidden`}
+                                className={`w-4 h-4 ml-1 transition-all duration-500 ${isPortfolioHovered || isPortfolioOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-700' : 'text-white'} md:hidden`}
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                             <svg
-                                className={`w-4 h-4 ml-1 transition-transform duration-300 ${isPortfolioHovered ? 'rotate-180' : ''} hidden md:block`}
+                                className={`w-4 h-4 ml-1 transition-all duration-500 ${isPortfolioHovered ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-700' : 'text-white'} hidden md:block`}
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
@@ -199,7 +219,7 @@ const Navbar = () => {
                     </li>
                 </ul>
             </div>
-        </nav>
+        </motion.nav>
     );
 };
 

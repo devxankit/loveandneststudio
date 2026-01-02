@@ -7,7 +7,7 @@ const WhatsAppIntroPopup = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsVisible(true);
-        }, 2000); // 2 seconds delay
+        }, 3000); // 3 seconds delay for a more balanced entry
 
         return () => clearTimeout(timer);
     }, []);
@@ -24,44 +24,79 @@ const WhatsAppIntroPopup = () => {
     return (
         <AnimatePresence>
             {isVisible && (
-                <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 pointer-events-none">
+                <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
+                    {/* Backdrop with Blur */}
                     <motion.div
-                        initial={{ y: -100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -100, opacity: 0 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
-                        className="pointer-events-auto bg-[#F1EBDD] border border-[#B77A8C]/20 shadow-2xl rounded-2xl p-6 md:p-8 max-w-sm md:max-w-md w-[90%] mx-auto relative overflow-hidden"
-                    >
-                        {/* Decorative Background Elements */}
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-[#E6D1CB] rounded-full blur-[40px] opacity-50 -mr-10 -mt-10"></div>
-                        <div className="absolute bottom-0 left-0 w-20 h-20 bg-[#C9D0C3] rounded-full blur-[30px] opacity-40 -ml-8 -mb-8"></div>
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={handleClose}
+                        className="absolute inset-0 bg-[#5A2A45]/20 backdrop-blur-2xl pointer-events-auto"
+                    />
 
-                        {/* Close Button */}
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.8, opacity: 0, y: 20 }}
+                        transition={{
+                            type: "spring",
+                            damping: 25,
+                            stiffness: 300
+                        }}
+                        className="pointer-events-auto bg-[#F1EBDD] border border-white/40 shadow-[0_50px_100px_-20px_rgba(90,42,69,0.3)] rounded-[32px] p-10 md:p-14 max-w-[480px] w-full relative overflow-hidden"
+                    >
+                        {/* High-End Decorative Elements */}
+                        <div className="absolute top-0 right-0 w-40 h-40 bg-[#B77A8C]/10 rounded-full blur-[60px] -mr-16 -mt-16"></div>
+                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#C9D0C3]/20 rounded-full blur-[60px] -ml-16 -mb-16"></div>
+
+                        {/* Minimal Close Button */}
                         <button
                             onClick={handleClose}
-                            className="absolute top-3 right-3 text-[#6E5A52]/60 hover:text-[#5A2A45] transition-colors p-1"
+                            className="absolute top-6 right-6 text-[#5A2A45]/30 hover:text-[#5A2A45] transition-all hover:rotate-90 duration-500 p-2"
                             aria-label="Close"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
 
-                        <div className="text-center relative z-10">
-                            <div className="w-12 h-12 bg-[#5A2A45] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                            </div>
+                        <div className="text-center relative z-10 flex flex-col items-center">
+                            <motion.div
+                                initial={{ y: -10, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                                className="w-16 h-16 bg-[#5A2A45] rounded-full flex items-center justify-center mb-8 text-white shadow-xl shadow-[#5A2A45]/20"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            </motion.div>
 
-                            <h3 className="font-display italic text-2xl text-[#5A2A45] mb-2">Welcome to Love & Nest</h3>
-                            <p className="text-[#6E5A52] text-sm leading-relaxed mb-6 font-light">
-                                Capturing the poetry of your life. Let's create something beautiful together.
+                            <motion.span
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 0.4 }}
+                                transition={{ delay: 0.4 }}
+                                className="block text-[10px] uppercase tracking-[0.6em] text-[#5A2A45] mb-4 font-bold"
+                            >
+                                Personalized Inquiry
+                            </motion.span>
+
+                            <h3 className="font-display text-4xl text-[#5A2A45] mb-4 leading-tight">
+                                Let's Discuss Your <br /> <span className="italic font-light font-serif text-[#B77A8C]">Love Story</span>
+                            </h3>
+
+                            <p className="text-[#6E5A52]/70 text-base leading-relaxed mb-10 font-outfit font-light max-w-[280px]">
+                                We're here to preserve your magic. Connect with our artist directly on WhatsApp.
                             </p>
 
                             <button
                                 onClick={handleConnect}
-                                className="w-full py-3 bg-[#5A2A45] text-[#F1EBDD] font-bold uppercase tracking-widest text-xs rounded-full shadow-lg hover:bg-[#B77A8C] transition-colors duration-300 flex items-center justify-center gap-2 group"
+                                className="w-full group relative overflow-hidden px-8 py-5 bg-[#5A2A45] text-[#F1EBDD] font-bold uppercase tracking-[0.3em] text-[10px] rounded-full shadow-2xl transition-transform hover:scale-[1.02] active:scale-[0.98]"
                             >
-                                <span>Connect via WhatsApp</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                <span className="relative z-10 flex items-center justify-center gap-4">
+                                    Send Direct Message
+                                    <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 text-[#B77A8C]" stroke="currentColor" strokeWidth="2.5"><path d="M7 17l10-10M7 7h10v10" /></svg>
+                                </span>
+                                <div className="absolute inset-0 bg-[#B77A8C] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                             </button>
+
+                            <p className="mt-6 text-[9px] uppercase tracking-widest text-[#5A2A45]/30">Average response time: 2 hours</p>
                         </div>
                     </motion.div>
                 </div>
