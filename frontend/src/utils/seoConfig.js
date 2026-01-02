@@ -34,11 +34,6 @@ export const seoConfig = {
             description: 'Photography tips, parenting advice, and behind-the-scenes insights from Love & Nest Studio.',
             keywords: 'photography blog, newborn tips, maternity advice, photo session tips',
         },
-        offers: {
-            title: 'Special Offers',
-            description: 'Check out our special photography packages and limited-time offers for newborn, maternity, and family photography.',
-            keywords: 'photography offers, photo packages, special deals, discount photography',
-        },
         contact: {
             title: 'Contact Us',
             description: 'Get in touch with Love & Nest Studio to book your photography session or ask any questions.',

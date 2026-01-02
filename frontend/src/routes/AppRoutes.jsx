@@ -13,7 +13,6 @@ const Services = lazy(() => import('../pages/Services/Services'));
 const Blog = lazy(() => import('../pages/Blog/Blog'));
 const BlogDetails = lazy(() => import('../pages/Blog/BlogDetails'));
 const BestTimeMaternityPost = lazy(() => import('../pages/Blog/BestTimeMaternityPost'));
-const Offers = lazy(() => import('../pages/Offers/Offers'));
 const Contact = lazy(() => import('../pages/Contact/Contact'));
 const Testimonials = lazy(() => import('../pages/Testimonials/Testimonials'));
 const NotFound = lazy(() => import('../pages/NotFound'));
@@ -36,7 +35,6 @@ const AppRoutes = () => {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:id" element={<BlogDetails />} />
                 <Route path="/best-time-for-maternity-shoot" element={<BestTimeMaternityPost />} />
-                <Route path="/offers" element={<Offers />} />
                 <Route path="/testimonials" element={<Testimonials />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="*" element={<NotFound />} />
