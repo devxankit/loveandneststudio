@@ -101,7 +101,7 @@ const HeroSection = () => {
     const logoOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
     return (
-        <section ref={ref} className="relative h-[95vh] w-full overflow-hidden flex items-center justify-center bg-[#E8CBB6]/20">
+        <section ref={ref} className="relative min-h-[85vh] md:h-screen w-full overflow-hidden flex items-center justify-center bg-[#E8CBB6]/20">
             <motion.div
                 style={{ y: backgroundY }}
                 className="absolute inset-0 z-0"
@@ -124,7 +124,7 @@ const HeroSection = () => {
 
             <motion.div
                 style={{ y: textY }}
-                className="relative z-10 text-center px-4 max-w-7xl mx-auto flex flex-col items-center"
+                className="relative z-10 text-center px-4 max-w-7xl mx-auto flex flex-col items-center pt-20 md:pt-0"
             >
                 <div className="overflow-hidden mb-2">
                     <motion.div
@@ -180,9 +180,9 @@ const HeroSection = () => {
 
 const EditorialSection = () => {
     return (
-        <section className="py-24 px-6 md:px-20 relative bg-[#B7C1B8]/30">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                <div className="relative">
+        <section className="py-16 md:py-24 px-6 md:px-20 relative bg-[#B7C1B8]/30">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+                <div className="relative order-2 md:order-1">
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -201,13 +201,13 @@ const EditorialSection = () => {
                     </motion.div>
                 </div>
 
-                <div className="relative h-[600px] w-full flex justify-center items-center">
+                <div className="relative h-[400px] md:h-[600px] w-full flex justify-center items-center order-1 md:order-2">
                     <motion.div
                         initial={{ opacity: 0, rotate: -5 }}
                         whileInView={{ opacity: 1, rotate: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 1 }}
-                        className="absolute w-[70%] h-[80%] z-10 shadow-2xl"
+                        className="absolute w-[80%] md:w-[70%] h-[80%] z-10 shadow-2xl"
                     >
                         <LazyImage src={img3} alt="Editorial 1" className="w-full h-full object-cover" />
                     </motion.div>
@@ -216,7 +216,7 @@ const EditorialSection = () => {
                         whileInView={{ opacity: 1, rotate: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 1, delay: 0.2 }}
-                        className="absolute w-[70%] h-[80%] z-0 translate-x-10 translate-y-10 opacity-70 grayscale sepia-[.2]"
+                        className="absolute w-[80%] md:w-[70%] h-[80%] z-0 translate-x-8 md:translate-x-10 translate-y-8 md:translate-y-10 opacity-70 grayscale sepia-[.2]"
                     >
                         <LazyImage src={img5} alt="Editorial 2" className="w-full h-full object-cover" />
                     </motion.div>
@@ -228,13 +228,13 @@ const EditorialSection = () => {
 
 const ArtisticSilhouetteSection = () => {
     return (
-        <section className="py-32 bg-white overflow-hidden relative min-h-[80vh] flex items-center justify-center">
+        <section className="py-20 md:py-32 bg-white overflow-hidden relative min-h-[60vh] md:min-h-[80vh] flex items-center justify-center">
             {/* Background "Shadow" Effect */}
             <div className="absolute inset-0 flex items-center justify-center opacity-[0.05] pointer-events-none select-none overflow-hidden">
                 <img src={img2} alt="Shadow Background" className="h-[150%] w-auto max-w-none grayscale blur-sm" />
             </div>
 
-            <div className="max-w-7xl mx-auto w-full px-6 flex flex-col md:flex-row items-center gap-20 relative z-10">
+            <div className="max-w-7xl mx-auto w-full px-6 flex flex-col md:flex-row items-center gap-12 md:gap-20 relative z-10">
                 {/* Image Composition */}
                 <div className="md:w-1/2 relative flex justify-center">
                     <motion.div
@@ -242,7 +242,7 @@ const ArtisticSilhouetteSection = () => {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="w-[80%] aspect-[3/4] relative z-10"
+                        className="w-[85%] md:w-[80%] aspect-[3/4] relative z-10"
                     >
                         <div className="absolute -inset-4 border border-[#E8CBB6] rotate-6 z-0"></div>
                         <div className="w-full h-full overflow-hidden shadow-2xl z-10 relative bg-gray-100">
@@ -288,7 +288,7 @@ const JourneySection = () => {
     const marqueeItems = [...timelineImages, ...timelineImages, ...timelineImages];
 
     return (
-        <section className="py-32 bg-[#FAF5F0] overflow-hidden relative border-t border-[#E8CBB6]/30">
+        <section className="py-20 md:py-32 bg-[#FAF5F0] overflow-hidden relative border-t border-[#E8CBB6]/30">
             <div className="text-center mb-16 px-4">
                 <h2 className="font-display text-4xl md:text-5xl mb-4 text-[#5A2A45]">The Journey</h2>
                 <p className="font-outfit text-[#B77A8C] uppercase tracking-widest">Growing with love</p>
@@ -303,12 +303,12 @@ const JourneySection = () => {
                         ease: "linear",
                         repeat: Infinity
                     }}
-                    className="flex gap-12 pl-12 w-max"
+                    className="flex gap-6 md:gap-12 pl-6 md:pl-12 w-max"
                 >
                     {marqueeItems.map((img, index) => (
                         <div
                             key={`journey-${index}`}
-                            className="relative group w-[300px] md:w-[400px] flex-shrink-0"
+                            className="relative group w-[250px] md:w-[400px] flex-shrink-0"
                         >
                             <div className="bg-white p-6 pb-20 shadow-lg rotate-1 group-hover:rotate-0 transition-transform duration-500 transform origin-top border border-[#E8CBB6]/40">
                                 <div className="aspect-[4/5] overflow-hidden bg-gray-100 mb-6 grayscale group-hover:grayscale-0 transition-all duration-700">
@@ -331,9 +331,9 @@ const PosesGridSection = () => {
     const gridImages = [img1, img3, img5, img7, img8, img9, img10, img12];
 
     return (
-        <section className="py-24 bg-white">
-            <div className="max-w-6xl mx-auto px-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section className="py-12 md:py-24 bg-white">
+            <div className="max-w-6xl mx-auto px-2 md:px-4">
+                <div className="grid grid-cols-3 gap-2 md:gap-6">
                     {/* First 4 images */}
                     {gridImages.slice(0, 4).map((img, idx) => (
                         <motion.div
@@ -354,15 +354,15 @@ const PosesGridSection = () => {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
-                        className="aspect-[3/4] flex flex-col items-center justify-center bg-[#E8CBB6]/10 p-10 text-center border border-[#E8CBB6]/40 shadow-sm"
+                        className="aspect-[3/4] flex flex-col items-center justify-center bg-[#E8CBB6]/10 p-1 md:p-10 text-center border border-[#E8CBB6]/40 shadow-sm"
                     >
-                        <h4 className="font-display text-3xl md:text-4xl tracking-wide text-[#5A2A45] uppercase leading-relaxed font-light">
+                        <h4 className="font-display text-sm xs:text-base md:text-4xl tracking-wide text-[#5A2A45] uppercase leading-relaxed font-light">
                             Studio <br />
                             <span className="font-medium">Maternity</span> <br />
                             Poses <br />
                         </h4>
-                        <div className="w-12 h-[1px] bg-[#B77A8C] my-6"></div>
-                        <span className="font-outfit text-sm tracking-[0.3em] uppercase text-[#8F8A86]">
+                        <div className="w-6 md:w-12 h-[1px] bg-[#B77A8C] my-2 md:my-6"></div>
+                        <span className="font-outfit text-[0.5rem] xs:text-[0.6rem] md:text-sm tracking-[0.15em] md:tracking-[0.3em] uppercase text-[#8F8A86]">
                             You'll Love
                         </span>
                     </motion.div>
@@ -388,20 +388,16 @@ const PosesGridSection = () => {
 
 const GallerySection = () => {
     return (
-        <section className="py-24 px-4 bg-white">
+        <section className="py-16 md:py-24 px-4 bg-white">
             <div className="max-w-[1600px] mx-auto">
                 <SectionTitle title="Portfolio Gallery" subtitle="Curated Moments" />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 px-4 md:px-0">
-                    <div className="flex flex-col gap-8">
-                        {galleryImages.filter((_, i) => i % 3 === 0).map(item => <GalleryItem key={item.id} item={item} />)}
-                    </div>
-                    <div className="flex flex-col gap-8 md:mt-20">
-                        {galleryImages.filter((_, i) => i % 3 === 1).map(item => <GalleryItem key={item.id} item={item} />)}
-                    </div>
-                    <div className="flex flex-col gap-8">
-                        {galleryImages.filter((_, i) => i % 3 === 2).map(item => <GalleryItem key={item.id} item={item} />)}
-                    </div>
+                <div className="mt-10 md:mt-16 columns-2 md:columns-3 gap-4 md:gap-8 space-y-4 md:space-y-8">
+                    {galleryImages.map((item) => (
+                        <div key={item.id} className="break-inside-avoid mb-4 md:mb-8">
+                            <GalleryItem item={item} />
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
@@ -437,13 +433,13 @@ const GalleryItem = ({ item }) => {
 
 const CTASection = () => {
     return (
-        <section className="py-32 px-6 bg-[#5A2A45] text-white text-center relative overflow-hidden">
+        <section className="py-20 md:py-32 px-6 bg-[#5A2A45] text-white text-center relative overflow-hidden">
             {/* Background decoration */}
             <div className="absolute top-0 left-0 w-64 h-64 bg-[#B77A8C]/30 blur-[100px] rounded-full"></div>
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#E8CBB6]/20 blur-[120px] rounded-full"></div>
 
             <div className="max-w-3xl mx-auto relative z-10">
-                <h2 className="font-display text-5xl md:text-6xl mb-8">Ready to capture your glow?</h2>
+                <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mb-6 md:mb-8">Ready to capture your glow?</h2>
                 <p className="font-outfit text-[#E8CBB6] text-lg mb-12 max-w-xl mx-auto">
                     Let's create timeless art that celebrates this beautiful chapter of your life. Book your session today.
                 </p>
