@@ -3,7 +3,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/layout/ScrollToTop';
-import WhatsAppButton from './components/common/WhatsAppButton';
 import AppRoutes from './routes/AppRoutes';
 
 
@@ -18,7 +17,6 @@ function App() {
             <AppRoutes />
           </main>
           <Footer />
-          <WhatsAppButton />
         </div>
       </Router>
     </HelmetProvider>
