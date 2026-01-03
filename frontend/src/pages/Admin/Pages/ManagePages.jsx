@@ -1,0 +1,60 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FileText, Edit3, Eye, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const ManagePages = () => {
+    // Hardcoded list of pages for now - eventually fetch from API
+    const pages = [
+        { id: 'home', title: 'Home Page', path: '/', status: 'Published', lastEdited: '2 days ago' },
+        { id: 'about', title: 'About Page', path: '/about', status: 'Published', lastEdited: '1 week ago' },
+        { id: 'contact', title: 'Contact Page', path: '/contact', status: 'Published', lastEdited: '1 month ago' },
+    ];
+
+    return (
+        <div className="space-y-8">
+            {/* Header */}
+            <div>
+                <h1 className="font-display text-4xl text-[#5A2A45] mb-2">Manage Pages</h1>
+                <p className="text-[#6E5A52]/70 font-outfit font-light">
+                    Edit content for your main website pages.
+                </p>
+            </div>
+
+            {/* Pages Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {pages.map((page) => (
+                    <motion.div
+                        key={page.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-white rounded-2xl p-6 shadow-sm border border-[#5A2A45]/5 hover:shadow-md transition-shadow group"
+                    >
+                        <div className="flex justify-between items-start mb-6">
+                            <div className="w-12 h-12 rounded-xl bg-[#F1EBDD] flex items-center justify-center text-[#5A2A45]">
+                                <FileText size={24} strokeWidth={1.5} />
+                            </div>
+                            <span className="px-3 py-1 rounded-full bg-green-50 text-green-600 text-xs font-medium border border-green-100 flex items-center gap-1.5">
+                                <CheckCircle size={10} /> {page.status}
+                            </span>
+                        </div>
+
+                        <h3 className="font-display text-xl text-[#5A2A45] mb-2">{page.title}</h3>
+                        <p className="text-sm text-[#6E5A52]/60 mb-6 font-outfit">Last edited: {page.lastEdited}</p>
+
+                        <div className="flex items-center gap-3">
+                            <Link to={`/admin/pages/${page.id}`} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#5A2A45] text-[#F1EBDD] rounded-lg text-sm font-medium hover:bg-[#4a2238] transition-colors">
+                                <Edit3 size={14} /> Edit Content
+                            </Link>
+                            <Link to={page.path} target="_blank" className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#5A2A45]/10 text-[#5A2A45] hover:bg-[#5A2A45]/5 transition-colors" title="View Live Page">
+                                <Eye size={16} />
+                            </Link>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default ManagePages;

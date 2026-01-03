@@ -70,19 +70,28 @@ const WhatsAppIntroPopup = () => {
 
                             <motion.span
                                 initial={{ opacity: 0 }}
+                                animate={{ opacity: 0.6 }}
+                                transition={{ delay: 0.2 }}
+                                className="block text-[9px] uppercase tracking-[0.4em] text-[#5A2A45] mb-6 opacity-60"
+                            >
+                                Love & Nest Studio
+                            </motion.span>
+
+                            <motion.span
+                                initial={{ opacity: 0 }}
                                 animate={{ opacity: 0.4 }}
                                 transition={{ delay: 0.4 }}
                                 className="block text-[10px] uppercase tracking-[0.6em] text-[#5A2A45] mb-4 font-bold"
                             >
-                                Personalized Inquiry
+                                Message From Artist
                             </motion.span>
 
                             <h3 className="font-display text-4xl text-[#5A2A45] mb-4 leading-tight">
-                                Let's Discuss Your <br /> <span className="italic font-light font-serif text-[#B77A8C]">Love Story</span>
+                                Hello, I'm <br /> <span className="italic font-light font-serif text-[#B77A8C]">Anamika</span>
                             </h3>
 
                             <p className="text-[#6E5A52]/70 text-base leading-relaxed mb-10 font-outfit font-light max-w-[280px]">
-                                We're here to preserve your magic. Connect with our artist directly on WhatsApp.
+                                "I'd love to hear your story and help you preserve your most fleeting moments forever."
                             </p>
 
                             <button
@@ -90,13 +99,13 @@ const WhatsAppIntroPopup = () => {
                                 className="w-full group relative overflow-hidden px-8 py-5 bg-[#5A2A45] text-[#F1EBDD] font-bold uppercase tracking-[0.3em] text-[10px] rounded-full shadow-2xl transition-transform hover:scale-[1.02] active:scale-[0.98]"
                             >
                                 <span className="relative z-10 flex items-center justify-center gap-4">
-                                    Send Direct Message
+                                    Chat with Anamika
                                     <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 text-[#B77A8C]" stroke="currentColor" strokeWidth="2.5"><path d="M7 17l10-10M7 7h10v10" /></svg>
                                 </span>
                                 <div className="absolute inset-0 bg-[#B77A8C] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                             </button>
 
-                            <p className="mt-6 text-[9px] uppercase tracking-widest text-[#5A2A45]/30">Average response time: 2 hours</p>
+                            <p className="mt-6 text-[9px] uppercase tracking-widest text-[#5A2A45]/30">Direct Line to Studio</p>
                         </div>
                     </motion.div>
                 </div>

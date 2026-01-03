@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Lazy load pages
@@ -11,9 +11,22 @@ const Maternity = lazy(() => import('../pages/Portfolio/Maternity'));
 const Baby = lazy(() => import('../pages/Portfolio/Baby'));
 const Family = lazy(() => import('../pages/Portfolio/Family'));
 const Services = lazy(() => import('../pages/Services/Services'));
+const ServiceGallery = lazy(() => import('../pages/Services/ServiceGallery'));
 const Blog = lazy(() => import('../pages/Blog/Blog'));
 const BlogDetails = lazy(() => import('../pages/Blog/BlogDetails'));
 const BestTimeMaternityPost = lazy(() => import('../pages/Blog/BestTimeMaternityPost'));
+// Admin Pages
+const AdminLogin = lazy(() => import('../pages/Admin/Login'));
+const AdminLayout = lazy(() => import('../pages/Admin/Layout/AdminLayout'));
+const AdminDashboard = lazy(() => import('../pages/Admin/Dashboard/AdminDashboard'));
+const ManagePortfolio = lazy(() => import('../pages/Admin/Portfolio/ManagePortfolio'));
+const ManagePages = lazy(() => import('../pages/Admin/Pages/ManagePages'));
+const PageEditor = lazy(() => import('../pages/Admin/Pages/PageEditor'));
+const ManageBlog = lazy(() => import('../pages/Admin/Blog/ManageBlog'));
+const ManageTestimonials = lazy(() => import('../pages/Admin/Testimonials/ManageTestimonials'));
+const ManageServices = lazy(() => import('../pages/Admin/Services/ManageServices'));
+const ManageInquiries = lazy(() => import('../pages/Admin/Inquiries/ManageInquiries'));
+const AdminSettings = lazy(() => import('../pages/Admin/Settings/AdminSettings'));
 const Contact = lazy(() => import('../pages/Contact/Contact'));
 const Testimonials = lazy(() => import('../pages/Testimonials/Testimonials'));
 const NotFound = lazy(() => import('../pages/NotFound'));
@@ -23,18 +36,19 @@ import PageLoader from '../components/common/PageLoader';
 
 const AppRoutes = () => {
     const location = useLocation();
+    const isAdmin = location.pathname.startsWith('/admin');
 
     return (
         <Suspense fallback={<PageLoader />}>
             <AnimatePresence mode="wait">
                 <motion.div
-                    key={location.pathname}
-                    initial={{ opacity: 0, scale: 1.01 }}
+                    key={isAdmin ? "admin-portal" : location.pathname}
+                    initial={isAdmin ? { opacity: 1 } : { opacity: 0, scale: 1.01 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.99 }}
+                    exit={isAdmin ? { opacity: 1 } : { opacity: 0, scale: 0.99 }}
                     transition={{
-                        duration: 0.8,
-                        ease: [0.16, 1, 0.3, 1] // High-end Expo Ease Out
+                        duration: isAdmin ? 0 : 0.8,
+                        ease: [0.16, 1, 0.3, 1]
                     }}
                 >
                     <Routes location={location}>
@@ -46,11 +60,28 @@ const AppRoutes = () => {
                         <Route path="/portfolio/baby" element={<Baby />} />
                         <Route path="/portfolio/family" element={<Family />} />
                         <Route path="/services" element={<Services />} />
+                        <Route path="/services/:id" element={<ServiceGallery />} />
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/blog/:id" element={<BlogDetails />} />
                         <Route path="/best-time-for-maternity-shoot" element={<BestTimeMaternityPost />} />
                         <Route path="/testimonials" element={<Testimonials />} />
                         <Route path="/contact" element={<Contact />} />
+
+                        {/* Admin Routes */}
+                        <Route path="/admin/login" element={<AdminLogin />} />
+                        <Route path="/admin" element={<AdminLayout />}>
+                            <Route index element={<Navigate to="dashboard" replace />} />
+                            <Route path="dashboard" element={<AdminDashboard />} />
+                            <Route path="pages" element={<ManagePages />} />
+                            <Route path="pages/:pageId" element={<PageEditor />} />
+                            <Route path="portfolio" element={<ManagePortfolio />} />
+                            <Route path="blog" element={<ManageBlog />} />
+                            <Route path="testimonials" element={<ManageTestimonials />} />
+                            <Route path="services" element={<ManageServices />} />
+                            <Route path="inquiries" element={<ManageInquiries />} />
+                            <Route path="settings" element={<AdminSettings />} />
+                        </Route>
+
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </motion.div>

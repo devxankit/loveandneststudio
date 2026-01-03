@@ -1,4 +1,4 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -12,19 +12,30 @@ const GrainOverlay = () => (
   </div>
 );
 
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  return (
+    <div className="app selection:bg-[#5A2A45] selection:text-[#F1EBDD]">
+      <GrainOverlay />
+      {!isAdminRoute && <Navbar />}
+      <main className="relative z-0">
+        {children}
+      </main>
+      {!isAdminRoute && <Footer />}
+    </div>
+  );
+};
+
 function App() {
   return (
     <HelmetProvider>
       <Router>
         <ScrollToTop />
-        <div className="app selection:bg-[#5A2A45] selection:text-[#F1EBDD]">
-          <GrainOverlay />
-          <Navbar />
-          <main className="relative z-0">
-            <AppRoutes />
-          </main>
-          <Footer />
-        </div>
+        <Layout>
+          <AppRoutes />
+        </Layout>
       </Router>
     </HelmetProvider>
   );
