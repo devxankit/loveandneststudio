@@ -85,15 +85,7 @@ const Family = () => {
                         transition={{ duration: 1, delay: 0.8, ease: "circOut" }}
                         className="w-[1px] h-16 bg-gradient-to-b from-[#1a1a1a]/40 to-transparent mb-10 mx-auto origin-top"
                     ></motion.div>
-                    <motion.a
-                        href="/contact"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.8 }}
-                        className="inline-block text-[#1a1a1a] border border-[#1a1a1a]/30 py-4 px-12 text-xs md:text-sm uppercase tracking-[3px] hover:bg-[#1a1a1a] hover:text-white transition-all duration-500"
-                    >
-                        Book A Session
-                    </motion.a>
+
                 </section>
 
                 {/* 2. GREETINGS / INTRO SECTION */}

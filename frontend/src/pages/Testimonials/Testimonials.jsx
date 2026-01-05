@@ -3,8 +3,9 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import SEO from '../../components/seo/SEO';
 import SectionTitle from '../../components/common/SectionTitle';
 import LazyImage from '../../components/common/LazyImage';
+import { getTestimonials, getPage } from '../../services/api';
 
-// Import all testimonial images
+// Fallback images
 import testImg1 from '../../assets/images/testimonials/Screenshot 2025-12-31 114249.png';
 import testImg2 from '../../assets/images/testimonials/Screenshot 2025-12-31 114257.png';
 import testImg3 from '../../assets/images/testimonials/Screenshot 2025-12-31 114307.png';
@@ -12,45 +13,47 @@ import testImg4 from '../../assets/images/testimonials/Screenshot 2025-12-31 114
 import testImg5 from '../../assets/images/testimonials/Screenshot 2025-12-31 114335.png';
 
 const Testimonials = () => {
+    const [reviews, setReviews] = useState([]);
+    const [pageContent, setPageContent] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [reviewsRes, pageRes] = await Promise.all([
+                    getTestimonials(),
+                    getPage('testimonials')
+                ]);
+                setReviews(reviewsRes.data);
+                setPageContent(pageRes.data);
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
     // Scroll progress for parallax effect
     const { scrollYProgress } = useScroll();
     const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
-    // Data for Hero Grid
-    const heroImages = [
-        testImg1, testImg2, testImg3, testImg4, testImg5,
-        testImg2, testImg1, testImg4, testImg3, testImg5 // Duplicate for fuller grid
-    ];
+    // Data for Hero Grid - Dynamically construct from reviews if available, else fallback
+    const dynamicImages = reviews
+        .filter(r => r.image)
+        .map(r => r.image);
 
-    // Detailed Testimonials Data
-    const testimonials = [
-        {
-            id: 1,
-            name: "Priya Jha",
-            image: testImg1,
-            role: "Happy Mother",
-            content: "Hello Anamika, Thank you for the beautiful photos. Your work is wonderful and you are a very nice photographer—professional, kind, and talented. Thank you for making my son 1st birthday special.. I loved the colors and how you captured the moments. Again Thank you 😊 ❤️",
-            rating: 5,
-            color: "bg-[#E8CBB6]" // Peach Nude background
-        },
-        {
-            id: 2,
-            name: "Reshu Verma",
-            image: testImg2,
-            role: "Mentor",
-            content: `Anamika is a rare blend of precision, grace, and quiet strength, and collaborating with her has been nothing short of inspiring on both professional and personal fronts. Her presence elevates any project she touches, and her contribution to Love & Nest Studio is truly special.
+    // Ensure we have enough images for the grid by repeating or filling with fallbacks
+    const fallbackImages = [testImg1, testImg2, testImg3, testImg4, testImg5];
+    let gridImages = [...dynamicImages, ...fallbackImages];
+    // We need at least 15-20 images for the grid to look good, so repeat
+    while (gridImages.length < 20) {
+        gridImages = [...gridImages, ...fallbackImages, ...dynamicImages];
+    }
+    const heroImages = gridImages.slice(0, 20); // Pick first 20
 
-            Anamika brings an exceptional level of **clarity** and structure to her work, staying calm and composed even when timelines are tight or challenges arise. She takes ownership of her responsibilities, thinks things through, and follows through with consistency, which makes working with her feel effortless and deeply reassuring.
-
-            What stands out most is her ability to balance discipline with warmth. She not only manages tasks and coordinates with people seamlessly, but also creates an environment where everyone feels heard, supported, and motivated to give their best.
-
-            Every interaction with Anamika reflects sincerity, integrity, and genuine care—for the work, the team, and the vision. She is the kind of professional you can depend on completely, and the kind of person you are always grateful to have by your side.
-
-            With her talent, dedication, and heart, Anamika is destined to build something beautiful, and Love & Nest Studio could not have a more capable or compassionate force behind it. I wish her all the success in the world as she continues to shape this journey.`,
-            rating: 5,
-            color: "bg-[#F5F2F0]" // Light Grey/White background for contrast
-        }
-    ];
+    // Get section content safely
+    const getSection = (id) => pageContent?.sections?.find(s => s.id === id)?.content || {};
+    const heroSection = getSection('hero');
+    const ctaSection = getSection('cta');
 
     // Star Rating Component
     const StarRating = ({ rating }) => (
@@ -66,9 +69,8 @@ const Testimonials = () => {
     return (
         <>
             <SEO
-                title="Testimonials - Love & Nest Studio"
-                description="Read reviews and testimonials from our happy clients. See why families trust Love & Nest Studio for their precious moments."
-                keywords="photography reviews, client testimonials, best photographer reviews, dehradun photographer reviews"
+                title={pageContent?.meta?.title || "Testimonials - Love & Nest Studio"}
+                description={pageContent?.meta?.description || "Read reviews and testimonials from our happy clients."}
             />
 
             <div className="w-full bg-[#FAF9F6]">
@@ -87,47 +89,41 @@ const Testimonials = () => {
                         <div className="grid grid-cols-12 gap-2 md:gap-4 h-full max-w-[1600px] mx-auto content-center">
 
                             {/* --- Left Side Clusters --- */}
-
-                            {/* Col 1 - Visible Mobile (Waterfall start) */}
                             <div className="flex flex-col gap-3 md:gap-4 items-center pt-12 md:pt-8">
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.5, delay: 0.1, type: "spring" }} className="w-full aspect-[3/4] rounded-lg md:rounded-xl overflow-hidden shadow-sm hover:scale-105 transition-transform duration-500">
-                                    <LazyImage src={testImg1} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[0]} className="w-full h-full object-cover" />
                                 </motion.div>
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.5, delay: 0.4, type: "spring" }} className="w-full aspect-square rounded-lg md:rounded-xl overflow-hidden shadow-sm opacity-80 mt-2 md:mt-12">
-                                    <LazyImage src={testImg3} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[1]} className="w-full h-full object-cover" />
                                 </motion.div>
                             </div>
 
-                            {/* Col 2 - Visible Mobile */}
                             <div className="flex flex-col gap-3 md:gap-8 items-center pt-4 md:pt-24">
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.4, delay: 0.2, type: "spring" }} className="w-full aspect-square rounded-lg md:rounded-xl overflow-hidden shadow-sm">
-                                    <LazyImage src={testImg2} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[2]} className="w-full h-full object-cover" />
                                 </motion.div>
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.4, delay: 0.6, type: "spring" }} className="w-full aspect-[4/5] rounded-lg md:rounded-xl overflow-hidden shadow-sm opacity-90">
-                                    <LazyImage src={testImg5} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[3]} className="w-full h-full object-cover" />
                                 </motion.div>
                             </div>
 
-                            {/* Col 3 - Hidden Mobile (Space for Text) */}
                             <div className="hidden md:flex flex-col gap-5 items-center pt-4">
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.6, delay: 0.3, type: "spring" }} className="w-full aspect-[3/4] rounded-xl overflow-hidden shadow-sm mt-8">
-                                    <LazyImage src={testImg4} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[4]} className="w-full h-full object-cover" />
                                 </motion.div>
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.6, delay: 0.7, type: "spring" }} className="w-full aspect-square rounded-xl overflow-hidden shadow-sm opacity-70">
-                                    <LazyImage src={testImg1} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[5]} className="w-full h-full object-cover" />
                                 </motion.div>
                             </div>
 
-                            {/* Col 4 - Hidden Mobile */}
                             <div className="hidden lg:flex flex-col gap-8 items-center pt-32">
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.3, delay: 0.25, type: "spring" }} className="w-full aspect-square rounded-xl overflow-hidden shadow-sm">
-                                    <LazyImage src={testImg3} className="w-full h-full object-cover grayscale-[30%]" />
+                                    <LazyImage src={heroImages[6]} className="w-full h-full object-cover grayscale-[30%]" />
                                 </motion.div>
                             </div>
 
 
                             {/* --- Center Text Content --- */}
-                            {/* Mobile: Spans 8 cols. Tablet: Spans 4 cols. Desktop: Spans 4 cols. */}
                             <div className="col-span-8 md:col-span-4 lg:col-span-4 flex flex-col justify-center items-center text-center z-20 pointer-events-auto px-1 md:px-0 h-full">
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.95 }}
@@ -136,7 +132,7 @@ const Testimonials = () => {
                                     className="inline-block"
                                 >
                                     <span className="py-1.5 px-4 md:py-2 md:px-6 rounded-full bg-[#fdf2f8]/90 backdrop-blur-sm text-[#5A2A45] font-outfit text-[9px] md:text-[10px] font-bold tracking-[0.2em] uppercase border border-[#5A2A45]/10 shadow-sm">
-                                        Testimonials
+                                        {heroSection.badge || "Testimonials"}
                                     </span>
                                 </motion.div>
 
@@ -144,10 +140,9 @@ const Testimonials = () => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 2.5, delay: 0.3, ease: "easeOut" }}
-                                    className="font-display text-[2rem] md:text-[3.5rem] text-[#1a1a1a] leading-[1.1] md:leading-[1] font-medium mt-4 md:mt-5 mb-2 md:mb-3 drop-shadow-sm mix-blend-darken"
+                                    className="font-display text-[2rem] md:text-[3.5rem] text-[#1a1a1a] leading-[1.1] md:leading-[1] font-medium mt-4 md:mt-5 mb-2 md:mb-3 drop-shadow-sm mix-blend-darken whitespace-pre-line"
                                 >
-                                    Trusted by families<br />
-                                    <span className="text-[#8F8A86] font-normal italic text-[0.7em]">from various cities</span>
+                                    {heroSection.heading || "Trusted by families\nfrom various cities"}
                                 </motion.h1>
 
                                 <motion.p
@@ -156,50 +151,45 @@ const Testimonials = () => {
                                     transition={{ duration: 2.5, delay: 0.6, ease: "easeOut" }}
                                     className="font-outfit text-[#666] text-[11px] md:text-base max-w-[150px] md:max-w-md mx-auto leading-relaxed font-light"
                                 >
-                                    Learn why professionals trust our lens.
+                                    {heroSection.subheading || "Learn why professionals trust our lens."}
                                 </motion.p>
                             </div>
 
 
                             {/* --- Right Side Clusters --- */}
-
-                            {/* Col 9 - Hidden Mobile */}
                             <div className="hidden lg:flex flex-col gap-6 items-center pt-16">
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.5, delay: 0.3, type: "spring" }} className="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-sm">
-                                    <LazyImage src={testImg5} className="w-full h-full object-cover grayscale-[20%]" />
+                                    <LazyImage src={heroImages[7]} className="w-full h-full object-cover grayscale-[20%]" />
                                 </motion.div>
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.5, delay: 0.8, type: "spring" }} className="w-full aspect-square rounded-xl overflow-hidden shadow-sm opacity-60">
-                                    <LazyImage src={testImg2} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[8]} className="w-full h-full object-cover" />
                                 </motion.div>
                             </div>
 
-                            {/* Col 10 - Hidden Mobile (Space for Text) */}
                             <div className="hidden md:flex flex-col gap-4 items-center pt-2">
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.3, delay: 0.4, type: "spring" }} className="w-full aspect-square rounded-xl overflow-hidden shadow-sm mt-12">
-                                    <LazyImage src={testImg1} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[9]} className="w-full h-full object-cover" />
                                 </motion.div>
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.3, delay: 0.7, type: "spring" }} className="w-full aspect-[3/4] rounded-xl overflow-hidden shadow-sm opacity-90">
-                                    <LazyImage src={testImg4} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[10]} className="w-full h-full object-cover" />
                                 </motion.div>
                             </div>
 
-                            {/* Col 11 - Visible Mobile */}
                             <div className="flex flex-col gap-4 md:gap-10 items-center pt-8 md:pt-28">
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.6, delay: 0.2, type: "spring" }} className="w-full aspect-[3/4] rounded-lg md:rounded-xl overflow-hidden shadow-sm">
-                                    <LazyImage src={testImg2} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[11]} className="w-full h-full object-cover" />
                                 </motion.div>
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.6, delay: 0.5, type: "spring" }} className="w-full aspect-square rounded-lg md:rounded-xl overflow-hidden shadow-sm opacity-80">
-                                    <LazyImage src={testImg3} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[12]} className="w-full h-full object-cover" />
                                 </motion.div>
                             </div>
 
-                            {/* Col 12 - Visible Mobile */}
                             <div className="flex flex-col gap-3 md:gap-5 items-center pt-16 md:pt-12">
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.4, delay: 0.6, type: "spring" }} className="w-full aspect-square rounded-lg md:rounded-xl overflow-hidden shadow-sm">
-                                    <LazyImage src={testImg4} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[13]} className="w-full h-full object-cover" />
                                 </motion.div>
                                 <motion.div initial={{ y: -800, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.4, delay: 0.9, type: "spring" }} className="w-full aspect-[4/5] rounded-lg md:rounded-xl overflow-hidden shadow-sm opacity-50">
-                                    <LazyImage src={testImg1} className="w-full h-full object-cover" />
+                                    <LazyImage src={heroImages[14]} className="w-full h-full object-cover" />
                                 </motion.div>
                             </div>
 
@@ -225,72 +215,43 @@ const Testimonials = () => {
                 <section className="pt-8 pb-24 px-4 md:px-8 max-w-[1400px] mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
 
-                        {/* Testimonial 1 - Priya Jha */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                            className="bg-white rounded-[24px] p-6 shadow-sm border border-stone-100/50 relative overflow-hidden flex flex-col gap-4"
-                        >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#E8CBB6]/10 rounded-bl-full -z-0"></div>
+                        {reviews.map((review, index) => (
+                            <motion.div
+                                key={review._id}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: index * 0.1 }}
+                                className={`${index % 2 !== 0 ? 'bg-[#5A2A45] text-white' : 'bg-white border border-stone-100/50'} rounded-[24px] p-6 shadow-sm relative overflow-hidden flex flex-col gap-4`}
+                            >
+                                {index % 2 === 0 && <div className="absolute top-0 right-0 w-32 h-32 bg-[#E8CBB6]/10 rounded-bl-full -z-0"></div>}
 
-                            <div className="flex items-center gap-4 relative z-10">
-                                <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md relative shrink-0">
-                                    <LazyImage src={testimonials[0].image} alt={testimonials[0].name} className="w-full h-full object-cover" />
-                                </div>
-                                <div>
-                                    <h3 className="font-display text-lg text-[#5A2A45] font-bold leading-tight">{testimonials[0].name}</h3>
-                                    <p className="font-outfit text-[#B77A8C] text-[10px] uppercase tracking-wider font-semibold">{testimonials[0].role}</p>
-                                    <div className="scale-75 origin-left -ml-0.5 mt-0.5">
-                                        <StarRating rating={testimonials[0].rating} />
+                                <div className={`flex items-center gap-4 relative z-10 ${index % 2 !== 0 ? 'flex-row-reverse justify-end' : ''}`}>
+                                    <div className={`w-14 h-14 rounded-full overflow-hidden border-2 ${index % 2 !== 0 ? 'border-[#B77A8C]' : 'border-white'} shadow-md relative shrink-0`}>
+                                        <LazyImage src={review.image || testImg1} alt={review.clientName} className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className={index % 2 !== 0 ? 'text-right flex-1' : ''}>
+                                        <h3 className={`font-display text-lg ${index % 2 !== 0 ? 'text-[#E8CBB6]' : 'text-[#5A2A45]'} font-bold leading-tight`}>{review.clientName}</h3>
+                                        <p className={`font-outfit ${index % 2 !== 0 ? 'text-white/80' : 'text-[#B77A8C]'} text-[10px] uppercase tracking-wider font-semibold`}>{review.serviceType || 'Client'}</p>
+                                        <div className={`scale-75 ${index % 2 !== 0 ? 'flex justify-end mt-0.5 origin-right -mr-0.5' : 'origin-left -ml-0.5 mt-0.5'}`}>
+                                            <StarRating rating={review.rating} />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="relative z-10">
-                                <p className="font-outfit text-[13px] md:text-sm text-[#8F8A86] leading-relaxed italic">
-                                    "{testimonials[0].content}"
-                                </p>
-                            </div>
-                        </motion.div>
-
-                        {/* Testimonial 2 - Reshu Verma (Full Content, Compact) */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="bg-[#5A2A45] rounded-[24px] p-6 shadow-md relative overflow-hidden text-white flex flex-col gap-4"
-                        >
-                            <div className="flex items-center gap-4 relative z-10 flex-row-reverse justify-end">
-                                <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#B77A8C] shadow-md relative shrink-0">
-                                    <LazyImage src={testimonials[1].image} alt={testimonials[1].name} className="w-full h-full object-cover" />
+                                <div className="relative z-10">
+                                    <p className={`font-outfit text-[13px] md:text-sm ${index % 2 !== 0 ? 'text-white/90 text-justify whitespace-pre-line opacity-95' : 'text-[#8F8A86] leading-relaxed italic'}`}>
+                                        "{review.content}"
+                                    </p>
                                 </div>
-                                <div className="text-right flex-1">
-                                    <h3 className="font-display text-lg text-[#E8CBB6] font-bold leading-tight">{testimonials[1].name}</h3>
-                                    <p className="font-outfit text-white/80 text-[10px] uppercase tracking-wider font-semibold">{testimonials[1].role}</p>
-                                    <div className="flex justify-end mt-0.5 scale-75 origin-right -mr-0.5">
-                                        <StarRating rating={testimonials[1].rating} />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="relative z-10">
-                                <div className="font-outfit text-[13px] md:text-sm leading-relaxed text-white/90 text-justify whitespace-pre-line opacity-95">
-                                    {testimonials[1].content}
-                                </div>
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                        ))}
 
                     </div>
                 </section>
 
                 <div className="pb-24 text-center">
-                    <p className="font-outfit text-[#8F8A86] mb-8">Ready to create your own memories?</p>
-                    <a href="/contact" className="inline-block px-10 py-4 bg-[#B77A8C] text-white rounded-full font-outfit uppercase tracking-[2px] text-sm hover:bg-[#5A2A45] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
-                        Book a Session
-                    </a>
+                    <p className="font-outfit text-[#8F8A86] mb-8">{ctaSection.text || "Ready to create your own memories?"}</p>
                 </div>
 
             </div>

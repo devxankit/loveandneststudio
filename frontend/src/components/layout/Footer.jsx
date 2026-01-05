@@ -24,7 +24,7 @@ const Footer = () => {
                         </p>
                         <div className="pt-2">
                             <span className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] uppercase tracking-widest text-[#B77A8C]">
-                                Pune, India
+                                Dehradun, India
                             </span>
                         </div>
                     </div>
@@ -77,6 +77,8 @@ const Footer = () => {
                                 { icon: <><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" /><path d="m10 15 5-3-5-3z" /></>, href: "https://youtube.com/@loveandnest?si=O7DUvepeflrB2_p5", color: "hover:bg-[#FF0000]" },
                                 { icon: <><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></>, href: "https://instagram.com", color: "hover:bg-[#E1306C]" },
                                 { icon: <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />, href: "https://facebook.com", color: "hover:bg-[#1877F2]" },
+                                { icon: <path d="M14.188 10.156c-1.334-.73-2.618-.46-3.262.247-.365.399-.544 1.054-.544 1.972 0 .869.195 1.488.583 1.839.615.556 1.7.532 2.827-.066.079-.395.179-.861.272-1.401.127-.723.167-1.745.124-2.591zm0 5.483l-1.921 1.02a6.3 6.3 0 01-4.832 0 6.273 6.273 0 01-3.14-5.32c0-3.414 2.8-6.195 6.242-6.195 2.222 0 4.204 1.154 5.289 2.956.124.204.062.47-.142.595l-1.637 1.002a.426.426 0 01-.58-.124 3.766 3.766 0 00-2.93-1.874 3.82 3.82 0 00-3.717 3.64c0 1.996 1.554 3.633 3.616 3.633.923 0 1.758-.328 2.378-.885-.018-.621-.054-1.282-.124-1.961-.157-1.524-.49-2.937-1.025-3.882-.782-1.383-2.316-2.091-4.48-1.564-2.827.688-4.436 3.327-4.436 6.368 0 4.167 2.65 6.645 6.009 6.645 2.366 0 4.29-1.233 5.45-3.327l.182-.328a.424.424 0 01.521-.17l1.782.723a.422.422 0 01.242.535 9.176 9.176 0 01-8.177 5.093c-5.18 0-9.282-3.8-9.282-9.175 0-5.717 4.606-10.428 10.38-10.428 5.766 0 9.8 4.237 9.8 9.38 0 1.706-.554 3.917-2.089 6.012a.426.426 0 01-.628.069l-1.625-1.233a.425.425 0 01-.064-.593c1.06-1.396 1.487-2.915 1.487-4.255 0-2.321-.868-4.15-2.617-4.15-1.127 0-1.897.669-2.203 1.834z" />, href: "https://www.threads.net/@love.neststudio", color: "hover:bg-[#000000]" },
+                                { icon: <path d="M9.04 21.54c.24-1.17.47-2.64.55-3.03.04-.19 1.05-4.47 1.05-4.47s-.26-.53-.26-1.32c0-1.24.72-2.17 1.61-2.17.76 0 1.12.57 1.12 1.25 0 .76-.48 1.91-.73 2.97-.21.89.45 1.61 1.33 1.61 1.6 0 2.83-1.68 2.83-4.11 0-2.16-1.55-3.66-3.77-3.66-2.74 0-4.35 2.05-4.35 4.18 0 .83.32 1.71.72 2.2.08.1.09.18.07.28-.08.31-.25 1.02-.28 1.17-.05.19-.19.23-.44.11-1.65-.77-2.68-3.18-2.68-5.12 0-4.17 3.03-8 8.74-8 4.59 0 8.16 3.27 8.16 7.63 0 4.55-2.87 8.22-6.85 8.22-1.34 0-2.6-.7-3.03-1.53 0 0-.66 2.52-.82 3.14-.3 1.14-1.1 2.58-1.64 3.45" />, href: "https://in.pinterest.com/", color: "hover:bg-[#E60023]" },
                                 { icon: <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 19.938l.965-4.638A8.119 8.119 0 0 1 2 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />, href: "https://whatsapp.com", color: "hover:bg-[#25D366]" }
                             ].map((social, idx) => (
                                 <a
@@ -98,7 +100,7 @@ const Footer = () => {
                     <span>© {currentYear} Love & Nest Studio. All rights reserved.</span>
                     <div className="flex gap-8 mt-4 md:mt-0">
                         <span className="hover:text-white cursor-pointer transition-colors">Privacy</span>
-                        <span className="hover:text-white cursor-pointer transition-colors">Terms</span>
+                        <Link to="/terms-and-conditions" className="hover:text-white cursor-pointer transition-colors">Terms</Link>
                         <span className="hover:text-white cursor-pointer transition-colors">Sitemap</span>
                     </div>
                 </div>

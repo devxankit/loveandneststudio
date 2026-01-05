@@ -1,57 +1,59 @@
-// API Base URL Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import axios from 'axios';
 
-// Generic API call function
-export const apiCall = async (endpoint, options = {}) => {
-    const url = `${API_BASE_URL}${endpoint}`;
-
-    const defaultOptions = {
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers,
-        },
-        ...options,
-    };
-
-    try {
-        const response = await fetch(url, defaultOptions);
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || 'API request failed');
-        }
-
-        return data;
-    } catch (error) {
-        console.error('API Error:', error);
-        throw error;
+// Create Axios Instance
+const api = axios.create({
+    baseURL: 'http://localhost:5000/api', // Hardcoded for now, or use import.meta.env.VITE_API_URL
+    headers: {
+        'Content-Type': 'application/json'
     }
+});
+
+// Request Interceptor (if we add Auth later)
+api.interceptors.request.use(config => {
+    // const token = localStorage.getItem('adminToken');
+    // if(token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+}, error => Promise.reject(error));
+
+// Pages API
+export const getPages = () => api.get('/pages');
+export const getPage = (slug) => api.get(`/pages/${slug}`);
+export const createPage = (data) => api.post('/pages', data);
+export const updatePageSection = (slug, sectionId, formData) => {
+    return api.put(`/pages/${slug}/sections/${sectionId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' } // Needed for files
+    });
+};
+export const updatePageSectionJSON = (slug, sectionId, content) => {
+    return api.put(`/pages/${slug}/sections/${sectionId}`, { content }, {
+        headers: { 'Content-Type': 'application/json' }
+    });
+};
+export const uploadImage = (formData) => {
+    return api.post('/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
 };
 
-// GET request
-export const get = (endpoint) => apiCall(endpoint, { method: 'GET' });
+// Blog API
+export const getPosts = (params) => api.get('/posts', { params });
+export const getPost = (slug) => api.get(`/posts/${slug}`);
+export const createPost = (formData) => api.post('/posts', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const updatePost = (id, formData) => api.put(`/posts/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const deletePost = (id) => api.delete(`/posts/${id}`);
 
-// POST request
-export const post = (endpoint, body) =>
-    apiCall(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(body),
-    });
+// Testimonials API
+export const getTestimonials = () => api.get('/testimonials');
+export const createTestimonial = (formData) => api.post('/testimonials', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const updateTestimonial = (id, formData) => api.put(`/testimonials/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const deleteTestimonial = (id) => api.delete(`/testimonials/${id}`);
 
-// PUT request
-export const put = (endpoint, body) =>
-    apiCall(endpoint, {
-        method: 'PUT',
-        body: JSON.stringify(body),
-    });
-
-// DELETE request
-export const del = (endpoint) =>
-    apiCall(endpoint, { method: 'DELETE' });
-
-export default {
-    get,
-    post,
-    put,
-    del,
-};
+export default api;

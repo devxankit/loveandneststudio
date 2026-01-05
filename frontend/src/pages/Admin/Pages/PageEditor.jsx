@@ -1,75 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Save, Layout, Type, Image as ImageIcon, List, Plus } from 'lucide-react';
-
-// Mock Config Data (In a real app, this comes from an API or Config file)
-const PAGE_CONFIGS = {
-    home: {
-        title: "Home Page",
-        description: "Manage the main landing page sections.",
-        sections: [
-            { id: 'hero', title: "Hero Slider", icon: ImageIcon, status: 'Active', fields: ['slider_images', 'overlay_text'] },
-            { id: 'intro', title: "Welcome / Hello", icon: Type, status: 'Active', fields: ['heading', 'subtext', 'image'] },
-            { id: 'artist', title: "The Artist", icon: Layout, status: 'Active', fields: ['artist_name', 'bio', 'portrait'] },
-            { id: 'philosophy', title: "Philosophy", icon: List, status: 'Active', fields: ['quote', 'points'] },
-            { id: 'curated', title: "Curated Moments (Split)", icon: ImageIcon, status: 'Active', fields: ['gallery_images'] },
-        ]
-    },
-    about: {
-        title: "About Page",
-        description: "Edit your biography and studio details.",
-        sections: [
-            { id: 'hero', title: "Hero Section", icon: ImageIcon, status: 'Active' },
-            { id: 'bio', title: "Biography Script", icon: Type, status: 'Active' },
-            { id: 'why_us', title: "Why Choose Us", icon: List, status: 'Active' },
-        ]
-    },
-    contact: {
-        title: "Contact Page",
-        description: "Update contact info and form settings.",
-        sections: [
-            { id: 'info', title: "Contact Info", icon: Type, status: 'Active' },
-            { id: 'form', title: "Form Settings", icon: List, status: 'Active' },
-        ]
-    }
-};
+import { ArrowLeft, Save, Layout, Type, Image as ImageIcon, List, Loader } from 'lucide-react';
+import { getPage, updatePageSection } from '../../../services/api';
 
 const PageEditor = () => {
-    const { pageId } = useParams();
+    const { pageId } = useParams(); // Using this as 'slug'
     const navigate = useNavigate();
-    const config = PAGE_CONFIGS[pageId];
 
-    // State for the currently selected section to edit
+    const [pageData, setPageData] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [activeSection, setActiveSection] = useState(null);
+    const [editForm, setEditForm] = useState({});
+    const [saving, setSaving] = useState(false);
+    const [file, setFile] = useState(null); // For image uploads
+    const [fileTargetKey, setFileTargetKey] = useState('image');
 
-    // Mock Form State
-    const [formData, setFormData] = useState({});
-
-    if (!config) return <div className="p-10 text-center">Page not found</div>;
+    useEffect(() => {
+        const fetchPage = async () => {
+            try {
+                const response = await getPage(pageId);
+                setPageData(response.data);
+            } catch (error) {
+                console.error("Failed to fetch page:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPage();
+    }, [pageId]);
 
     const handleSectionClick = (section) => {
         setActiveSection(section);
-        // Reset/Load form data mock
-        setFormData({ title: section.title, content: "Existing content..." });
+        // Deep copy content to form state
+        setEditForm({ ...section.content });
+        setFile(null);
+        setFileTargetKey('image');
     };
 
     const handleBack = () => {
         if (activeSection) {
             setActiveSection(null);
+            setEditForm({});
         } else {
             navigate('/admin/pages');
         }
     };
 
-    const handleSave = () => {
-        // Simulate save
-        const btn = document.getElementById('save-btn');
-        if (btn) {
-            btn.innerText = "Saved!";
-            setTimeout(() => btn.innerText = "Save Changes", 2000);
+    const handleInputChange = (key, value) => {
+        setEditForm(prev => ({ ...prev, [key]: value }));
+    };
+
+    const handleFileChange = (e) => {
+        if (e.target.files[0]) {
+            setFile(e.target.files[0]);
         }
     };
+
+    const handleSave = async () => {
+        if (!activeSection) return;
+        setSaving(true);
+        const formData = new FormData();
+
+        // Append all text fields as a JSON string
+        formData.append('content', JSON.stringify(editForm));
+
+        if (file) {
+            formData.append('image', file); // 'image' is the fieldname expected by multer
+            formData.append('targetKey', fileTargetKey); // Tell backend which key to update
+        }
+
+        try {
+            await updatePageSection(pageId, activeSection.id, formData);
+
+            // Refresh local data
+            const response = await getPage(pageId);
+            setPageData(response.data);
+
+            // Show success (you might want a toast here)
+            alert('Section Updated Successfully!');
+        } catch (error) {
+            console.error(error);
+            alert('Failed to save changes.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    if (loading) return <div className="h-full flex items-center justify-center text-[#5A2A45]"><Loader className="animate-spin mr-2" /> Loading Page...</div>;
+    if (!pageData) return <div className="p-10 text-center">Page not found via API ({pageId})</div>;
 
     return (
         <div className="h-full flex flex-col">
@@ -80,22 +99,23 @@ const PageEditor = () => {
                         onClick={handleBack}
                         className="flex items-center gap-2 text-[#6E5A52] hover:text-[#5A2A45] transition-colors mb-2 text-sm font-medium"
                     >
-                        <ArrowLeft size={16} /> {activeSection ? `Back to ${config.title}` : 'Back to Pages'}
+                        <ArrowLeft size={16} /> {activeSection ? `Back to ${pageData.title}` : 'Back to Pages'}
                     </button>
                     <h1 className="font-display text-3xl md:text-4xl text-[#5A2A45]">
-                        {activeSection ? activeSection.title : config.title}
+                        {activeSection ? `${activeSection.title || activeSection.id}` : pageData.title}
                     </h1>
                     <p className="text-[#6E5A52]/70 font-outfit font-light text-sm">
-                        {activeSection ? `Editing content for ${activeSection.title}` : config.description}
+                        {activeSection ? 'Edit content fields below' : 'Manage page sections'}
                     </p>
                 </div>
                 {activeSection && (
                     <button
-                        id="save-btn"
                         onClick={handleSave}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-[#5A2A45] text-[#F1EBDD] rounded-full text-sm font-bold tracking-wide hover:bg-[#4a2238] transition-all shadow-lg active:scale-95"
+                        disabled={saving}
+                        className="flex items-center gap-2 px-6 py-2.5 bg-[#5A2A45] text-[#F1EBDD] rounded-full text-sm font-bold tracking-wide hover:bg-[#4a2238] transition-all shadow-lg active:scale-95 disabled:opacity-50"
                     >
-                        <Save size={16} /> Save Changes
+                        {saving ? <Loader className="animate-spin" size={16} /> : <Save size={16} />}
+                        {saving ? 'Saving...' : 'Save Changes'}
                     </button>
                 )}
             </div>
@@ -111,7 +131,7 @@ const PageEditor = () => {
                         exit={{ opacity: 0, scale: 0.95 }}
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                     >
-                        {config.sections.map((section) => (
+                        {pageData.sections.map((section) => (
                             <motion.button
                                 key={section.id}
                                 onClick={() => handleSectionClick(section)}
@@ -120,26 +140,20 @@ const PageEditor = () => {
                                 className="bg-white p-6 rounded-2xl shadow-sm border border-[#5A2A45]/5 text-left group hover:shadow-md transition-all flex flex-col h-40 justify-between relative overflow-hidden"
                             >
                                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                    <section.icon size={64} className="text-[#5A2A45]" />
+                                    <Layout size={64} className="text-[#5A2A45]" />
                                 </div>
                                 <div className="w-10 h-10 rounded-lg bg-[#F1EBDD] flex items-center justify-center text-[#5A2A45] mb-4">
-                                    <section.icon size={20} />
+                                    <Type size={20} />
                                 </div>
                                 <div>
-                                    <h3 className="font-display text-lg text-[#5A2A45]">{section.title}</h3>
+                                    <h3 className="font-display text-lg text-[#5A2A45]">{section.title || section.id}</h3>
                                     <p className="text-xs text-[#6E5A52]/60 mt-1 uppercase tracking-wider">Click to Edit</p>
                                 </div>
                             </motion.button>
                         ))}
-
-                        {/* Add New Section Button (Visual Mock) */}
-                        <button className="border-2 border-dashed border-[#5A2A45]/10 rounded-2xl flex flex-col items-center justify-center gap-3 text-[#5A2A45]/40 hover:text-[#5A2A45] hover:border-[#5A2A45]/30 transition-all h-40">
-                            <Plus size={24} />
-                            <span className="text-sm font-medium">Add Section</span>
-                        </button>
                     </motion.div>
                 ) : (
-                    /* EDITING VIEW */
+                    /* EDITING VIEW (DYNAMIC FIELDS) */
                     <motion.div
                         key="editor"
                         initial={{ opacity: 0, x: 20 }}
@@ -147,54 +161,98 @@ const PageEditor = () => {
                         exit={{ opacity: 0, x: -20 }}
                         className="bg-white rounded-2xl shadow-sm border border-[#5A2A45]/5 p-8 max-w-4xl"
                     >
-                        {/* Dynamic Field Mockup */}
                         <div className="space-y-6">
-                            <div>
-                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-2">Section Heading</label>
-                                <input
-                                    type="text"
-                                    defaultValue={activeSection.title}
-                                    className="w-full text-lg p-4 bg-[#F8F6F4] border-b-2 border-transparent focus:border-[#5A2A45] outline-none rounded-t-lg transition-colors font-display text-[#5A2A45]"
-                                />
-                            </div>
+                            {/* Dynamically render inputs based on content keys */}
+                            {/* Dynamically render inputs based on content keys */}
+                            {Object.keys(editForm).map((key) => {
+                                const value = editForm[key];
+                                const isImageKey = key === 'image' || key === 'portrait' || key.toLowerCase().includes('img');
+                                const isGallery = (key === 'slides' || key === 'images') && Array.isArray(value);
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-2">Primary Image</label>
-                                    <div className="aspect-video bg-[#F1EBDD] rounded-xl flex flex-col items-center justify-center text-[#5A2A45]/50 border-2 border-dashed border-[#5A2A45]/10 hover:border-[#5A2A45]/30 cursor-pointer transition-colors group">
-                                        <ImageIcon size={32} className="mb-2 group-hover:scale-110 transition-transform" />
-                                        <span className="text-xs font-medium">Click to Upload</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-2">Visibility</label>
-                                    <div className="flex items-center gap-4 p-4 bg-[#F8F6F4] rounded-lg">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                                            <span className="text-sm font-medium text-[#5A2A45]">Visible</span>
+                                if (isGallery) {
+                                    return (
+                                        <div key={key} className="p-4 bg-[#F8F6F4] rounded-xl border border-[#5A2A45]/5">
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-4">
+                                                Manage Gallery ({value.length})
+                                            </label>
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                                {value.map((slide, idx) => (
+                                                    <div key={idx} className="relative group aspect-square rounded-lg overflow-hidden border border-[#5A2A45]/10">
+                                                        <img src={slide} alt={`Slide ${idx}`} className="w-full h-full object-cover" />
+                                                        <button
+                                                            onClick={() => {
+                                                                const newSlides = value.filter((_, i) => i !== idx);
+                                                                handleInputChange(key, newSlides);
+                                                            }}
+                                                            className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                            title="Remove Slide"
+                                                        >
+                                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="flex items-center gap-4">
+                                                <input
+                                                    type="file"
+                                                    onChange={(e) => {
+                                                        if (e.target.files[0]) {
+                                                            setFile(e.target.files[0]);
+                                                            setFileTargetKey(key); // Target 'slides'
+                                                        }
+                                                    }}
+                                                    className="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#5A2A45] file:text-[#F1EBDD] hover:file:bg-[#4a2238]"
+                                                />
+                                                {file && fileTargetKey === key && <span className="text-xs text-[#5A2A45] font-medium">Ready to Upload</span>}
+                                            </div>
                                         </div>
-                                        <button className="text-xs text-[#B77A8C] hover:text-[#5A2A45] underline">Change</button>
-                                    </div>
+                                    );
+                                }
 
-                                    <div className="mt-6">
-                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-2">Background Color</label>
-                                        <div className="flex gap-2">
-                                            {['#F1EBDD', '#5A2A45', '#FFFFFF', '#C9D0C3'].map(c => (
-                                                <div key={c} className="w-8 h-8 rounded-full border border-black/10 cursor-pointer hover:scale-110 transition-transform shadow-sm" style={{ backgroundColor: c }}></div>
-                                            ))}
+                                if (isImageKey) {
+                                    return (
+                                        <div key={key} className="p-4 bg-[#F8F6F4] rounded-xl border border-[#5A2A45]/5">
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-2">
+                                                {key.replace(/_/g, ' ')}
+                                            </label>
+                                            <div className="flex items-center gap-6">
+                                                {value && (
+                                                    <div className="w-24 h-24 rounded-lg overflow-hidden border border-[#5A2A45]/10 shrink-0">
+                                                        <img src={value} alt={key} className="w-full h-full object-cover" />
+                                                    </div>
+                                                )}
+                                                <div className="flex-1">
+                                                    <input
+                                                        type="file"
+                                                        onChange={(e) => {
+                                                            if (e.target.files[0]) {
+                                                                setFile(e.target.files[0]);
+                                                                setFileTargetKey(key); // Target specific key
+                                                            }
+                                                        }}
+                                                        className="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#F1EBDD] file:text-[#5A2A45] hover:file:bg-[#E8CBB6]"
+                                                    />
+                                                    {file && fileTargetKey === key && <p className="text-xs text-[#5A2A45] mt-2 font-medium">New image selected. Click Save to apply.</p>}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    );
+                                }
 
-                            <div>
-                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-2">Content / Description</label>
-                                <textarea
-                                    className="w-full h-40 p-4 bg-[#F8F6F4] rounded-lg outline-none focus:ring-1 focus:ring-[#5A2A45] resize-none"
-                                    placeholder="Enter section content here..."
-                                    defaultValue={`Content for ${activeSection.title}...`}
-                                ></textarea>
-                            </div>
+                                return (
+                                    <div key={key}>
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-2">
+                                            {key.replace(/_/g, ' ')}
+                                        </label>
+                                        <textarea
+                                            value={typeof value === 'object' ? JSON.stringify(value, null, 2) : value || ''}
+                                            onChange={(e) => handleInputChange(key, e.target.value)}
+                                            className="w-full min-h-[50px] p-4 bg-[#F8F6F4] rounded-lg outline-none focus:ring-1 focus:ring-[#5A2A45] resize-y font-outfit"
+                                        />
+                                    </div>
+                                );
+                            })}
+
                         </div>
                     </motion.div>
                 )}

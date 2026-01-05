@@ -27,10 +27,13 @@ import hero5 from '../../assets/images/hero/Screenshot 2025-12-30 141756.png';
 import hero6 from '../../assets/images/hero/Screenshot 2025-12-30 141833.png';
 import hero7 from '../../assets/images/hero/Screenshot 2025-12-30 141842.png';
 
-const HorizontalCollage = () => {
-    const images = [hero1, hero2, hero3, hero4, hero5, hero6, hero7];
-    const row1 = [...images, ...images, hero1, hero2];
-    const row2 = [hero3, hero4, hero5, hero6, hero7, hero1, hero2, hero3, hero4, hero5, hero6, hero7];
+const HorizontalCollage = ({ images = [] }) => {
+    // If no images passed (default handling upstream but safety check here)
+    if (!images || images.length === 0) return null;
+
+    const row1 = [...images, ...images, images[0], images[1]];
+    // Ensure we have enough length for row2 even if input is small
+    const row2 = [...images, ...images, ...images];
 
     return (
         <section className="relative pt-24 pb-48 bg-[#F1EBDD] overflow-hidden flex flex-col gap-6">
@@ -151,14 +154,51 @@ const HeroImageSlider = ({ images }) => {
     );
 };
 
+import { getPage } from '../../services/api';
+
 const Home = () => {
     const scrollRef = useRef(null);
     const [isAutoScrolling, setIsAutoScrolling] = React.useState(true);
+    const [pageData, setPageData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     const introRef = useRef(null);
     const artistRef = useRef(null);
     const philosophyRef = useRef(null);
     const contactRef = useRef(null);
     const [activeSection, setActiveSection] = useState("01");
+    const [expandedGalleryIndex, setExpandedGalleryIndex] = useState(null);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const { data } = await getPage('home');
+                setPageData(data);
+            } catch (error) {
+                console.error("Failed to load home content:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    // Helper to get section data
+    const getSection = (id) => pageData?.sections?.find(s => s.id === id)?.content || {};
+
+    const heroSection = getSection('hero');
+    const introSection = getSection('intro');
+    const artistSection = getSection('artist');
+    const collageSection = getSection('collage');
+
+    // Dynamic Images or Fallbacks
+    const heroSlides = heroSection.slides?.length > 0 ? heroSection.slides : [hero1, hero2, hero3, hero4];
+    const introImage = introSection.image || familyImg;
+    const artistImage = artistSection.portrait || aboutImg;
+
+    // Collage Images
+    const defaultCollage = [hero1, hero2, hero3, hero4, hero5, hero6, hero7];
+    const collageImages = collageSection.images?.length > 0 ? collageSection.images : defaultCollage;
 
     const scrollToRef = (ref, id) => {
         setIsAutoScrolling(false);
@@ -209,26 +249,26 @@ const Home = () => {
 
                 {/* 01. HERO SLIDER */}
                 <HomeSection index={10} fullHeight={false} className="h-[100dvh] md:h-[85vh] min-h-[500px] bg-[#F1EBDD] text-white relative p-0 border-none" isSticky={false}>
-                    <HeroImageSlider images={[hero1, hero2, hero3, hero4]} />
+                    <HeroImageSlider images={heroSlides} />
                     <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center text-white pointer-events-none px-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2.5 }} className="relative">
                             <div className="overflow-hidden py-2 md:py-4 px-2 md:px-10">
                                 <motion.h1 initial={{ y: "110%", opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }} className="font-display text-[18vw] md:text-[15vw] lg:text-[11rem] leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-                                    Love &
+                                    {heroSection.heading || "Love &"}
                                 </motion.h1>
                             </div>
                             <div className="overflow-hidden py-2 -mt-2 md:-mt-6 lg:-mt-10">
                                 <motion.h1 initial={{ y: "-110%", opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1], delay: 0.1 }} className="font-display text-[18vw] md:text-[15vw] lg:text-[11rem] leading-[0.85] tracking-tighter italic font-light opacity-90 drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-                                    Nest
+                                    {heroSection.subheading || "Nest"}
                                 </motion.h1>
                             </div>
                             <motion.div initial={{ width: 0, opacity: 0 }} animate={{ width: "100%", opacity: 1 }} transition={{ duration: 1.5, delay: 0.8, ease: "circOut" }} className="h-[1px] md:h-[2px] bg-white/60 mx-auto my-6 md:my-12" />
                             <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 0.6, y: 0 }} transition={{ duration: 1, delay: 1.2 }} className="text-[8px] md:text-sm font-light tracking-[0.6em] md:tracking-[0.8em] uppercase">
-                                Artistic Motherhood · Lifestyle Photography
+                                {heroSection.overlay_text || "Maternity • Newborn • Kids"}
                             </motion.p>
                         </motion.div>
                         <div className="absolute top-[10%] right-[10%] opacity-20 hidden md:block">
-                            <span className="text-[10px] tracking-[0.5em] font-light">18.5204° N, 73.8567° E</span>
+                            <span className="text-[10px] tracking-[0.5em] font-light">Dehradun, India</span>
                         </div>
                     </div>
                 </HomeSection>
@@ -288,7 +328,7 @@ const Home = () => {
                                 <span className="text-[#5A2A45] italic font-light">with us includes</span>
                             </h2>
                             <div className="space-y-4 md:space-y-8">
-                                {["Personalized Moodboarding", "Professional Art Direction", "Bespoke Retouching", "Physical Gallery Artifacts", "Digital Archives Access"].map((item, idx) => (
+                                {["Personalized Moodboarding", "Professional Art Direction", "Bespoke Retouching", "Comfortable Environment", "Digital Archives Access"].map((item, idx) => (
                                     <motion.div key={idx} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: idx * 0.1 }} className="flex items-center gap-4 md:gap-6 group">
                                         <div className="w-5 h-5 md:w-6 md:h-6 border border-[#5A2A45]/30 rounded-full flex items-center justify-center group-hover:border-[#5A2A45] transition-colors">
                                             <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#5A2A45] rounded-full scale-0 group-hover:scale-100 transition-transform"></div>
@@ -323,7 +363,17 @@ const Home = () => {
                     <div className="flex gap-4 overflow-hidden py-10 md:py-16 relative z-10 px-2 md:px-4">
                         <motion.div animate={{ x: [0, -1200] }} transition={{ duration: 45, repeat: Infinity, ease: "linear" }} className="flex gap-2 md:gap-4 shrink-0">
                             {[hero1, hero2, hero3, hero4, hero5, hero6, hero7, hero1, hero2, hero3, hero4].map((img, i) => (
-                                <motion.div key={i} whileHover={{ scale: 1.05, rotate: 1, zIndex: 20 }} className="relative w-[140px] md:w-[220px] h-[200px] md:h-[320px] rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-xl group transition-all duration-700 bg-black/5">
+                                <motion.div
+                                    key={i}
+                                    onClick={() => setExpandedGalleryIndex(expandedGalleryIndex === i ? null : i)}
+                                    animate={{
+                                        scale: expandedGalleryIndex === i ? 1.25 : 1,
+                                        zIndex: expandedGalleryIndex === i ? 50 : 1
+                                    }}
+                                    whileHover={{ scale: 1.05, rotate: 1, zIndex: 20 }}
+                                    transition={{ duration: 0.4 }}
+                                    className="relative w-[140px] md:w-[220px] h-[200px] md:h-[320px] rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-xl group cursor-pointer bg-black/5"
+                                >
                                     <div className="absolute inset-0 bg-[#5A2A45]/10 group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none"></div>
                                     <LazyImage src={img} className="w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 transition-all duration-1000 scale-110 group-hover:scale-100" />
                                 </motion.div>
@@ -352,7 +402,7 @@ const Home = () => {
                             <div className="relative py-10">
                                 <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[1px] h-full bg-[#6E5A52]/10"></div>
                                 <div className="space-y-12 relative z-10">
-                                    {[{ id: "01", label: "Intro", ref: introRef }, { id: "02", label: "Artist", ref: artistRef }, { id: "03", label: "Philosophy", ref: philosophyRef }, { id: "04", label: "Contact", ref: contactRef }].map((item, i) => (
+                                    {[{ id: "01", label: "Info", ref: introRef }, { id: "02", label: "Artist", ref: artistRef }, { id: "03", label: "Philosophy", ref: philosophyRef }, { id: "04", label: "Contact", ref: contactRef }].map((item, i) => (
                                         <motion.div key={i} onClick={() => scrollToRef(item.ref, item.id)} whileHover={{ x: 10 }} className="flex items-center justify-center gap-6 cursor-pointer group">
                                             <span className={`text-[9px] font-bold transition-opacity uppercase tracking-[0.3em] ${activeSection === item.id ? 'opacity-100 text-[#B77A8C]' : 'opacity-20'}`}>{item.id}</span>
                                             <div className={`h-[1px] transition-all duration-500 ${activeSection === item.id ? 'w-20 bg-[#B77A8C]' : 'w-12 bg-[#6E5A52]/10 group-hover:bg-[#B77A8C] group-hover:w-20'}`}></div>
@@ -382,16 +432,16 @@ const Home = () => {
                         <HomeSection index={21} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-16 min-h-[70vh] lg:min-h-screen border-t border-black/5">
                             <div className="w-full h-full flex flex-col justify-center">
                                 <div className="flex justify-between items-end mb-8 md:mb-12 border-b border-black/10 pb-4 md:pb-6">
-                                    <h2 className="font-display text-3xl md:text-5xl uppercase">Hello and <br /> Welcome</h2>
+                                    <h2 className="font-display text-3xl md:text-5xl uppercase" dangerouslySetInnerHTML={{ __html: introSection.heading || "Hello and <br /> Welcome" }} />
                                     <span className="text-2xl md:text-4xl font-display opacity-30">0.1</span>
                                 </div>
                                 <div className="flex flex-col gap-6 md:gap-10">
                                     <div className="aspect-[4/5] bg-white/5 p-2 md:p-4 relative grayscale hover:grayscale-0 transition-all duration-700 w-full md:w-2/3 mx-auto">
-                                        <LazyImage src={familyImg} alt="Welcome" className="w-full h-full object-cover opacity-80" />
+                                        <LazyImage src={introImage} alt="Welcome" className="w-full h-full object-cover opacity-80" />
                                     </div>
                                     <div className="space-y-4 md:space-y-6 text-center md:text-left">
                                         <p className="text-lg md:text-2xl font-light leading-relaxed text-[#6E5A52]">
-                                            "We preserve the <span className="italic font-serif text-[#E8CBB6]">feeling</span> of a moment."
+                                            "{introSection.text || "Love you can feel forever."}"
                                         </p>
                                         <Link to="/about">
                                             <button className="mt-4 px-6 py-2 border border-black/30 hover:bg-[#5A2A45] hover:text-[#FAF9F6] transition-all duration-300 text-[10px] uppercase tracking-widest cursor-pointer">
@@ -407,20 +457,20 @@ const Home = () => {
                             <HomeSection index={30} className="bg-[#C9D0C3] text-[#1a1a1a] p-6 lg:p-16 min-h-[70vh] lg:min-h-screen">
                                 <div className="w-full h-full flex flex-col justify-center">
                                     <div className="flex justify-between items-end mb-8 md:mb-12 border-b border-black/10 pb-4 md:pb-6">
-                                        <h2 className="font-display text-3xl md:text-5xl uppercase text-[#1a1a1a]">The Artist</h2>
+                                        <h2 className="font-display text-3xl md:text-5xl uppercase text-[#1a1a1a]">{artistSection.title || "The Artist"}</h2>
                                         <span className="text-2xl md:text-4xl font-display opacity-30">0.2</span>
                                     </div>
                                     <div className="flex flex-col gap-6 md:gap-8 h-full">
                                         <div className="h-[30vh] md:h-[40vh] w-full overflow-hidden relative">
-                                            <LazyImage src={aboutImg} alt="Anamika" className="w-full h-full object-cover grayscale contrast-125" />
-                                            <div className="absolute bottom-0 left-0 bg-[#5A2A45] text-[#FAF9F6] px-4 py-2 text-[10px] uppercase tracking-widest">Pune, MH</div>
+                                            <LazyImage src={artistImage} alt="Anamika" className="w-full h-full object-cover grayscale contrast-125" />
+                                            <div className="absolute bottom-0 left-0 bg-[#5A2A45] text-[#FAF9F6] px-4 py-2 text-[10px] uppercase tracking-widest">Dehradun, India</div>
                                         </div>
                                         <div className="space-y-4 md:space-y-6">
                                             <div>
-                                                <h4 className="text-xs font-bold uppercase tracking-widest mb-1 opacity-50">Lead Photographer</h4>
-                                                <p className="font-display text-xl md:text-2xl">Anamika</p>
+                                                <h4 className="text-xs font-bold uppercase tracking-widest mb-1 opacity-50">{artistSection.role || "Lead Photographer"}</h4>
+                                                <p className="font-display text-xl md:text-2xl">{artistSection.name || "Anamika"}</p>
                                             </div>
-                                            <p className="text-sm leading-relaxed text-gray-600">A photographer with a deep passion for capturing the authentic essence of life's journey.</p>
+                                            <p className="text-sm leading-relaxed text-gray-600">{artistSection.bio || "A photographer with a deep passion for capturing the authentic essence of life's journey."}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -464,14 +514,7 @@ const Home = () => {
                                         <h2 className="font-display text-[15vw] md:text-[9rem] leading-[0.85] text-transparent bg-clip-text bg-gradient-to-br from-[#F1EBDD] to-[#B77A8C] drop-shadow-2xl">
                                             Let's<br /> <span className="italic font-light">Create</span>
                                         </h2>
-                                        <Link to="/contact">
-                                            <button className="group relative mt-6 md:mt-8 px-10 md:px-14 py-4 md:py-6 bg-[#F1EBDD] text-[#5A2A45] overflow-hidden rounded-full shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] transition-transform duration-500 hover:scale-105">
-                                                <span className="relative z-10 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-[#F1EBDD] transition-colors duration-300 flex items-center gap-2 md:gap-3">
-                                                    Book a Session <span className="text-sm md:text-lg leading-none">↗</span>
-                                                </span>
-                                                <div className="absolute inset-0 bg-[#B77A8C] translate-y-full group-hover:translate-y-0 transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1)"></div>
-                                            </button>
-                                        </Link>
+
                                     </motion.div>
                                 </div>
                             </HomeSection>
@@ -480,7 +523,7 @@ const Home = () => {
                 </div>
 
                 {/* 04. HORIZONTAL STRIPS */}
-                <HorizontalCollage />
+                <HorizontalCollage images={collageImages} />
             </div>
         </div>
     );

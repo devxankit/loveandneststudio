@@ -17,6 +17,14 @@ import lifestyle1 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31
 import cs1 from '../../assets/images/hero/Screenshot 2025-12-30 141842.png';
 import cs2 from '../../assets/images/hero/Screenshot 2025-12-30 141700.png';
 
+import bday1 from '../../assets/images/services/Screenshot 2026-01-05 114143.png';
+import bday2 from '../../assets/images/services/Screenshot 2026-01-05 114155.png';
+import bday3 from '../../assets/images/services/Screenshot 2026-01-05 114207.png';
+import bday4 from '../../assets/images/services/Screenshot 2026-01-05 114223.png';
+import bday5 from '../../assets/images/services/Screenshot 2026-01-05 114238.png';
+import bday6 from '../../assets/images/services/Screenshot 2026-01-05 114251.png';
+import bday7 from '../../assets/images/services/Screenshot 2026-01-05 114307.png';
+
 // --- ANIMATIONS ---
 const elegantFade = {
     hidden: { opacity: 0, scale: 0.98, filter: "blur(5px)" },
@@ -49,9 +57,9 @@ const getContainerVariant = (type) => ({
 // 1. Balanced Grid (Maternity/Family)
 // Responsive: Stack on mobile (Main top, 2 subs bottom), 5-col split on desktop.
 const BalancedGrid = ({ images, animVariant }) => (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 max-w-3xl mx-auto h-auto md:h-[350px]">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-3 max-w-4xl mx-auto mb-12">
         {/* Main Featured Image */}
-        <motion.div variants={animVariant} className="col-span-2 md:col-span-3 h-[200px] md:h-full rounded-xl overflow-hidden shadow-sm relative group">
+        <motion.div variants={animVariant} className="col-span-2 md:col-span-3 h-[220px] md:h-[350px] rounded-xl overflow-hidden shadow-sm relative group">
             <div className="w-full h-full relative overflow-hidden">
                 <motion.img
                     whileHover={{ scale: 1.05 }} transition={{ duration: 0.8 }}
@@ -61,17 +69,17 @@ const BalancedGrid = ({ images, animVariant }) => (
         </motion.div>
 
         {/* Side Stack */}
-        <div className="col-span-2 md:col-span-2 flex flex-row md:flex-col gap-2 md:gap-3 h-[120px] md:h-full">
+        <div className="col-span-2 md:col-span-2 flex flex-row md:flex-col gap-3 h-[120px] md:h-[350px]">
             <motion.div variants={animVariant} className="flex-1 rounded-xl overflow-hidden shadow-sm group relative">
                 <motion.img
                     whileHover={{ scale: 1.05 }} transition={{ duration: 0.8 }}
-                    src={images[1] || images[0]} alt="Gallery Side 1" className="w-full h-full object-cover center"
+                    src={images[1] || images[0]} alt="Gallery Side 1" className="w-full h-full object-cover object-center"
                 />
             </motion.div>
             <motion.div variants={animVariant} className="flex-1 rounded-xl overflow-hidden shadow-sm group relative">
                 <motion.img
                     whileHover={{ scale: 1.05 }} transition={{ duration: 0.8 }}
-                    src={images[2] || images[0]} alt="Gallery Side 2" className="w-full h-full object-cover center"
+                    src={images[2] || images[0]} alt="Gallery Side 2" className="w-full h-full object-cover object-center"
                 />
             </motion.div>
         </div>
@@ -149,6 +157,7 @@ const ServiceGallery = () => {
             title: "Maternity",
             subtitle: "Embracing Motherhood",
             description: "Timeless portraits celebrating the beauty of expectance.",
+            details: "Our maternity sessions are designed to make you feel empowered and beautiful. We provide a curated closet of high-end gowns and fabrics. The best time to schedule is between 28-34 weeks when you are showing comfortably.",
             component: BalancedGrid,
             animation: elegantFade,
             animType: 'elegant',
@@ -158,6 +167,17 @@ const ServiceGallery = () => {
             title: "Newborn",
             subtitle: "The First Days",
             description: "Pure, safe, and sleepy moments of your brand new addition.",
+            details: "Safety and comfort are our top priorities. We are trained in newborn safety and posing. Sessions are best scheduled within the first 5-15 days of birth. We provide all props, wraps, and accessories.",
+            component: CompactMosaic,
+            animation: cozySlide,
+            animType: 'cozy',
+            images: [nb1, nb2, nb1, nb2, nb1]
+        },
+        'birth': {
+            title: "Birth",
+            subtitle: "The Miracle of Life",
+            description: "Capturing the raw, powerful, and miraculous journey of bringing life into the world.",
+            details: "We document the labor and delivery process with respect and discretion, capturing the first breath and first bond.",
             component: CompactMosaic,
             animation: cozySlide,
             animType: 'cozy',
@@ -167,6 +187,7 @@ const ServiceGallery = () => {
             title: "Baby Milestones",
             subtitle: "Growing So Fast",
             description: "Capturing the magic of sitters, crawlers, and first steps.",
+            details: "From gummy smiles to first steps, these sessions capture your baby's rapid growth. Sitter sessions (6-9 months) are perfect for capturing their blossoming personality.",
             component: CompactStrip,
             animation: playfulPop,
             animType: 'playful',
@@ -176,15 +197,27 @@ const ServiceGallery = () => {
             title: "Cake Smash",
             subtitle: "Smash & Splash",
             description: "Messy, joyful, and colorful first birthday celebrations.",
+            details: "Celebrate the big One! We custom design the set to match your theme. We handle the cake, the decorations, and the cleanup. You just bring the baby!",
             component: PhotoWall,
             animation: playfulPop,
             animType: 'playful',
             images: [baby2, cs1, baby3, baby2, cs2, baby1]
         },
+        'pre-bday': {
+            title: "Pre-Birthday",
+            subtitle: "The Anticipation",
+            description: "Capturing the milestones and excitement leading up to the big day.",
+            details: "Perfect for documenting the crawling, standing, or walking stages before the first birthday.",
+            component: CompactStrip,
+            animation: playfulPop,
+            animType: 'playful',
+            images: [baby1, baby2, baby3, baby1, baby2]
+        },
         'family': {
             title: "Family",
             subtitle: "Bond & Connection",
             description: "Genuine moments of love shared between generations.",
+            details: "Focusing on connection and love. We guide you through natural interactions to capture the genuine bond of your family. Pets are always welcome!",
             component: BalancedGrid,
             animation: warmStagger,
             animType: 'warm',
@@ -194,6 +227,7 @@ const ServiceGallery = () => {
             title: "Lifestyle",
             subtitle: "At Home",
             description: "Unposed, authentic storytelling in your natural element.",
+            details: "Your story, told in your home. These sessions are unposed and documentary-style, using natural light to capture your daily rituals and love.",
             component: PhotoWall,
             animation: cozySlide,
             animType: 'cozy',
@@ -203,10 +237,31 @@ const ServiceGallery = () => {
             title: "Baby Shower",
             subtitle: "Celebration",
             description: "Event coverage for your special welcoming day.",
+            details: "We capture the joy of your celebration, from the details of the decor to the candid laughter of your guests.",
             component: PhotoWall,
             animation: warmStagger,
             animType: 'warm',
             images: [celebration1, fam1, mat1, fam2, celebration1, fam1]
+        },
+        'toddler': {
+            title: "Toddler",
+            subtitle: "Little Explorers",
+            description: "Energetic sessions that capture the wonder and curiosity of your growing child.",
+            details: "We follow their lead, capturing genuine expressions and playful moments in a safe environment.",
+            component: PhotoWall,
+            animation: playfulPop,
+            animType: 'playful',
+            images: [lifestyle1, baby3, nb2, baby2, lifestyle1]
+        },
+        'birthday': {
+            title: "Birthday",
+            subtitle: "Celebration",
+            description: "Documenting the joy, laughter, and celebration of your child's special milestones.",
+            details: "From the cake cutting to family portraits, we cover the highlights of your child's birthday.",
+            component: BalancedGrid,
+            animation: warmStagger,
+            animType: 'warm',
+            images: [bday1, bday2, bday3, bday4, bday5, bday6, bday7]
         }
     };
 
@@ -261,17 +316,18 @@ const ServiceGallery = () => {
             </div>
 
             {/* Gallery Grid Section */}
-            <div className="relative z-10 px-4 mb-16">
+            <div className="relative z-10 px-4 mb-12">
                 <GridComponent images={data.images} animVariant={selectedAnimation} />
             </div>
 
-            <motion.div variants={textVariant} className="text-center relative z-10">
-                <div className="inline-block p-1 rounded-full border border-[#5A2A45]/10 bg-white shadow-sm">
-                    <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-2 bg-[#5A2A45] text-[#F1EBDD] rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs hover:bg-[#411f32] transition-colors group">
-                        Book Session
-                        <Sparkles size={12} className="group-hover:text-yellow-200 transition-colors" />
-                    </Link>
-                </div>
+
+
+            {/* Service Details Text - Moved to Bottom (Above Footer area) */}
+            <motion.div variants={textVariant} className="max-w-2xl mx-auto px-6 mt-12 mb-8 text-center relative z-10">
+                <div className="w-10 h-[1px] bg-[#5A2A45]/20 mx-auto mb-6"></div>
+                <p className="font-outfit text-[#6E5A52]/80 leading-relaxed text-xs md:text-sm italic">
+                    {data.details}
+                </p>
             </motion.div>
 
         </motion.div>

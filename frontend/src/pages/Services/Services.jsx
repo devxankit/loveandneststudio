@@ -11,6 +11,7 @@ import cakeSmashImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-
 import familyImg from '../../assets/images/portfolio/family/Screenshot 2025-12-31 111323.png';
 import celebrationImg from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120803.png';
 import lifestyleImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153353.png';
+import birthdayThumbnail from '../../assets/images/services/Screenshot 2026-01-05 114143.png';
 
 // Animation variants
 const fadeInUp = {
@@ -32,52 +33,59 @@ const Services = () => {
     const services = [
         {
             id: 'maternity',
-            title: "Maternity Photography",
+            title: "Maternity",
             description: "Soft, soulful portraits that celebrate motherhood, love, and the beautiful bond between parents and baby—before your little one arrives.",
             image: maternityImg,
             alt: "Maternity Photography"
         },
         {
+            id: 'birth',
+            title: "Birth",
+            description: "Capturing the raw, powerful, and miraculous journey of bringing life into the world. Every emotion, every first breath, preserved forever.",
+            image: newbornImg,
+            alt: "Birth Photography"
+        },
+        {
             id: 'newborn',
-            title: "Newborn Photography (5–25 Days)",
-            description: "Gentle, cozy newborn sessions designed with safety and comfort at the heart. Natural poses, minimal props, and timeless imagery you’ll cherish forever.",
+            title: "Newborn",
+            description: "Gentle, cozy newborn sessions designed with safety and comfort at the heart. Natural poses, minimal props, and timeless imagery.",
             image: newbornImg,
             alt: "Newborn Photography"
         },
         {
-            id: 'baby',
-            title: "Baby Milestone Photography",
-            description: "3 Months • 6 Months • 9 Months • 1 Year. From tiny smiles to first steps, we capture every beautiful milestone as your baby grows—one precious stage at a time.",
+            id: 'pre-bday',
+            title: "Pre Bday",
+            description: "Capturing the milestones and anticipation leading up to your little one's special day. The smiles, the giggles, and the growth.",
             image: babyImg,
-            alt: "Baby Milestone Photography"
+            alt: "Pre Birthday Photography"
         },
         {
             id: 'cakesmash',
-            title: "Cake Smash Photography",
+            title: "Cake Smash",
             description: "Fun, colorful, and joy-filled first birthday shoots. Let your baby explore, play, and celebrate while we capture the magic (and the mess!).",
             image: cakeSmashImg,
             alt: "Cake Smash Photography"
         },
         {
+            id: 'toddler',
+            title: "Toddler",
+            description: "Energetic and personality-filled sessions that capture the wonder and curiosity of your growing child exploring the world.",
+            image: lifestyleImg,
+            alt: "Toddler Photography"
+        },
+        {
             id: 'family',
-            title: "Family & Parent-Baby Portraits",
+            title: "Family",
             description: "Warm, timeless family portraits that reflect genuine connections, love, and togetherness—perfect for generations to treasure.",
-            image: familyImg,
+            image: celebrationImg,
             alt: "Family Portraits"
         },
         {
-            id: 'babyshower',
-            title: "Baby Shower & Naming Ceremony",
-            description: "A blend of candid emotions and posed moments, beautifully documenting your special celebrations and cultural traditions.",
-            image: celebrationImg,
-            alt: "Baby Shower Coverage"
-        },
-        {
-            id: 'lifestyle',
-            title: "Lifestyle Baby Photography",
-            description: "Natural, story-driven sessions focusing on real emotions, tiny details, and everyday moments—captured in a relaxed, organic style.",
-            image: lifestyleImg,
-            alt: "Lifestyle Baby Photography"
+            id: 'birthday',
+            title: "Birthday",
+            description: "Documenting the joy, laughter, and celebration of your child's special milestones with family and friends.",
+            image: birthdayThumbnail,
+            alt: "Birthday Photography"
         }
     ];
 
@@ -240,7 +248,7 @@ const Services = () => {
 
                     {/* Add-on content here (simplified for this restore step) */}
                     <div className="text-center text-[#B77A8C] italic text-sm">
-                        Scroll down or visit our contact page for full pricing.
+                        Scroll down or visit our contact page for further details.
                     </div>
                 </div>
             </section>

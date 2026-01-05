@@ -29,6 +29,7 @@ const ManageInquiries = lazy(() => import('../pages/Admin/Inquiries/ManageInquir
 const AdminSettings = lazy(() => import('../pages/Admin/Settings/AdminSettings'));
 const Contact = lazy(() => import('../pages/Contact/Contact'));
 const Testimonials = lazy(() => import('../pages/Testimonials/Testimonials'));
+const TermsAndConditions = lazy(() => import('../pages/TermsAndConditions'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
 // Loading Component
@@ -66,6 +67,7 @@ const AppRoutes = () => {
                         <Route path="/best-time-for-maternity-shoot" element={<BestTimeMaternityPost />} />
                         <Route path="/testimonials" element={<Testimonials />} />
                         <Route path="/contact" element={<Contact />} />
+                        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
                         {/* Admin Routes */}
                         <Route path="/admin/login" element={<AdminLogin />} />

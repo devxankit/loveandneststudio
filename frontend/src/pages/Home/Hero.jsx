@@ -65,9 +65,6 @@ const Hero = () => {
                         <Link to="/portfolio">
                             <Button variant="primary" size="large">View Portfolio</Button>
                         </Link>
-                        <Link to="/contact">
-                            <Button variant="outline-light" size="large">Book Session</Button>
-                        </Link>
                     </div>
                 </div>
 

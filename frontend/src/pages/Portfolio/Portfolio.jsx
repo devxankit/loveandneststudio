@@ -21,6 +21,8 @@ import f1 from '../../assets/images/portfolio/family/Screenshot 2025-12-31 11133
 import f2 from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120803.png';
 import f3 from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120811.png';
 
+import { getPage } from '../../services/api'; import { useEffect, useState } from 'react';
+
 const Portfolio = () => {
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({
@@ -28,16 +30,31 @@ const Portfolio = () => {
         offset: ["start start", "end start"]
     });
 
+    const [pageContent, setPageContent] = useState(null);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await getPage('portfolio');
+                if (res.data) setPageContent(res.data);
+            } catch (error) {
+                console.error("Failed to fetch portfolio content", error);
+            }
+        };
+        fetchContent();
+    }, []);
+
     // Parallax ranges adjusted to accommodate longer strips and prevent revealing bottom gaps
     const column1Y = useTransform(scrollYProgress, [0, 1], ["0%", "-45%"]);
     const column2Y = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
     const column3Y = useTransform(scrollYProgress, [0, 1], ["0%", "-55%"]);
 
-    // Archive strips data
-    const strip1 = [newbornImg, b1, babyImg, b2, familyImg, b3, newbornImg, newbornImg, b1, babyImg];
-    const strip2 = [maternityImg, m1, m2, newbornImg, m3, babyImg, maternityImg, m1, m2, newbornImg];
-    const strip3 = [familyImg, f1, f2, maternityImg, f3, babyImg, familyImg, familyImg, f1, f2];
-    const categories = [
+    // Default Data
+    const defaultStrip1 = [newbornImg, b1, babyImg, b2, familyImg, b3, newbornImg, newbornImg, b1, babyImg];
+    const defaultStrip2 = [maternityImg, m1, m2, newbornImg, m3, babyImg, maternityImg, m1, m2, newbornImg];
+    const defaultStrip3 = [familyImg, f1, f2, maternityImg, f3, babyImg, familyImg, familyImg, f1, f2];
+
+    const defaultCategories = [
         {
             id: 'newborn',
             title: 'Newborn',
@@ -75,6 +92,15 @@ const Portfolio = () => {
             accent: 'bg-[#5A2A45]'
         }
     ];
+
+    // Merge Dynamic Data
+    const heroSection = pageContent?.sections?.find(s => s.id === 'hero')?.content;
+    const categoriesSection = pageContent?.sections?.find(s => s.id === 'categories')?.content;
+
+    const strip1 = heroSection?.strip1 || defaultStrip1;
+    const strip2 = heroSection?.strip2 || defaultStrip2;
+    const strip3 = heroSection?.strip3 || defaultStrip3;
+    const categories = categoriesSection || defaultCategories;
 
     const containerVariants = {
         hidden: { opacity: 0 },

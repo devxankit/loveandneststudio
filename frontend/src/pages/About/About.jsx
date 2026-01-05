@@ -1,7 +1,8 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import { getPage } from '../../services/api';
 import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
-
 
 // Import all about images
 import aboutImg1 from '../../assets/images/about/01-1.jpg';
@@ -33,6 +34,27 @@ import babyImg from '../../assets/images/hero/Screenshot 2025-12-30 141711.png';
 import familyImg from '../../assets/images/hero/Screenshot 2025-12-30 141721.png';
 
 const About = () => {
+    const [pageData, setPageData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const { data } = await getPage('about');
+                setPageData(data);
+            } catch (error) {
+                console.error("Failed to load about content:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    const getSection = (id) => pageData?.sections?.find(s => s.id === id)?.content || {};
+    const bioSection = getSection('bio');
+    const floatingGallerySection = getSection('floating_gallery');
+
     const portfolioCategories = [
         { id: 1, name: 'Newborn', image: newbornImg },
         { id: 2, name: 'Maternity', image: maternityImg },
@@ -40,7 +62,7 @@ const About = () => {
         { id: 4, name: 'Family', image: familyImg }
     ];
 
-    const aboutImages = [
+    const defaultAboutImages = [
         { src: aboutImg1, className: "w-[90px] h-[130px] top-[12%] left-[7%] animate-float1" },
         { src: aboutImg2, className: "w-[85px] h-[120px] top-[68%] left-[23%] animate-float2 [animation-delay:1s]" },
         { src: aboutImg3, className: "w-[95px] h-[135px] top-[28%] left-[82%] animate-float3 [animation-delay:2s]" },
@@ -64,11 +86,19 @@ const About = () => {
         { src: aboutImg21, className: "w-[92px] h-[130px] top-[65%] left-[31%] animate-float3 [animation-delay:0.9s]" }
     ];
 
+    // Combine dynamic images with default layout classes
+    const aboutImages = floatingGallerySection.images && floatingGallerySection.images.length > 0
+        ? floatingGallerySection.images.map((imgSrc, index) => ({
+            src: imgSrc,
+            className: defaultAboutImages[index % defaultAboutImages.length].className
+        }))
+        : defaultAboutImages;
+
     return (
         <>
             <SEO
                 title="About Us - Love & Nest Studio"
-                description="Meet Anamika, the founder of Love & Nest Studio, specializing in newborn, maternity, and family photography with grace and refinement."
+                description={bioSection.text ? bioSection.text.substring(0, 150) + "..." : "Meet Anamika, the founder of Love & Nest Studio..."}
                 keywords="about anamika, photography studio founder, newborn photographer, refined photography, family heirlooms"
             />
             <div className="w-full">
@@ -100,10 +130,10 @@ const About = () => {
 
                                 <div className="relative z-10 space-y-10 text-white">
                                     <div className="relative">
-                                        <h2 className="font-display text-[clamp(1.8rem,2.5vw,2.2rem)] font-semibold mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.1)] pb-3">The Photographer</h2>
+                                        <h2 className="font-display text-[clamp(1.8rem,2.5vw,2.2rem)] font-semibold mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.1)] pb-3">{bioSection.heading || "The Photographer"}</h2>
                                         <div className="absolute bottom-0 left-0 w-[60px] h-0.5 bg-white/80 rounded-full"></div>
                                         <p className="font-outfit text-base md:text-lg leading-relaxed text-white/95">
-                                            I'm Anamika, the founder and photographer behind Love & Nest, with over 13 years of professional experience and 8 years of specialized expertise in newborn and baby photography.
+                                            {bioSection.text || "I'm Anamika, the founder and photographer behind Love & Nest, with over 13 years of professional experience and 8 years of specialized expertise in newborn and baby photography."}
                                         </p>
                                     </div>
 

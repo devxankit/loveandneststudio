@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
+import { getPosts } from '../../services/api';
 
 // Images
 import maternityHero from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225737.png';
@@ -11,20 +12,19 @@ import decoImg2 from '../../assets/images/portfolio/maternity/Screenshot 2026-01
 import decoImg3 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 230114.png';
 
 const Blog = () => {
-    // Ideally this will come from backend/admin context later
-    const blogPosts = [
-        {
-            id: 1,
-            title: 'When Is the Best Time to Plan Your Maternity Photoshoot?',
-            excerpt: 'Discover why 28–32 weeks is the safest and most beautiful time for a relaxed, magazine-style maternity shoot experience.',
-            date: 'Jan 2, 2026',
-            category: 'Maternity Guide',
-            image: maternityHero,
-            link: '/best-time-for-maternity-shoot'
-        }
-        // Future posts will be added here
-    ];
+    const [posts, setPosts] = useState([]);
 
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const { data } = await getPosts();
+                setPosts(data);
+            } catch (error) {
+                console.error("Failed to fetch posts:", error);
+            }
+        };
+        fetchPosts();
+    }, []);
 
     const containerRef = useRef(null);
     const { scrollY } = useScroll(); // Use global scroll instead of target-based to avoid layout warnings
@@ -180,15 +180,15 @@ const Blog = () => {
                     {/* Grid Layout - even for one item, this structure ensures future items fit perfectly */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
 
-                        {blogPosts.map((post) => (
+                        {posts.map((post) => (
                             <motion.div
-                                key={post.id}
+                                key={post._id}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 0.6 }}
                             >
-                                <Link to={post.link} className="group block">
+                                <Link to={`/blog/${post.slug}`} className="group block">
                                     {/* Card Container */}
                                     <div className="flex flex-col h-full">
 
@@ -200,12 +200,12 @@ const Blog = () => {
                                             {/* Tag */}
                                             <div className="absolute top-4 left-4 z-20">
                                                 <span className="bg-white/90 backdrop-blur-sm text-[#5A2A45] text-[10px] font-bold tracking-widest px-3 py-1 uppercase rounded-sm shadow-sm">
-                                                    {post.category}
+                                                    {post.tags && post.tags.length > 0 ? post.tags[0] : 'Journal'}
                                                 </span>
                                             </div>
 
                                             <LazyImage
-                                                src={post.image}
+                                                src={post.coverImage || maternityHero}
                                                 alt={post.title}
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                             />
@@ -214,7 +214,7 @@ const Blog = () => {
                                         {/* Content */}
                                         <div className="flex flex-col flex-grow">
                                             <div className="flex items-center gap-3 mb-3 text-[10px] md:text-xs font-outfit uppercase tracking-widest text-[#B77A8C]">
-                                                <span>{post.date}</span>
+                                                <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                                                 <span className="w-1 h-1 bg-[#E8CBB6] rounded-full"></span>
                                                 <span>4 min read</span>
                                             </div>
