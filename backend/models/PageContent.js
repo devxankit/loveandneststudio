@@ -13,7 +13,7 @@ const pageContentSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        enum: ['home', 'about', 'contact', 'services', 'portfolio']
+        enum: ['home', 'about', 'contact', 'services', 'portfolio', 'testimonials']
     },
     title: { type: String, required: true },
     sections: [sectionSchema],

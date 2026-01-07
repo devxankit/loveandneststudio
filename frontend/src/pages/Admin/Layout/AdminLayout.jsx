@@ -15,11 +15,13 @@ import {
     Sparkles,
     FileText,
     ChevronDown,
-    ChevronRight
+
+    ChevronRight,
+    Command
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const SidebarItem = ({ icon: Icon, label, path, isActive, subItems }) => {
+const SidebarItem = ({ icon: Icon, label, path, isActive, subItems, isSidebarCollapsed }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const location = useLocation();
     const hasActiveChild = subItems?.some(sub => location.pathname.startsWith(sub.path));
@@ -45,14 +47,15 @@ const SidebarItem = ({ icon: Icon, label, path, isActive, subItems }) => {
                         ? 'bg-[#F1EBDD] text-[#5A2A45] shadow-lg'
                         : 'text-[#F1EBDD]/70 hover:bg-white/10 hover:text-white'
                     }`}
+                title={isSidebarCollapsed ? label : ''} // Tooltip for mini sidebar
             >
                 <Icon size={20} strokeWidth={(isActive || hasActiveChild) ? 2.5 : 2} className={(isActive || hasActiveChild) ? 'text-[#5A2A45]' : 'text-[#B77A8C] group-hover:text-white transition-colors'} />
 
-                <span className="font-medium tracking-wide text-sm whitespace-nowrap flex-1">
+                <span className={`font-medium tracking-wide text-sm whitespace-nowrap flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:opacity-0 lg:w-0 overflow-hidden' : ''}`}>
                     {label}
                 </span>
 
-                {subItems && (
+                {subItems && !isSidebarCollapsed && (
                     <div className={(isActive || hasActiveChild) ? 'text-[#5A2A45]' : 'text-[#B77A8C]'}>
                         {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                     </div>
@@ -124,6 +127,7 @@ const AdminLayout = () => {
         { icon: PenTool, label: 'Blog', path: '/admin/blog' },
         { icon: MessageSquare, label: 'Testimonials', path: '/admin/testimonials' },
         { icon: Users, label: 'Inquiries', path: '/admin/inquiries' },
+        { icon: Command, label: 'Logo & Branding', path: '/admin/branding' },
         { icon: Settings, label: 'Settings', path: '/admin/settings' },
     ];
 
@@ -147,8 +151,15 @@ const AdminLayout = () => {
 
             {/* Sidebar */}
             <aside
-                className={`bg-[#5A2A45] text-[#F1EBDD] flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.1)] z-30 fixed lg:relative h-full transition-all duration-300 ease-in-out`}
-                style={{ width: isSidebarOpen ? 260 : 80 }}
+                className={`bg-[#5A2A45] text-[#F1EBDD] flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.1)] z-30 fixed lg:relative h-full transition-all duration-300 ease-in-out
+                    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+                `}
+                style={{
+                    width: isSidebarOpen ? 260 : 80,
+                    // On mobile, if closed, we hide via translate, but we don't want width to affect layout if it was relative. 
+                    // Since it is fixed on mobile, width doesn't push content.
+                    // On desktop (lg), if closed, it is width 80.
+                }}
             >
                 {/* Brand Header */}
                 <div className="h-20 flex items-center justify-center relative border-b border-white/10 px-4">
@@ -156,14 +167,12 @@ const AdminLayout = () => {
                         <div className="w-8 h-8 rounded-lg bg-[#B77A8C] flex items-center justify-center text-white font-display font-bold text-lg shrink-0">
                             L
                         </div>
-                        <div className="whitespace-nowrap overflow-hidden">
+                        <div className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${!isSidebarOpen && 'lg:opacity-0 lg:w-0'}`}>
                             <h1 className="font-display text-xl tracking-wider text-[#F1EBDD]">Love & Nest</h1>
                             <p className="text-[9px] uppercase tracking-[0.2em] text-[#B77A8C]">Studio Admin</p>
                         </div>
                     </div>
                 </div>
-
-
 
                 {/* Navigation Links */}
                 <nav className="flex-1 py-8 space-y-1 overflow-y-auto custom-scrollbar">
@@ -172,6 +181,7 @@ const AdminLayout = () => {
                             key={item.path}
                             {...item}
                             isActive={location.pathname.startsWith(item.path)}
+                            isSidebarCollapsed={!isSidebarOpen} // Pass state to hide labels if needed
                         />
                     ))}
                 </nav>
@@ -182,7 +192,7 @@ const AdminLayout = () => {
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B77A8C] to-[#5A2A45] border-2 border-[#F1EBDD]/20 flex items-center justify-center text-white font-bold shrink-0 shadow-lg">
                             <span className="font-display mt-0.5">A</span>
                         </div>
-                        <div className="overflow-hidden">
+                        <div className={`overflow-hidden transition-all duration-300 ${!isSidebarOpen && 'lg:opacity-0 lg:w-0'}`}>
                             <p className="text-sm font-bold truncate text-[#F1EBDD]">Anamika</p>
                             <p className="text-[10px] text-[#B77A8C] tracking-wider uppercase">Super Admin</p>
                         </div>

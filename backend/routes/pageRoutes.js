@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { getPages, getPageBySlug, updatePageSection, createPage } = require('../controllers/pageController');
-const upload = require('../middleware/upload');
+const multer = require('multer');
+
+// Use memory storage to handle buffer manually for date fix
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.route('/').get(getPages).post(createPage);
 router.route('/:slug').get(getPageBySlug);

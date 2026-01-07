@@ -36,24 +36,52 @@ const Testimonials = () => {
     const { scrollYProgress } = useScroll();
     const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
-    // Data for Hero Grid - Dynamically construct from reviews if available, else fallback
-    const dynamicImages = reviews
-        .filter(r => r.image)
-        .map(r => r.image);
-
-    // Ensure we have enough images for the grid by repeating or filling with fallbacks
-    const fallbackImages = [testImg1, testImg2, testImg3, testImg4, testImg5];
-    let gridImages = [...dynamicImages, ...fallbackImages];
-    // We need at least 15-20 images for the grid to look good, so repeat
-    while (gridImages.length < 20) {
-        gridImages = [...gridImages, ...fallbackImages, ...dynamicImages];
-    }
-    const heroImages = gridImages.slice(0, 20); // Pick first 20
-
     // Get section content safely
     const getSection = (id) => pageContent?.sections?.find(s => s.id === id)?.content || {};
     const heroSection = getSection('hero');
     const ctaSection = getSection('cta');
+
+    // Data for Hero Grid
+    let gridImages = [];
+
+    // 1. Priority: Images explicitly uploaded via Admin Panel for Hero Section
+    // We treat this as a sparse array where index matters.
+    if (heroSection.images && heroSection.images.length > 0) {
+        // Construct a fixed 20-item grid, respecting the specific index from admin
+        // If an admin slot (0-14) is empty (null), fall back to a default image.
+        // For slots 15-19, we just cycle or repeat.
+
+        const fallbackSource = [testImg1, testImg2, testImg3, testImg4, testImg5];
+
+        gridImages = Array(20).fill(null).map((_, i) => {
+            // If we have an admin image at this index, use it
+            if (i < heroSection.images.length && heroSection.images[i]) {
+                return heroSection.images[i];
+            }
+            // Otherwise use a fallback
+            return fallbackSource[i % fallbackSource.length];
+        });
+    } else {
+        // 2. Fallback: Dynamic images from reviews + static assets
+        const dynamicImages = reviews.filter(r => r.image).map(r => r.image);
+        const fallbackImages = [testImg1, testImg2, testImg3, testImg4, testImg5];
+        let baseImages = [...dynamicImages, ...fallbackImages];
+
+        // Ensure we have enough images for the grid by repeating
+        if (baseImages.length > 0) {
+            const originalSource = [...baseImages];
+            while (baseImages.length < 20) {
+                baseImages = [...baseImages, ...originalSource];
+            }
+        } else {
+            // Ultimate fallback if absolutely no images exist anywhere
+            baseImages = [testImg1, testImg2, testImg3, testImg4, testImg5, testImg1, testImg2, testImg3, testImg4, testImg5, testImg1, testImg2, testImg3, testImg4, testImg5, testImg1, testImg2, testImg3, testImg4, testImg5];
+        }
+        gridImages = baseImages;
+    }
+
+    // Safety slice
+    const heroImages = gridImages.slice(0, 20);
 
     // Star Rating Component
     const StarRating = ({ rating }) => (

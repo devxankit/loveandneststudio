@@ -27,6 +27,7 @@ const ManageTestimonials = lazy(() => import('../pages/Admin/Testimonials/Manage
 const ManageServices = lazy(() => import('../pages/Admin/Services/ManageServices'));
 const ManageInquiries = lazy(() => import('../pages/Admin/Inquiries/ManageInquiries'));
 const AdminSettings = lazy(() => import('../pages/Admin/Settings/AdminSettings'));
+const GlobalBrandingPage = lazy(() => import('../pages/Admin/Settings/GlobalBrandingPage'));
 const Contact = lazy(() => import('../pages/Contact/Contact'));
 const Testimonials = lazy(() => import('../pages/Testimonials/Testimonials'));
 const TermsAndConditions = lazy(() => import('../pages/TermsAndConditions'));
@@ -82,6 +83,7 @@ const AppRoutes = () => {
                             <Route path="services" element={<ManageServices />} />
                             <Route path="inquiries" element={<ManageInquiries />} />
                             <Route path="settings" element={<AdminSettings />} />
+                            <Route path="branding" element={<GlobalBrandingPage />} />
                         </Route>
 
                         <Route path="*" element={<NotFound />} />

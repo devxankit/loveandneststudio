@@ -1,7 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Star, Trash2, Check, X, Plus, Upload, Loader } from 'lucide-react';
-import { getTestimonials, createTestimonial, deleteTestimonial, updateTestimonial } from '../../../services/api';
+import { MessageSquare, Star, Trash2, Check, X, Plus, Upload, Loader, Image as ImageIcon, Save } from 'lucide-react';
+import {
+    getTestimonials, createTestimonial, deleteTestimonial, updateTestimonial,
+    getPage, updatePageSectionJSON, uploadImage
+} from '../../../services/api';
+
+const HeroImageManager = ({ images = [], onUpdate, onSave, isSaving }) => {
+    const [uploadingIndex, setUploadingIndex] = useState(null);
+
+    // Ensure we always have exactly 15 slots
+    const slots = Array(15).fill(null).map((_, i) => images[i] || null);
+
+    const handleReplace = async (e, index) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploadingIndex(index);
+        try {
+            const formData = new FormData();
+            formData.append('image', file);
+            const res = await uploadImage(formData);
+
+            const newImages = [...slots];
+            newImages[index] = res.data.url;
+
+            // Do not filter out nulls to maintain slot positions
+            onUpdate(newImages);
+        } catch (error) {
+            console.error("Upload failed", error);
+            alert("Failed to upload image");
+        } finally {
+            setUploadingIndex(null);
+        }
+    };
+
+    return (
+        <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-[#5A2A45]/5 mb-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h2 className="font-display text-2xl text-[#5A2A45]">Hero Animation Gallery</h2>
+                    <p className="text-[#6E5A52] text-sm font-outfit font-light">
+                        Manage the 15 specific images used in the "Wall of Love" animation.
+                        Click on any slot to replace that specific image.
+                    </p>
+                </div>
+                <button
+                    onClick={onSave}
+                    disabled={isSaving}
+                    className="bg-[#5A2A45] text-[#F1EBDD] px-8 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#4a2238] transition-all shadow-lg flex items-center gap-2 disabled:opacity-70 shrink-0"
+                >
+                    {isSaving ? <Loader size={16} className="animate-spin" /> : <Save size={16} />}
+                    Save Changes
+                </button>
+            </div>
+
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
+                {slots.map((url, index) => (
+                    <div key={index} className="space-y-2">
+                        <p className="text-xs font-bold uppercase text-[#5A2A45]/50 text-center">Position {index + 1}</p>
+                        <div className="aspect-[3/4] relative group rounded-xl overflow-hidden shadow-sm bg-[#F9F7F2] border-2 border-dashed border-[#5A2A45]/10">
+                            {url ? (
+                                <img src={url} alt={`Pos ${index + 1}`} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-[#5A2A45]/20">
+                                    <ImageIcon size={24} />
+                                </div>
+                            )}
+
+                            {/* Overlay */}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <label className="cursor-pointer bg-white text-[#5A2A45] p-2 rounded-full hover:bg-[#F1EBDD] transition-colors shadow-lg transform hover:scale-105 active:scale-95">
+                                    {uploadingIndex === index ? (
+                                        <Loader size={16} className="animate-spin" />
+                                    ) : (
+                                        <Upload size={16} />
+                                    )}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => handleReplace(e, index)}
+                                        disabled={uploadingIndex !== null}
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
 
 const TestimonialModal = ({ isOpen, onClose, onSave, review }) => {
     const [formData, setFormData] = useState({
@@ -175,11 +265,24 @@ const ManageTestimonials = () => {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingReview, setEditingReview] = useState(null);
+    const [heroImages, setHeroImages] = useState([]);
+    const [pageContent, setPageContent] = useState(null);
+    const [savingGallery, setSavingGallery] = useState(false);
 
-    const fetchReviews = async () => {
+    const fetchData = async () => {
         try {
-            const res = await getTestimonials();
-            setReviews(res.data);
+            const [reviewsRes, pageRes] = await Promise.all([
+                getTestimonials(),
+                getPage('testimonials')
+            ]);
+            setReviews(reviewsRes.data);
+            setPageContent(pageRes.data);
+
+            // Extract hero images from page content
+            const heroSection = pageRes.data.sections.find(s => s.id === 'hero');
+            if (heroSection && heroSection.content && heroSection.content.images) {
+                setHeroImages(heroSection.content.images);
+            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -188,7 +291,7 @@ const ManageTestimonials = () => {
     };
 
     useEffect(() => {
-        fetchReviews();
+        fetchData();
     }, []);
 
     const handleDelete = async (id) => {
@@ -198,20 +301,35 @@ const ManageTestimonials = () => {
         }
     };
 
-    const handleSave = async (formData, id) => {
+    const handleSaveReview = async (formData, id) => {
         if (id) {
-            // Check if updateTestimonial exists in API, if not we need to add it or fail gracefully
             if (typeof updateTestimonial === 'function') {
                 await updateTestimonial(id, formData);
-            } else {
-                console.error("updateTestimonial API not implemented");
             }
         } else {
             await createTestimonial(formData);
         }
         setIsModalOpen(false);
         setEditingReview(null);
-        fetchReviews();
+        fetchData(); // Refresh all data
+    };
+
+    const handleUpdateHeroImages = (newImages) => {
+        setHeroImages(newImages); // Optimistic / Local update only
+    };
+
+    const handleSaveHeroGallery = async () => {
+        setSavingGallery(true);
+        try {
+            const heroContent = pageContent.sections.find(s => s.id === 'hero')?.content || {};
+            await updatePageSectionJSON('testimonials', 'hero', { ...heroContent, images: heroImages });
+            alert("Hero Gallery Saved Successfully!");
+        } catch (error) {
+            console.error("Failed to update hero images", error);
+            alert("Failed to save changes to hero gallery.");
+        } finally {
+            setSavingGallery(false);
+        }
     };
 
     const openEdit = (review) => {
@@ -232,7 +350,7 @@ const ManageTestimonials = () => {
     if (loading) return <div className="h-screen flex items-center justify-center text-[#5A2A45]"><Loader className="animate-spin mr-2" /> Loading Reviews...</div>;
 
     return (
-        <div className="space-y-10 max-w-6xl mx-auto min-h-screen">
+        <div className="space-y-10 max-w-6xl mx-auto min-h-screen pb-20">
             <div className="flex flex-col md:flex-row justify-between items-end gap-6">
                 <div>
                     <h1 className="font-display text-4xl text-[#5A2A45] mb-2">Client Love</h1>
@@ -248,6 +366,15 @@ const ManageTestimonials = () => {
                 </div>
             </div>
 
+            {/* Hero Gallery Manager */}
+            <HeroImageManager
+                images={heroImages}
+                onUpdate={handleUpdateHeroImages}
+                onSave={handleSaveHeroGallery}
+                isSaving={savingGallery}
+            />
+
+            {/* Reviews Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <AnimatePresence>
                     {reviews.map(review => (
@@ -275,7 +402,7 @@ const ManageTestimonials = () => {
             <TestimonialModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onSave={handleSave}
+                onSave={handleSaveReview}
                 review={editingReview}
             />
         </div>

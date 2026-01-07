@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const [footerLogo, setFooterLogo] = useState('');
+    const [siteTitle, setSiteTitle] = useState('Love & Nest');
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/settings');
+                if (res.data.footerLogo) setFooterLogo(res.data.footerLogo);
+                if (res.data.siteTitle) setSiteTitle(res.data.siteTitle);
+            } catch (error) {
+                console.error("Error fetching footer settings:", error);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     return (
         <footer className="relative bg-[#1a0f16] text-[#FAF9F6] overflow-hidden pt-20 pb-10 px-6 md:px-16 border-t border-white/5">
@@ -17,7 +33,15 @@ const Footer = () => {
                     {/* 1. Brand / Logo */}
                     <div className="md:col-span-1 space-y-6">
                         <Link to="/">
-                            <h3 className="font-display text-4xl italic text-[#FAF9F6]">Love & Nest</h3>
+                            {footerLogo ? (
+                                <img
+                                    src={footerLogo}
+                                    alt={siteTitle}
+                                    className="max-h-24 mx-auto md:mx-0 object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                                />
+                            ) : (
+                                <h3 className="font-display text-4xl italic text-[#FAF9F6]">{siteTitle}</h3>
+                            )}
                         </Link>
                         <p className="text-sm text-white/50 leading-relaxed max-w-[250px] mx-auto md:mx-0 font-outfit font-light">
                             Capturing the poetry of your life,<br /> one frame at a time.

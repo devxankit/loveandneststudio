@@ -218,16 +218,16 @@ const ManagePortfolio = () => {
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-4 border-b border-[#E6D1CB]">
+            <div className="flex gap-4 border-b border-[#E6D1CB] overflow-x-auto no-scrollbar">
                 <button
                     onClick={() => setActiveTab('categories')}
-                    className={`pb-4 px-4 font-bold uppercase tracking-widest text-xs transition-colors flex items-center gap-2 ${activeTab === 'categories' ? 'text-[#5A2A45] border-b-2 border-[#5A2A45]' : 'text-[#6E5A52]/60 hover:text-[#5A2A45]'}`}
+                    className={`pb-4 px-4 font-bold uppercase tracking-widest text-xs transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 ${activeTab === 'categories' ? 'text-[#5A2A45] border-b-2 border-[#5A2A45]' : 'text-[#6E5A52]/60 hover:text-[#5A2A45]'}`}
                 >
                     <Layout size={16} /> Categories
                 </button>
                 <button
                     onClick={() => setActiveTab('hero')}
-                    className={`pb-4 px-4 font-bold uppercase tracking-widest text-xs transition-colors flex items-center gap-2 ${activeTab === 'hero' ? 'text-[#5A2A45] border-b-2 border-[#5A2A45]' : 'text-[#6E5A52]/60 hover:text-[#5A2A45]'}`}
+                    className={`pb-4 px-4 font-bold uppercase tracking-widest text-xs transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 ${activeTab === 'hero' ? 'text-[#5A2A45] border-b-2 border-[#5A2A45]' : 'text-[#6E5A52]/60 hover:text-[#5A2A45]'}`}
                 >
                     <Layers size={16} /> Hero Animation
                 </button>

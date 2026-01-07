@@ -81,7 +81,8 @@ const PageEditor = () => {
             alert('Section Updated Successfully!');
         } catch (error) {
             console.error(error);
-            alert('Failed to save changes.');
+            const msg = error.response?.data?.message || error.message || 'Unknown Error';
+            alert(`Failed to save changes: ${msg}`);
         } finally {
             setSaving(false);
         }
@@ -93,7 +94,8 @@ const PageEditor = () => {
     return (
         <div className="h-full flex flex-col">
             {/* Header */}
-            <div className="mb-8 flex items-center justify-between">
+            {/* Header */}
+            <div className="mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <button
                         onClick={handleBack}
@@ -101,10 +103,10 @@ const PageEditor = () => {
                     >
                         <ArrowLeft size={16} /> {activeSection ? `Back to ${pageData.title}` : 'Back to Pages'}
                     </button>
-                    <h1 className="font-display text-3xl md:text-4xl text-[#5A2A45]">
+                    <h1 className="font-display text-2xl md:text-3xl lg:text-4xl text-[#5A2A45]">
                         {activeSection ? `${activeSection.title || activeSection.id}` : pageData.title}
                     </h1>
-                    <p className="text-[#6E5A52]/70 font-outfit font-light text-sm">
+                    <p className="text-[#6E5A52]/70 font-outfit font-light text-xs md:text-sm">
                         {activeSection ? 'Edit content fields below' : 'Manage page sections'}
                     </p>
                 </div>
@@ -112,7 +114,7 @@ const PageEditor = () => {
                     <button
                         onClick={handleSave}
                         disabled={saving}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-[#5A2A45] text-[#F1EBDD] rounded-full text-sm font-bold tracking-wide hover:bg-[#4a2238] transition-all shadow-lg active:scale-95 disabled:opacity-50"
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-[#5A2A45] text-[#F1EBDD] rounded-full text-sm font-bold tracking-wide hover:bg-[#4a2238] transition-all shadow-lg active:scale-95 disabled:opacity-50"
                     >
                         {saving ? <Loader className="animate-spin" size={16} /> : <Save size={16} />}
                         {saving ? 'Saving...' : 'Save Changes'}
@@ -166,7 +168,7 @@ const PageEditor = () => {
                             {/* Dynamically render inputs based on content keys */}
                             {Object.keys(editForm).map((key) => {
                                 const value = editForm[key];
-                                const isImageKey = key === 'image' || key === 'portrait' || key.toLowerCase().includes('img');
+                                const isImageKey = key === 'image' || key === 'portrait' || key.toLowerCase().includes('img') || key.toLowerCase().includes('image');
                                 const isGallery = (key === 'slides' || key === 'images') && Array.isArray(value);
 
                                 if (isGallery) {
@@ -215,13 +217,17 @@ const PageEditor = () => {
                                             <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]/70 mb-2">
                                                 {key.replace(/_/g, ' ')}
                                             </label>
-                                            <div className="flex items-center gap-6">
-                                                {value && (
-                                                    <div className="w-24 h-24 rounded-lg overflow-hidden border border-[#5A2A45]/10 shrink-0">
+                                            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                                                {value ? (
+                                                    <div className="w-full sm:w-24 h-40 sm:h-24 rounded-lg overflow-hidden border border-[#5A2A45]/10 shrink-0">
                                                         <img src={value} alt={key} className="w-full h-full object-cover" />
                                                     </div>
+                                                ) : (
+                                                    <div className="w-full sm:w-24 h-24 rounded-lg bg-gray-100 border border-dashed border-[#5A2A45]/20 shrink-0 flex items-center justify-center text-center p-2">
+                                                        <span className="text-[10px] text-[#5A2A45]/50 leading-tight">No Custom Image (Default Visible)</span>
+                                                    </div>
                                                 )}
-                                                <div className="flex-1">
+                                                <div className="flex-1 w-full">
                                                     <input
                                                         type="file"
                                                         onChange={(e) => {

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import logo from '../../assets/logo/Gemini_Generated_Image_adt2l4adt2l4adt2-removebg-preview.png';
+import axios from 'axios';
+import defaultLogo from '../../assets/logo/Gemini_Generated_Image_adt2l4adt2l4adt2-removebg-preview.png';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isPortfolioHovered, setIsPortfolioHovered] = useState(false);
     const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [navbarLogo, setNavbarLogo] = useState(null);
     const { scrollY } = useScroll();
     const location = useLocation();
 
@@ -18,6 +20,21 @@ const Navbar = () => {
     useEffect(() => {
         setIsMenuOpen(false);
     }, [location.pathname]);
+
+    // Fetch dynamic logo
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/settings');
+                if (res.data.navbarLogo) {
+                    setNavbarLogo(res.data.navbarLogo);
+                }
+            } catch (error) {
+                console.error("Error fetching navbar logo:", error);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -32,31 +49,7 @@ const Navbar = () => {
         } after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'
         } ${!isScrolled ? 'hover:brightness-110 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : ''}`;
 
-    const dropdownVariants = {
-        hidden: {
-            opacity: 0,
-            y: -10,
-            scale: 0.95,
-            transition: { duration: 0.2 }
-        },
-        visible: {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            transition: {
-                type: "spring",
-                stiffness: 300,
-                damping: 20,
-                staggerChildren: 0.05,
-                delayChildren: 0.05
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, x: -10 },
-        visible: { opacity: 1, x: 0 }
-    };
+    const displayLogo = navbarLogo || defaultLogo;
 
     return (
         <motion.nav
@@ -69,7 +62,7 @@ const Navbar = () => {
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex justify-between items-center h-16 md:h-20">
                 <Link to="/" className="flex items-center transition-all duration-500 hover:scale-105 active:scale-95 group">
                     <img
-                        src={logo}
+                        src={displayLogo}
                         alt="Love & Nest Studio"
                         className={`transition-all duration-700 ${isScrolled ? 'h-12 md:h-14 lg:h-16' : 'h-16 md:h-20 lg:h-24'} w-auto object-contain filter group-hover:drop-shadow-sm`}
                     />

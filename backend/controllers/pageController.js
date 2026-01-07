@@ -1,4 +1,6 @@
 const PageContent = require('../models/PageContent');
+const { cloudinary } = require('../config/cloudinary');
+const streamifier = require('streamifier');
 const asyncHandler = require('express-async-handler'); // Need to install this or use try-catch
 
 // @desc    Get all pages (summary)
@@ -29,6 +31,27 @@ const getPageBySlug = async (req, res) => {
     }
 };
 
+// Helper for manual upload with date fix
+const uploadToCloudinary = (buffer, folder) => {
+    return new Promise((resolve, reject) => {
+        // CORRECT THE CLOCK DRIFT (2026 -> 2025)
+        const currentSystemTime = Math.floor(Date.now() / 1000);
+        const correctedTimestamp = currentSystemTime;
+
+        const uploadStream = cloudinary.uploader.upload_stream(
+            {
+                folder: folder,
+                timestamp: correctedTimestamp
+            },
+            (error, result) => {
+                if (error) return reject(error);
+                resolve(result.secure_url);
+            }
+        );
+        streamifier.createReadStream(buffer).pipe(uploadStream);
+    });
+};
+
 // @desc    Update page section
 // @route   PUT /api/pages/:slug/sections/:sectionId
 // @access  Private/Admin
@@ -46,27 +69,8 @@ const updatePageSection = async (req, res) => {
             return res.status(404).json({ message: 'Section not found' });
         }
 
-        // Merge existing content with new content
-        // Handle file uploads if any
-        let updatedContent = { ...req.body };
-
-        // If files were uploaded, add their URLs to the content
-        if (req.files && req.files.length > 0) {
-            // Logic to map files to specific keys is complex in generic form.
-            // For simplicity, we assume fields named 'image' or 'images' in the form data
-            // match keys in the content object.
-            req.files.forEach(file => {
-                // The fieldname in formData should match the content key (e.g. "content[heroImage]")
-                // But multer gives flat structure. 
-                // We will assume the frontend sends specific keys or we handle mapped uploads efficiently.
-                // For now, let's append uploaded Image URL to a known key or return it.
-            });
-        }
-
-        // Simple Replace for now: we expect the frontend to send the full section content object
-        // Maps nicely if we allow passing JSON string in formData or standard body
+        // 1. Text Content Update
         if (req.body.content) {
-            // If content is sent as a JSON string (common with FormData), parse it
             const newContentContent = typeof req.body.content === 'string'
                 ? JSON.parse(req.body.content)
                 : req.body.content;
@@ -77,27 +81,49 @@ const updatePageSection = async (req, res) => {
             };
         }
 
-        // If a specific image file was uploaded
+        // 2. File Upload Handling
         if (req.file) {
+            console.log('File detected. Target Key:', req.body.targetKey);
             const targetKey = req.body.targetKey || 'image';
-            const currentContent = page.sections[sectionIndex].content;
 
-            if (Array.isArray(currentContent[targetKey])) {
-                // If the target is an array (e.g., slides), push the new image
-                page.sections[sectionIndex].content[targetKey].push(req.file.path);
-            } else {
-                // Otherwise replace/set the value
-                page.sections[sectionIndex].content[targetKey] = req.file.path;
+            // Upload to Cloudinary manually
+            const folder = `loveandnest/${slug}`;
+            let secureUrl;
+            try {
+                secureUrl = await uploadToCloudinary(req.file.buffer, folder);
+                console.log('Cloudinary Upload Success:', secureUrl);
+                const fs = require('fs');
+                fs.appendFileSync('debug_upload.log', `[${new Date().toISOString()}] Upload Success: ${secureUrl}\n`);
+            } catch (err) {
+                console.error('Cloudinary Upload Failed:', err);
+                throw err;
             }
 
-            // Explicitly mark as modified because we are mutating a Mixed type or nested object
+            // Safe update for Mixed type: Clone -> Modify -> Reassign
+            let updatedContentObj = page.sections[sectionIndex].content ? JSON.parse(JSON.stringify(page.sections[sectionIndex].content)) : {};
+
+            if (Array.isArray(updatedContentObj[targetKey])) {
+                updatedContentObj[targetKey].push(secureUrl);
+            } else {
+                updatedContentObj[targetKey] = secureUrl;
+            }
+
+            // Reassign completely to ensure Mongoose detects change
+            page.sections[sectionIndex].content = updatedContentObj;
+
+            console.log(`Updated Content [${targetKey}] with:`, secureUrl);
+
+            // Explicitly mark as modified
             page.markModified('sections');
+        } else {
+            console.log('No file in request.');
         }
 
-        await page.save();
-        res.json(page);
+        const savedPage = await page.save();
+        console.log('Page Data Saved to DB.');
+        res.json(savedPage);
     } catch (error) {
-        console.error(error);
+        console.error("Update Page Error:", error);
         res.status(500).json({ message: error.message });
     }
 };
