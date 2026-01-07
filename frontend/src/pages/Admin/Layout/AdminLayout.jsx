@@ -122,7 +122,17 @@ const AdminLayout = () => {
                 { label: 'Contact Page', path: '/admin/pages/contact' },
             ]
         },
-        { icon: Image, label: 'Portfolio', path: '/admin/portfolio' },
+        {
+            icon: Image,
+            label: 'Portfolio',
+            path: '/admin/portfolio',
+            subItems: [
+                { label: 'Newborn', path: '/admin/portfolio/newborn' },
+                { label: 'Maternity', path: '/admin/portfolio/maternity' },
+                { label: 'Baby', path: '/admin/portfolio/baby' },
+                { label: 'Family', path: '/admin/portfolio/family' },
+            ]
+        },
         { icon: Sparkles, label: 'Services', path: '/admin/services' },
         { icon: PenTool, label: 'Blog', path: '/admin/blog' },
         { icon: MessageSquare, label: 'Testimonials', path: '/admin/testimonials' },

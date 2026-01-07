@@ -13,11 +13,18 @@ const blogPostSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Auto-generate slug from title before saving
+// Auto-generate slug from title before saving
 blogPostSchema.pre('save', function (next) {
     if (this.isModified('title') && !this.slug) {
-        this.slug = this.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        this.slug = this.title
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '') // Remove non-word chars
+            .replace(/[\s_-]+/g, '-') // Replace spaces/underscores with -
+            .replace(/^-+|-+$/g, ''); // Trim - from start/end
     }
     next();
 });
 
 module.exports = mongoose.model('BlogPost', blogPostSchema);
+

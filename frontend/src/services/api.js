@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+// --- NEWBORN API ---
+export const getNewbornPage = () => api.get('/newborn');
+export const updateNewbornPage = (data) => api.put('/newborn', data);
+
+// --- GENERIC UPLOAD ---
 // Create Axios Instance
 const api = axios.create({
     baseURL: 'http://localhost:5000/api', // Hardcoded for now, or use import.meta.env.VITE_API_URL

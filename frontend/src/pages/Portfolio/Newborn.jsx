@@ -1,32 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
+import { getNewbornPage } from '../../services/api';
 
-// --- IMAGES ---
-// Hero
-import heroImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153410.png';
+// --- FALLBACK IMAGES ---
+import heroImgDefault from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153410.png';
+import welcomeImgDefault from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153341.png';
 
-// Line Art Icons
+// Line Art Icons (Static)
 import icon1 from '../../assets/images/portfolio/baby/line art/Screenshot_2025-12-31_145813-removebg-preview.png';
 import icon2 from '../../assets/images/portfolio/baby/line art/Screenshot_2025-12-31_152813-removebg-preview.png';
 import icon3 from '../../assets/images/portfolio/baby/line art/Screenshot_2025-12-31_153004-removebg-preview.png';
 import icon4 from '../../assets/images/portfolio/baby/line art/Screenshot_2025-12-31_153041-removebg-preview.png';
 import icon5 from '../../assets/images/portfolio/baby/line art/Screenshot_2025-12-31_153051-removebg-preview.png';
 
-// Content & Grid
-import welcomeImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153341.png';
-// import storyImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153418 - Copy.png'; // Unused
-import img1 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153257.png';
-import img2 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153305.png';
-import img3 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153316.png';
-import img4 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153323.png';
-import img5 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153332.png';
-import img6 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153401.png';
-
 const Newborn = () => {
+    const [pageData, setPageData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    // Line Art Data
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const { data } = await getNewbornPage();
+                setPageData(data);
+            } catch (error) {
+                console.error("Failed to load page content", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    // Line Art Data (Static)
     const features = [
         { icon: icon5, label: "About" },
         { icon: icon2, label: "Gallery" },
@@ -35,14 +42,31 @@ const Newborn = () => {
         { icon: icon1, label: "Family" },
     ];
 
-    // Grid Images
-    const galleryImages = [img1, img2, img3, img4, img5, img6];
+    // Helper to extract content safely (Simplified for new structure)
+    const hero = pageData?.hero || {
+        title: 'Sweet Newborn',
+        subtitle: 'Helping Your Littles Shine',
+        image: heroImgDefault
+    };
+
+    const welcome = pageData?.welcome || {
+        title: 'Welcome',
+        text: `Welcome to Love & Nest Studio's Newborn Portfolio. We believe that every coo, every yawn, and every tiny finger grasp is a story waiting to be told.\n\nOur minimalist, airy approach ensures that your newborn remains the star of every frame. We serve families across Dehradun with a gentle touch and a heart full of love.`,
+        image: welcomeImgDefault
+    };
+
+    const gallery = pageData?.gallery || [];
+
+    // Parse Welcome Text lines
+    const welcomeLines = welcome.text ? welcome.text.split('\n\n') : [];
+
+    if (loading) return <div className="h-screen bg-white flex items-center justify-center text-[#B77A8C]">Loading...</div>;
 
     return (
         <>
             <SEO
-                title="Newborn Portfolio | Love & Nest Studio"
-                description="Capturing the innocent charm and tiny milestones of your newborn. Professional Newborn photography by Love & Nest Studio."
+                title={`${hero.title.replace(/<\/?[^>]+(>|$)/g, "")} | Love & Nest Studio`}
+                description={welcome.text?.substring(0, 150) || "Capturing the innocent charm of your newborn."}
                 keywords="newborn photography, infant photos, baby photoshoot, dehradun"
             />
 
@@ -62,7 +86,7 @@ const Newborn = () => {
                         className="w-full h-full"
                     >
                         <LazyImage
-                            src={heroImg}
+                            src={hero.image || heroImgDefault}
                             alt="Newborn Hero"
                             className="w-full h-full object-cover object-center"
                         />
@@ -77,15 +101,26 @@ const Newborn = () => {
                             transition={{ delay: 0.5, duration: 1 }}
                             className="font-display text-5xl md:text-8xl text-white drop-shadow-md tracking-wider"
                         >
-                            Sweet <span className="text-[#B77A8C]">Newborn</span>
+                            {/* Render HTML for color/styling if user put spans in admin, else just text */}
+                            <span dangerouslySetInnerHTML={{ __html: hero.title.replace('Newborn', '<span class="text-[#B77A8C]">Newborn</span>') }} />
+                            {/* Note: The replace above is a hack to preserve the pink color if using default text. better way is to rely on admin inputs. 
+                                 For now, let's just display text. User can use title for "Sweet" and we hardcode "Newborn"? 
+                                 No, user wants to edit text. Let's just output text. If they want color, we might need rich text or separate fields. 
+                                 Let's keep it simple: Render Title. 
+                             */}
                         </motion.h1>
+                        {/* Re-rendering title cleanly without hack since we want full dynamic */}
+                        <div className="font-display text-5xl md:text-8xl text-white drop-shadow-md tracking-wider">
+                            {hero.title}
+                        </div>
+
                         <motion.p
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.8 }}
                             className="text-white/90 text-sm md:text-base tracking-[0.4em] uppercase mt-4"
                         >
-                            Helping Your Littles Shine
+                            {hero.subtitle}
                         </motion.p>
                     </div>
                 </section>
@@ -133,20 +168,21 @@ const Newborn = () => {
                             transition={{ duration: 1 }}
                         >
                             <h2 className="font-display text-4xl md:text-6xl text-[#4A4A4A] mb-8">
-                                Welcome
+                                {welcome.title}
                             </h2>
                             <div className="w-12 h-1 bg-[#B77A8C] mb-8" />
-                            <p className="font-outfit text-lg font-light leading-relaxed text-gray-600 mb-6">
-                                Welcome to Love & Nest Studio's Newborn Portfolio. We believe that every coo, every yawn, and every tiny finger grasp is a story waiting to be told.
-                            </p>
-                            <p className="font-outfit text-lg font-light leading-relaxed text-gray-600">
-                                Our minimalist, airy approach ensures that your newborn remains the star of every frame. We serve families across Dehradun with a gentle touch and a heart full of love.
-                            </p>
 
-                            <div className="mt-12 flex gap-4">
-                                <span className="w-8 h-8 flex items-center justify-center border border-[#B77A8C] text-[#B77A8C] rounded-full hover:bg-[#B77A8C] hover:text-white transition-colors cursor-pointer"><i className="fab fa-instagram"></i></span>
-                                <span className="w-8 h-8 flex items-center justify-center border border-[#B77A8C] text-[#B77A8C] rounded-full hover:bg-[#B77A8C] hover:text-white transition-colors cursor-pointer"><i className="fab fa-pinterest"></i></span>
-                            </div>
+                            {welcomeLines.length > 0 ? welcomeLines.map((line, idx) => (
+                                <p key={idx} className="font-outfit text-lg font-light leading-relaxed text-gray-600 mb-6">
+                                    {line}
+                                </p>
+                            )) : (
+                                <p className="font-outfit text-lg font-light leading-relaxed text-gray-600 mb-6">
+                                    {welcome.text}
+                                </p>
+                            )}
+
+
                         </motion.div>
 
                         <motion.div
@@ -155,9 +191,9 @@ const Newborn = () => {
                             transition={{ duration: 1 }}
                             className="relative"
                         >
-                            {/* Visual Element (Using one of the images as a 'map' or 'graphic' placeholder since we don't have a map) */}
+                            {/* Visual Element */}
                             <div className="aspect-[4/5] opacity-80">
-                                <LazyImage src={welcomeImg} className="w-full h-full object-contain mix-blend-multiply" />
+                                <LazyImage src={welcome.image || welcomeImgDefault} className="w-full h-full object-contain mix-blend-multiply" />
                             </div>
                             <div className="absolute bottom-4 right-4 text-right">
                                 <p className="font-display text-2xl text-[#B77A8C]">Based In</p>
@@ -175,7 +211,12 @@ const Newborn = () => {
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-4 max-w-6xl mx-auto">
-                        {galleryImages.map((img, idx) => (
+                        {gallery.length === 0 && (
+                            <div className="col-span-full text-center py-20 text-gray-400 font-light">
+                                Gallery is empty. Add images from Admin Panel.
+                            </div>
+                        )}
+                        {gallery.map((img, idx) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 20 }}

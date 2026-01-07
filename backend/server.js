@@ -36,6 +36,8 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/services', servicesRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/settings', globalSettingsRoutes);
+app.use('/api/pages', require('./routes/pageRoutes'));
+app.use('/api/newborn', require('./routes/newbornRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 
 // Base Route

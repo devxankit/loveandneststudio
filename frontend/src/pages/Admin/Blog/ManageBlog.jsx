@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Edit3, Trash2, Calendar, Eye, Search, Filter, Plus, X, Upload, Loader } from 'lucide-react';
-import { getPosts, deletePost, createPost, updatePost } from '../../../services/api';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { getPosts, deletePost, createPost, updatePost, uploadImage } from '../../../services/api';
 
 const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
     const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
     });
     const [saving, setSaving] = useState(false);
     const [preview, setPreview] = useState(null);
+    const quillRef = useRef(null);
 
     useEffect(() => {
         if (post) {
@@ -35,12 +38,67 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleContentChange = (content) => {
+        setFormData(prev => ({ ...prev, content }));
+    };
+
     const handleFileChange = (e) => {
         if (e.target.files[0]) {
             setFormData(prev => ({ ...prev, coverImage: e.target.files[0] }));
             setPreview(URL.createObjectURL(e.target.files[0]));
         }
     };
+
+    // Custom Image Handler for Quill
+    const imageHandler = () => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            if (file) {
+                const data = new FormData();
+                data.append('image', file);
+
+                try {
+                    // Show some loading indication if possible, for now just wait
+                    const res = await uploadImage(data);
+                    const url = res.data.url;
+
+                    const quill = quillRef.current.getEditor();
+                    const range = quill.getSelection(true);
+                    quill.insertEmbed(range.index, 'image', url);
+                } catch (err) {
+                    console.error('Image upload failed', err);
+                    alert("Failed to upload image. Please try again.");
+                }
+            }
+        };
+    };
+
+    const modules = useMemo(() => ({
+        toolbar: {
+            container: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'blockquote'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['link', 'image'],
+                ['clean']
+            ],
+            handlers: {
+                image: imageHandler
+            }
+        }
+    }), []);
+
+    const formats = [
+        'header',
+        'bold', 'italic', 'underline', 'blockquote',
+        'list', 'bullet',
+        'link', 'image'
+    ];
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -71,42 +129,73 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 shadow-2xl"
+                className="bg-white rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 shadow-2xl flex flex-col md:flex-row gap-8"
             >
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="font-display text-3xl text-[#5A2A45]">{post ? 'Edit Story' : 'New Story'}</h2>
-                    <button onClick={onClose} className="p-2 hover:bg-[#F1EBDD] rounded-full text-[#5A2A45]"><X size={24} /></button>
+                <div className="flex-1 space-y-6">
+                    <div className="flex justify-between items-center mb-2 md:hidden">
+                        <h2 className="font-display text-2xl text-[#5A2A45]">{post ? 'Edit Story' : 'New Story'}</h2>
+                        <button onClick={onClose} className="p-2 hover:bg-[#F1EBDD] rounded-full text-[#5A2A45]"><X size={24} /></button>
+                    </div>
+
+                    {/* Left Column: Metadata */}
+                    <div className="space-y-6">
+                        {/* Cover Image */}
+                        <div className="relative h-48 bg-[#F9F7F2] rounded-xl flex items-center justify-center border-2 border-dashed border-[#5A2A45]/10 overflow-hidden group hover:border-[#5A2A45]/30 transition-colors">
+                            {preview ? (
+                                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="text-center text-[#5A2A45]/40">
+                                    <Upload className="mx-auto mb-2" />
+                                    <span className="text-xs uppercase tracking-widest font-bold">Upload Cover</span>
+                                </div>
+                            )}
+                            <input type="file" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                        </div>
+
+                        <div className="grid gap-4">
+                            <input name="title" value={formData.title} onChange={handleChange} placeholder="Article Title" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-xl text-[#5A2A45] placeholder-[#5A2A45]/30" required />
+                            <textarea name="excerpt" value={formData.excerpt} onChange={handleChange} placeholder="Brief Excerpt" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none min-h-[100px] text-sm" required />
+                            <input name="tags" value={formData.tags} onChange={handleChange} placeholder="Tags (comma separated)" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none text-sm" />
+                        </div>
+                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Image Upload */}
-                    <div className="relative h-48 bg-[#F9F7F2] rounded-xl flex items-center justify-center border-2 border-dashed border-[#5A2A45]/10 overflow-hidden group hover:border-[#5A2A45]/30 transition-colors">
-                        {preview ? (
-                            <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-                        ) : (
-                            <div className="text-center text-[#5A2A45]/40">
-                                <Upload className="mx-auto mb-2" />
-                                <span className="text-xs uppercase tracking-widest font-bold">Upload Cover</span>
-                            </div>
-                        )}
-                        <input type="file" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                {/* Right Column: Content Editor */}
+                <div className="flex-[1.5] flex flex-col">
+                    <div className="hidden md:flex justify-between items-center mb-6">
+                        <h2 className="font-display text-3xl text-[#5A2A45]">{post ? 'Edit Story' : 'New Story'}</h2>
+                        <button onClick={onClose} className="p-2 hover:bg-[#F1EBDD] rounded-full text-[#5A2A45]"><X size={24} /></button>
                     </div>
 
-                    <div className="grid gap-4">
-                        <input name="title" value={formData.title} onChange={handleChange} placeholder="Article Title" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-xl text-[#5A2A45] placeholder-[#5A2A45]/30" required />
-                        <textarea name="excerpt" value={formData.excerpt} onChange={handleChange} placeholder="Brief Excerpt" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none min-h-[80px]" required />
-                        {/* Simple Textarea for Content - Rich Text Editor would be better but keeping it simple as requested */}
-                        <textarea name="content" value={formData.content} onChange={handleChange} placeholder="Full Story Content (HTML allowed)" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none min-h-[200px] font-mono text-sm" required />
-                        <input name="tags" value={formData.tags} onChange={handleChange} placeholder="Tags (comma separated)" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none text-sm" />
+                    <div className="flex-1 min-h-[400px] relative">
+                        {/* React Quill Editor */}
+                        <div className="h-full flex flex-col">
+                            <ReactQuill
+                                ref={quillRef}
+                                theme="snow"
+                                value={formData.content}
+                                onChange={handleContentChange}
+                                modules={modules}
+                                formats={formats}
+                                className="h-full flex-1 bg-[#F9F7F2] rounded-xl"
+                                placeholder="Tell your story..."
+                            />
+                        </div>
+                        {/* Customize Quill CSS via Global Styles or inline if needed, but default is okay for admin */}
+                        <style>{`
+                            .ql-toolbar { border-radius: 12px 12px 0 0; border-color: rgba(90,42,69,0.1) !important; background: white; }
+                            .ql-container { border-radius: 0 0 12px 12px; border-color: rgba(90,42,69,0.1) !important; font-family: 'Outfit', sans-serif; }
+                            .ql-editor { min-height: 300px; font-size: 1rem; color: #6E5A52; }
+                         `}</style>
                     </div>
 
-                    <div className="flex justify-end gap-3 pt-4">
+                    <div className="flex justify-end gap-3 pt-6">
                         <button type="button" onClick={onClose} className="px-6 py-3 rounded-full text-[#6E5A52] font-bold text-xs uppercase tracking-widest hover:bg-[#F9F7F2]">Cancel</button>
-                        <button type="submit" disabled={saving} className="px-8 py-3 rounded-full bg-[#5A2A45] text-[#F1EBDD] font-bold text-xs uppercase tracking-widest hover:bg-[#4a2238] shadow-lg disabled:opacity-50">
+                        <button onClick={handleSubmit} disabled={saving} className="px-8 py-3 rounded-full bg-[#5A2A45] text-[#F1EBDD] font-bold text-xs uppercase tracking-widest hover:bg-[#4a2238] shadow-lg disabled:opacity-50">
                             {saving ? 'Saving...' : (post ? 'Update Story' : 'Publish Story')}
                         </button>
                     </div>
-                </form>
+                </div>
             </motion.div>
         </div>
     );
