@@ -8,6 +8,9 @@ export const updateNewbornPage = (data) => api.put('/newborn', data);
 export const getMaternityPage = () => api.get('/maternity');
 export const updateMaternityPage = (data) => api.put('/maternity', data);
 
+export const getBabyPage = () => api.get('/baby');
+export const updateBabyPage = (data) => api.put('/baby', data);
+
 // --- GENERIC UPLOAD ---
 // Create Axios Instance
 const api = axios.create({

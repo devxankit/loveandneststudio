@@ -1,24 +1,20 @@
 const mongoose = require('mongoose');
 
-const portfolioItemSchema = new mongoose.Schema({
-    url: { type: String, required: true },
-    title: { type: String },
-    altText: { type: String },
-    size: { type: String, enum: ['normal', 'large', 'tall', 'wide'], default: 'normal' }
-}, { _id: true });
-
 const babySchema = new mongoose.Schema({
     hero: {
-        title: { type: String, default: 'Baby Portfolio' },
-        subtitle: { type: String, default: 'Growing fast' },
-        bgImage: { type: String }
+        title: { type: String, default: 'Coming Soon' },
+        subtitle: { type: String, default: 'Something Beautiful' },
+        text: { type: String, default: 'We are curating a gallery of tiny miracles and sweet moments.' },
+        images: [{ type: String }] // For the infinite scrolling columns
     },
-    gallery: [portfolioItemSchema],
-    meta: {
-        title: String,
-        description: String,
-        keywords: String
-    }
+    welcome: {
+        handwriting: { type: String, default: 'welcome!' },
+        title: { type: String, default: "Let's break the ice" },
+        text: { type: String, default: "I'm the photographer behind Love & Nest..." },
+        image: { type: String },
+        buttonText: { type: String, default: 'My Full Adventure' }
+    },
+    puzzleImages: [{ type: String }] // For the puzzle grid (Sneak Peek)
 }, { timestamps: true });
 
 module.exports = mongoose.model('Baby', babySchema);

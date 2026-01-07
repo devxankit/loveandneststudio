@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Plus, Trash2, Layout, Save, X, ImageIcon, Type, Sparkles } from 'lucide-react';
-import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage } from '../../../services/api';
+import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage } from '../../../services/api';
 
 const ManageCategory = () => {
     const { category } = useParams(); // newborn, maternity, baby, family
@@ -16,6 +16,7 @@ const ManageCategory = () => {
     const title = category?.charAt(0).toUpperCase() + category?.slice(1);
     const isNewborn = category === 'newborn';
     const isMaternity = category === 'maternity';
+    const isBaby = category === 'baby';
 
     useEffect(() => {
         fetchData();
@@ -42,6 +43,15 @@ const ManageCategory = () => {
                     gallery: data.gallery || [],
                     cta: data.cta || { title: 'Ready to capture your glow?', text: "Let's create timeless art..." }
                 });
+            } else if (isBaby) {
+                const { data } = await getBabyPage();
+                setPageData({
+                    hero: data.hero || { title: 'Coming Soon', subtitle: 'Something Beautiful', text: '...', images: [] },
+                    welcome: data.welcome || { handwriting: 'welcome!', title: "Let's break the ice", text: '...', image: '', buttonText: 'My Full Adventure' },
+                    puzzleImages: data.puzzleImages || [],
+                    gallery: [] // Ensure gallery exists to avoid length errors
+                });
+                if (activeTab === 'gallery') setActiveTab('hero');
             } else {
                 // Fallback for others using the Generic PageContent system
                 const res = await getPage(`portfolio-${category}`);
@@ -145,6 +155,8 @@ const ManageCategory = () => {
                 await updateNewbornPage(newData);
             } else if (isMaternity) {
                 await updateMaternityPage(newData);
+            } else if (isBaby) {
+                await updateBabyPage(newData);
             } else {
                 const sectionsToUpdate = [];
                 if (newData.hero) sectionsToUpdate.push({ id: 'hero', content: newData.hero });
@@ -195,15 +207,19 @@ const ManageCategory = () => {
             {/* Tabs */}
             <div className="flex flex-wrap gap-2 md:gap-4 mb-8 border-b border-[#E6D1CB]">
                 {[
-                    { id: 'gallery', label: 'Gallery', icon: ImageIcon },
+                    ...(!isBaby ? [{ id: 'gallery', label: 'Gallery', icon: ImageIcon }] : []),
                     { id: 'hero', label: 'Hero', icon: Layout },
-                    ...(!isMaternity ? [{ id: 'welcome', label: 'Welcome', icon: Sparkles }] : []),
+                    ...(!isMaternity && !isBaby ? [{ id: 'welcome', label: 'Welcome', icon: Sparkles }] : []),
                     ...(isMaternity ? [
                         { id: 'editorial', label: 'Editorial', icon: Type },
                         { id: 'silhouette', label: 'Silhouette', icon: ImageIcon },
                         { id: 'journey', label: 'Journey', icon: Sparkles },
                         { id: 'poses', label: 'Poses Grid', icon: Layout },
                         { id: 'cta', label: 'CTA', icon: Save }
+                    ] : []),
+                    ...(isBaby ? [
+                        { id: 'welcome', label: 'Welcome', icon: Sparkles },
+                        { id: 'puzzle', label: 'Puzzle Grid', icon: Layout }
                     ] : [])
                 ].map((tab) => (
                     <button
@@ -223,7 +239,7 @@ const ManageCategory = () => {
                     <div className="space-y-6">
                         <div className="flex items-center justify-between">
                             <h2 className="font-display text-2xl text-[#5A2A45]">Gallery Images</h2>
-                            <span className="text-xs bg-[#F9F7F2] px-3 py-1 rounded-full text-[#6E5A52] font-bold">{pageData.gallery.length} items</span>
+                            <span className="text-xs bg-[#F9F7F2] px-3 py-1 rounded-full text-[#6E5A52] font-bold">{pageData.gallery?.length || 0} items</span>
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -236,7 +252,7 @@ const ManageCategory = () => {
                             </label>
 
                             <AnimatePresence>
-                                {pageData.gallery.map((img, idx) => (
+                                {pageData.gallery?.map((img, idx) => (
                                     <motion.div
                                         layout
                                         initial={{ opacity: 0, scale: 0.8 }}
@@ -261,45 +277,103 @@ const ManageCategory = () => {
                     </div>
                 )}
 
-                {/* 2. HERO TAB */}
                 {activeTab === 'hero' && (
-                    <form onSubmit={handleHeroSave} className="max-w-3xl space-y-8">
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div>
-                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Hero Background Image</label>
-                                <div className="relative aspect-[3/4] bg-[#F9F7F2] rounded-2xl overflow-hidden border-2 border-dashed border-[#5A2A45]/20 group hover:border-[#5A2A45]/40 transition-colors">
-                                    {pageData.hero.image ? (
-                                        <img src={pageData.hero.image} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="absolute inset-0 flex items-center justify-center text-[#5A2A45]/40">No Image</div>
-                                    )}
-                                    <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold uppercase tracking-widest text-xs">
-                                        Change Image
-                                        <input type="file" name="newImage" className="hidden" accept="image/*" />
-                                    </label>
+                    <div className="max-w-4xl space-y-8">
+                        {!isBaby ? (
+                            <form onSubmit={handleHeroSave} className="grid md:grid-cols-2 gap-8">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Hero Background Image</label>
+                                    <div className="relative aspect-[3/4] bg-[#F9F7F2] rounded-2xl overflow-hidden border-2 border-dashed border-[#5A2A45]/20 group hover:border-[#5A2A45]/40 transition-colors">
+                                        {pageData.hero.image ? (
+                                            <img src={pageData.hero.image} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="absolute inset-0 flex items-center justify-center text-[#5A2A45]/40">No Image</div>
+                                        )}
+                                        <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold uppercase tracking-widest text-xs">
+                                            Change Image
+                                            <input type="file" name="newImage" className="hidden" accept="image/*" />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Title</label>
+                                        <input name="title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-display text-2xl text-[#5A2A45] outline-none" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
+                                        <input name="subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-outfit text-[#6E5A52] outline-none" />
+                                    </div>
+                                    <div className="pt-4">
+                                        <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl active:scale-[0.98]">
+                                            {saving ? 'Saving...' : 'SAVE CHANGES'}
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        ) : (
+                            <div className="space-y-8">
+                                {/* Baby Hero - Background Images */}
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Background Scrolling Images</label>
+                                        <label className="bg-[#5A2A45] text-white px-3 py-1 rounded-full text-[10px] uppercase font-bold cursor-pointer hover:bg-[#4a2238]">
+                                            Add Background Image
+                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                const url = await handleUploadImage(e.target.files[0]);
+                                                if (url) updateAll({ ...pageData, hero: { ...pageData.hero, images: [...pageData.hero.images, url] } });
+                                            }} />
+                                        </label>
+                                    </div>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        {pageData.hero.images.map((img, i) => (
+                                            <div key={i} className="aspect-square relative group rounded-xl overflow-hidden shadow-sm">
+                                                <img src={img} className="w-full h-full object-cover" />
+                                                <button onClick={() => updateAll({ ...pageData, hero: { ...pageData.hero, images: pageData.hero.images.filter((_, idx) => idx !== i) } })} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <Trash2 size={12} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Baby Hero - Text Content */}
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Coming Soon Title</label>
+                                            <input id="h-title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
+                                            <input id="h-subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description Text</label>
+                                            <textarea id="h-text" defaultValue={pageData.hero.text} rows={4} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none resize-none" />
+                                        </div>
+                                        <button onClick={() => updateAll({
+                                            ...pageData,
+                                            hero: {
+                                                ...pageData.hero,
+                                                title: document.getElementById('h-title').value,
+                                                subtitle: document.getElementById('h-subtitle').value,
+                                                text: document.getElementById('h-text').value
+                                            }
+                                        })} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase text-xs shadow-lg">
+                                            {saving ? 'Saving...' : 'SAVE HERO TEXT'}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Title</label>
-                                    <input name="title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-display text-2xl text-[#5A2A45] outline-none border border-transparent focus:border-[#5A2A45]/20 transition-colors" />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
-                                    <input name="subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-outfit text-[#6E5A52] outline-none border border-transparent focus:border-[#5A2A45]/20 transition-colors" />
-                                </div>
-                                <div className="pt-4">
-                                    <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
-                                        {saving ? 'Saving...' : 'SAVE CHANGES'}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                        )}
+                    </div>
                 )}
 
-                {/* 3. WELCOME TAB (Non-Maternity) */}
-                {activeTab === 'welcome' && !isMaternity && (
+                {/* 3. WELCOME TAB (Non-Maternity, Non-Baby) */}
+                {activeTab === 'welcome' && !isMaternity && !isBaby && (
                     <form onSubmit={handleWelcomeSave} className="max-w-3xl space-y-8">
                         {/* ... (keep existing welcome form content) */}
                         <div className="grid md:grid-cols-2 gap-8">
@@ -324,6 +398,60 @@ const ManageCategory = () => {
                                     <img src={pageData.welcome?.image} className="w-full h-full object-contain p-4" />
                                     <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold uppercase tracking-widest text-xs">
                                         Change <input type="file" name="newImage" className="hidden" accept="image/*" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                )}
+
+                {/* 3. WELCOME TAB (Baby Only) */}
+                {activeTab === 'welcome' && isBaby && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        let img = pageData.welcome.image;
+                        const f = fd.get('newImage');
+                        if (f?.size > 0) img = await handleUploadImage(f);
+                        await updateAll({
+                            ...pageData,
+                            welcome: {
+                                handwriting: fd.get('handwriting'),
+                                title: fd.get('title'),
+                                text: fd.get('text'),
+                                buttonText: fd.get('buttonText'),
+                                image: img
+                            }
+                        });
+                    }} className="max-w-4xl space-y-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Handwriting Intro</label>
+                                    <input name="handwriting" defaultValue={pageData.welcome?.handwriting} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" placeholder="e.g., welcome!" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Title</label>
+                                    <input name="title" defaultValue={pageData.welcome?.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Content Text</label>
+                                    <textarea name="text" defaultValue={pageData.welcome?.text} rows={6} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none resize-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Text</label>
+                                    <input name="buttonText" defaultValue={pageData.welcome?.buttonText} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl">
+                                    {saving ? 'Saving...' : 'SAVE WELCOME SECTION'}
+                                </button>
+                            </div>
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Ice Breaker Image</label>
+                                <div className="aspect-[4/5] bg-[#F9F7F2] rounded-xl relative group overflow-hidden border-2 border-dashed border-[#5A2A45]/20">
+                                    <img src={pageData.welcome?.image} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold">
+                                        CHANGE PHOTO <input type="file" name="newImage" className="hidden" />
                                     </label>
                                 </div>
                             </div>
@@ -529,6 +657,47 @@ const ManageCategory = () => {
                             {saving ? 'Saving...' : 'SAVE CTA SECTION'}
                         </button>
                     </form>
+                )}
+
+                {/* 9. PUZZLE GRID TAB (Baby Only) */}
+                {activeTab === 'puzzle' && isBaby && (
+                    <div className="space-y-8">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Sneak Peek Puzzle (Fixed 15 Slots)</h3>
+                            <span className="text-[10px] bg-[#F9F7F2] text-[#8F8A86] px-3 py-1 rounded-full font-bold uppercase tracking-widest">Matches Page Layout</span>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                            {Array.from({ length: 15 }).map((_, i) => {
+                                const img = pageData.puzzleImages[i] || '';
+                                return (
+                                    <div key={i} className="space-y-2 group">
+                                        <div className="aspect-square relative rounded-2xl overflow-hidden bg-[#F9F7F2] border border-[#5A2A45]/5 shadow-sm">
+                                            {img ? (
+                                                <img src={img} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="absolute inset-0 flex items-center justify-center text-[#5A2A45]/10">
+                                                    <ImageIcon size={32} />
+                                                </div>
+                                            )}
+                                            <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity text-white font-bold text-[10px] uppercase tracking-widest">
+                                                {img ? 'Change Image' : 'Upload Image'}
+                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                    const url = await handleUploadImage(e.target.files[0]);
+                                                    if (url) {
+                                                        const newImages = [...pageData.puzzleImages];
+                                                        while (newImages.length <= i) newImages.push('');
+                                                        newImages[i] = url;
+                                                        updateAll({ ...pageData, puzzleImages: newImages.slice(0, 15) });
+                                                    }
+                                                }} />
+                                            </label>
+                                        </div>
+                                        <p className="text-center text-[10px] font-bold text-[#5A2A45]/40 uppercase tracking-widest">Slot {i + 1}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
                 )}
 
             </div>
