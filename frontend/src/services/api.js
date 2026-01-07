@@ -4,6 +4,10 @@ import axios from 'axios';
 export const getNewbornPage = () => api.get('/newborn');
 export const updateNewbornPage = (data) => api.put('/newborn', data);
 
+// --- MATERNITY API ---
+export const getMaternityPage = () => api.get('/maternity');
+export const updateMaternityPage = (data) => api.put('/maternity', data);
+
 // --- GENERIC UPLOAD ---
 // Create Axios Instance
 const api = axios.create({

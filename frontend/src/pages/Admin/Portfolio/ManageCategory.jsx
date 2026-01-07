@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Plus, Trash2, Layout, Save, X, ImageIcon, Type, Sparkles } from 'lucide-react';
-import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage } from '../../../services/api';
+import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage } from '../../../services/api';
 
 const ManageCategory = () => {
     const { category } = useParams(); // newborn, maternity, baby, family
     const [loading, setLoading] = useState(true);
     const [pageData, setPageData] = useState(null); // Will hold { hero: {}, welcome: {}, gallery: [] }
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState('gallery'); // gallery | hero | welcome
+    const [activeTab, setActiveTab] = useState('gallery');
+    const [message, setMessage] = useState({ type: '', text: '' }); // { type: 'success' | 'error', text: '' }
 
     // Capitalize for display
     const title = category?.charAt(0).toUpperCase() + category?.slice(1);
-    const isNewborn = category === 'newborn'; // Special handling for Newborn as per user request
+    const isNewborn = category === 'newborn';
+    const isMaternity = category === 'maternity';
 
     useEffect(() => {
         fetchData();
@@ -24,11 +26,21 @@ const ManageCategory = () => {
         try {
             if (isNewborn) {
                 const { data } = await getNewbornPage();
-                // Ensure default structure if empty
                 setPageData({
                     hero: data.hero || { title: `Sweet ${title}`, subtitle: 'Helping Your Littles Shine', image: '' },
                     welcome: data.welcome || { title: 'Welcome', text: `Welcome to Love & Nest Studio's ${title} Portfolio.`, image: '' },
                     gallery: data.gallery || []
+                });
+            } else if (isMaternity) {
+                const { data } = await getMaternityPage();
+                setPageData({
+                    hero: data.hero || { title: 'Motherhood', subtitle: 'The beauty of', image: '' },
+                    editorial: data.editorial || { title: 'A Moment Suspended in Time', text: '...', image1: '', image2: '' },
+                    silhouette: data.silhouette || { title: 'The Art of Silhouette', text: '...', image: '' },
+                    journey: data.journey || { title: 'The Journey', subtitle: 'Growing with love', images: [] },
+                    poses: data.poses || { title: 'Studio Maternity Poses', subtitle: "You'll Love", images: [] },
+                    gallery: data.gallery || [],
+                    cta: data.cta || { title: 'Ready to capture your glow?', text: "Let's create timeless art..." }
                 });
             } else {
                 // Fallback for others using the Generic PageContent system
@@ -126,18 +138,14 @@ const ManageCategory = () => {
     // --- CENTRAL UPDATE LOGIC ---
     const updateAll = async (newData) => {
         setSaving(true);
-        // Optimistic Update
+        setMessage({ type: '', text: '' });
         setPageData(newData);
         try {
             if (isNewborn) {
                 await updateNewbornPage(newData);
+            } else if (isMaternity) {
+                await updateMaternityPage(newData);
             } else {
-                // If using generic system, we have to map it back to sections array
-                // NOT IMPLEMENTED FULLY since user focused on Newborn checks
-                console.log("Saving generic...", newData);
-                // This part would need to be implemented to map newData back to the sections array
-                // and then call updatePageSectionJSON for each modified section or a single updatePage call.
-                // For now, we'll simulate the old behavior for generic pages.
                 const sectionsToUpdate = [];
                 if (newData.hero) sectionsToUpdate.push({ id: 'hero', content: newData.hero });
                 if (newData.welcome) sectionsToUpdate.push({ id: 'welcome', content: newData.welcome });
@@ -147,10 +155,11 @@ const ManageCategory = () => {
                     await updatePageSectionJSON(`portfolio-${category}`, section.id, section.content);
                 }
             }
+            setMessage({ type: 'success', text: 'Changes saved successfully!' });
+            setTimeout(() => setMessage({ type: '', text: '' }), 5000);
         } catch (error) {
             console.error("Save failed", error);
-            alert("Save failed: " + error.message);
-            // Revert optimistic update if save fails
+            setMessage({ type: 'error', text: "Save failed: " + error.message });
             fetchData();
         } finally {
             setSaving(false);
@@ -163,27 +172,46 @@ const ManageCategory = () => {
 
     return (
         <div className="max-w-[1600px] mx-auto min-h-screen pb-20">
-            <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-8 border-b border-[#E6D1CB] pb-6">
+            <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-8 border-b border-[#E6D1CB] pb-6 relative">
                 <div>
                     <h1 className="font-display text-4xl text-[#5A2A45] mb-2">{title} Portfolio</h1>
                     <p className="text-[#6E5A52] font-outfit font-light">Manage content for the {title} category page.</p>
                 </div>
-                {saving && <span className="text-[#B77A8C] animate-pulse font-bold">Saving...</span>}
+
+                <AnimatePresence>
+                    {message.text && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20, x: '-50%' }}
+                            animate={{ opacity: 1, y: 0, x: '-50%' }}
+                            exit={{ opacity: 0, y: -20, x: '-50%' }}
+                            className={`fixed top-10 left-1/2 z-[100] px-8 py-4 rounded-xl shadow-2xl font-bold uppercase tracking-widest text-sm ${message.type === 'success' ? 'bg-[#5A2A45] text-white' : 'bg-red-500 text-white'}`}
+                        >
+                            {message.type === 'success' ? '✓ ' : '✕ '} {message.text}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-4 mb-8 border-b border-[#E6D1CB]">
+            <div className="flex flex-wrap gap-2 md:gap-4 mb-8 border-b border-[#E6D1CB]">
                 {[
-                    { id: 'gallery', label: 'Gallery Grid', icon: ImageIcon },
-                    { id: 'hero', label: 'Hero Section', icon: Layout },
-                    { id: 'welcome', label: 'Welcome Section', icon: Sparkles },
+                    { id: 'gallery', label: 'Gallery', icon: ImageIcon },
+                    { id: 'hero', label: 'Hero', icon: Layout },
+                    ...(!isMaternity ? [{ id: 'welcome', label: 'Welcome', icon: Sparkles }] : []),
+                    ...(isMaternity ? [
+                        { id: 'editorial', label: 'Editorial', icon: Type },
+                        { id: 'silhouette', label: 'Silhouette', icon: ImageIcon },
+                        { id: 'journey', label: 'Journey', icon: Sparkles },
+                        { id: 'poses', label: 'Poses Grid', icon: Layout },
+                        { id: 'cta', label: 'CTA', icon: Save }
+                    ] : [])
                 ].map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`pb-4 px-4 font-bold uppercase tracking-widest text-xs transition-colors flex items-center gap-2 ${activeTab === tab.id ? 'text-[#5A2A45] border-b-2 border-[#5A2A45]' : 'text-[#6E5A52]/60 hover:text-[#5A2A45]'}`}
+                        className={`pb-4 px-2 md:px-4 font-bold uppercase tracking-widest text-[10px] md:text-xs transition-colors flex items-center gap-1 md:gap-2 ${activeTab === tab.id ? 'text-[#5A2A45] border-b-2 border-[#5A2A45]' : 'text-[#6E5A52]/60 hover:text-[#5A2A45]'}`}
                     >
-                        <tab.icon size={16} /> {tab.label}
+                        <tab.icon size={14} /> {tab.label}
                     </button>
                 ))}
             </div>
@@ -261,8 +289,8 @@ const ManageCategory = () => {
                                     <input name="subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-outfit text-[#6E5A52] outline-none border border-transparent focus:border-[#5A2A45]/20 transition-colors" />
                                 </div>
                                 <div className="pt-4">
-                                    <button type="submit" disabled={saving} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#4a2238] transition-colors shadow-lg">
-                                        {saving ? 'Saving...' : 'Save Changes'}
+                                    <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                                        {saving ? 'Saving...' : 'SAVE CHANGES'}
                                     </button>
                                 </div>
                             </div>
@@ -270,43 +298,236 @@ const ManageCategory = () => {
                     </form>
                 )}
 
-                {/* 3. WELCOME TAB */}
-                {activeTab === 'welcome' && (
+                {/* 3. WELCOME TAB (Non-Maternity) */}
+                {activeTab === 'welcome' && !isMaternity && (
                     <form onSubmit={handleWelcomeSave} className="max-w-3xl space-y-8">
+                        {/* ... (keep existing welcome form content) */}
                         <div className="grid md:grid-cols-2 gap-8">
-                            {/* Text Side */}
                             <div className="space-y-6 order-2 md:order-1">
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Title</label>
-                                    <input name="title" defaultValue={pageData.welcome.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-display text-2xl text-[#5A2A45] outline-none" />
+                                    <input name="title" defaultValue={pageData.welcome?.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-display text-2xl text-[#5A2A45] outline-none" />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Content</label>
-                                    <textarea name="text" defaultValue={pageData.welcome.text} rows={8} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-outfit text-[#6E5A52] outline-none resize-none" />
+                                    <textarea name="text" defaultValue={pageData.welcome?.text} rows={8} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-outfit text-[#6E5A52] outline-none resize-none" />
                                 </div>
                                 <div className="pt-4">
-                                    <button type="submit" disabled={saving} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#4a2238] transition-colors shadow-lg">
-                                        {saving ? 'Saving...' : 'Save Changes'}
+                                    <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                                        {saving ? 'Saving...' : 'SAVE CHANGES'}
                                     </button>
                                 </div>
                             </div>
-
-                            {/* Image Side */}
                             <div className="order-1 md:order-2">
-                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Visual Image (Map/Graphic)</label>
-                                <div className="relative aspect-[4/5] bg-[#F9F7F2] rounded-2xl overflow-hidden border-2 border-dashed border-[#5A2A45]/20 group hover:border-[#5A2A45]/40 transition-colors">
-                                    {pageData.welcome.image ? (
-                                        <img src={pageData.welcome.image} className="w-full h-full object-contain p-4" />
-                                    ) : (
-                                        <div className="absolute inset-0 flex items-center justify-center text-[#5A2A45]/40">No Image</div>
-                                    )}
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Image</label>
+                                <div className="relative aspect-[4/5] bg-[#F9F7F2] rounded-2xl overflow-hidden border-2 border-dashed border-[#5A2A45]/20 group">
+                                    <img src={pageData.welcome?.image} className="w-full h-full object-contain p-4" />
                                     <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold uppercase tracking-widest text-xs">
-                                        Change Image
-                                        <input type="file" name="newImage" className="hidden" accept="image/*" />
+                                        Change <input type="file" name="newImage" className="hidden" accept="image/*" />
                                     </label>
                                 </div>
                             </div>
                         </div>
+                    </form>
+                )}
+
+                {/* 4. EDITORIAL TAB (Maternity Only) */}
+                {activeTab === 'editorial' && isMaternity && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        let i1 = pageData.editorial.image1;
+                        let i2 = pageData.editorial.image2;
+                        const f1 = fd.get('newImage1');
+                        if (f1?.size > 0) i1 = await handleUploadImage(f1);
+                        const f2 = fd.get('newImage2');
+                        if (f2?.size > 0) i2 = await handleUploadImage(f2);
+                        await updateAll({
+                            ...pageData,
+                            editorial: { title: fd.get('title'), text: fd.get('text'), image1: i1, image2: i2 }
+                        });
+                    }} className="max-w-4xl space-y-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Featured Images</label>
+                                <div className="flex gap-4">
+                                    <div className="w-1/2 aspect-[3/4] bg-[#F9F7F2] rounded-xl relative group overflow-hidden">
+                                        <img src={pageData.editorial.image1} className="w-full h-full object-cover" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold">CHANGE <input type="file" name="newImage1" className="hidden" /></label>
+                                    </div>
+                                    <div className="w-1/2 aspect-[3/4] bg-[#F9F7F2] rounded-xl relative group overflow-hidden">
+                                        <img src={pageData.editorial.image2} className="w-full h-full object-cover" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold">CHANGE <input type="file" name="newImage2" className="hidden" /></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Title</label>
+                                    <input name="title" defaultValue={pageData.editorial.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Text</label>
+                                    <textarea name="text" defaultValue={pageData.editorial.text} rows={6} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                                    {saving ? 'Saving...' : 'SAVE EDITORIAL'}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                )}
+
+                {/* 5. SILHOUETTE TAB (Maternity Only) */}
+                {activeTab === 'silhouette' && isMaternity && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        let img = pageData.silhouette.image;
+                        const f = fd.get('newImage');
+                        if (f?.size > 0) img = await handleUploadImage(f);
+                        await updateAll({
+                            ...pageData,
+                            silhouette: { title: fd.get('title'), text: fd.get('text'), image: img }
+                        });
+                    }} className="max-w-4xl space-y-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="aspect-[3/4] bg-[#F9F7F2] rounded-xl relative group overflow-hidden">
+                                <img src={pageData.silhouette.image} className="w-full h-full object-cover" />
+                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-xs font-bold">CHANGE IMAGE <input type="file" name="newImage" className="hidden" /></label>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Silhouette Section Title</label>
+                                    <input name="title" defaultValue={pageData.silhouette.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Section Text</label>
+                                    <textarea name="text" defaultValue={pageData.silhouette.text} rows={6} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                                    {saving ? 'Saving...' : 'SAVE SILHOUETTE'}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                )}
+
+                {/* 6. JOURNEY TAB (Maternity Only) */}
+                {activeTab === 'journey' && isMaternity && (
+                    <div className="space-y-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Text Content</label>
+                                <input id="j-title" defaultValue={pageData.journey.title} placeholder="Title" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none mb-2" />
+                                <input id="j-subtitle" defaultValue={pageData.journey.subtitle} placeholder="Subtitle" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                <button onClick={() => updateAll({ ...pageData, journey: { ...pageData.journey, title: document.getElementById('j-title').value, subtitle: document.getElementById('j-subtitle').value } })}
+                                    className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                                    {saving ? 'Saving...' : 'SAVE TEXT'}
+                                </button>
+                            </div>
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Timeline Images (Fixed 5 Slots)</label>
+                                    <span className="text-[10px] text-[#B77A8C] font-bold uppercase">Showing 5 months of growth</span>
+                                </div>
+                                <div className="grid grid-cols-1 gap-4">
+                                    {[0, 1, 2, 3, 4].map((i) => {
+                                        const img = pageData.journey.images[i] || '';
+                                        return (
+                                            <div key={i} className="flex items-center gap-4 bg-[#F9F7F2] p-4 rounded-2xl border border-[#5A2A45]/5 group">
+                                                <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm flex-shrink-0 bg-white flex items-center justify-center">
+                                                    {img ? (
+                                                        <img src={img} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <ImageIcon className="text-[#5A2A45]/10" size={32} />
+                                                    )}
+                                                </div>
+                                                <div className="flex-grow">
+                                                    <p className="text-[#5A2A45] font-bold text-xs uppercase mb-1">Journey Item {i}</p>
+                                                    <p className="text-[#8F8A86] text-[10px] uppercase tracking-widest mb-2">Month {(i * 2) + 3}</p>
+                                                    <div className="flex gap-2">
+                                                        <label className="bg-white border border-[#5A2A45]/20 text-[#5A2A45] px-3 py-1 rounded-full text-[10px] uppercase font-bold cursor-pointer hover:bg-[#5A2A45] hover:text-white transition-colors">
+                                                            {img ? 'Change Image' : 'Upload Image'}
+                                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                                const url = await handleUploadImage(e.target.files[0]);
+                                                                if (url) {
+                                                                    const newImages = [...pageData.journey.images];
+                                                                    // Pad array if needed
+                                                                    while (newImages.length <= i) newImages.push('');
+                                                                    newImages[i] = url;
+                                                                    updateAll({ ...pageData, journey: { ...pageData.journey, images: newImages.slice(0, 5) } });
+                                                                }
+                                                            }} />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 7. POSES TAB (Maternity Only) */}
+                {activeTab === 'poses' && isMaternity && (
+                    <div className="space-y-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Poses Grid Text</label>
+                                <input id="p-title" defaultValue={pageData.poses.title} placeholder="Title" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none mb-2" />
+                                <input id="p-subtitle" defaultValue={pageData.poses.subtitle} placeholder="Subtitle" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                <button onClick={() => updateAll({ ...pageData, poses: { ...pageData.poses, title: document.getElementById('p-title').value, subtitle: document.getElementById('p-subtitle').value } })}
+                                    className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                                    {saving ? 'Saving...' : 'SAVE TEXT'}
+                                </button>
+                            </div>
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Poses Images (8 Images Recommended)</label>
+                                <div className="grid grid-cols-4 gap-2">
+                                    <label className="aspect-[3/4] bg-[#F9F7F2] border-2 border-dashed border-[#5A2A45]/20 rounded-xl flex items-center justify-center cursor-pointer hover:bg-[#5A2A45]/5">
+                                        <Plus size={20} className="text-[#5A2A45]/40" />
+                                        <input type="file" className="hidden" onChange={async (e) => {
+                                            const url = await handleUploadImage(e.target.files[0]);
+                                            if (url) updateAll({ ...pageData, poses: { ...pageData.poses, images: [...pageData.poses.images, url] } });
+                                        }} />
+                                    </label>
+                                    {pageData.poses.images.map((img, i) => (
+                                        <div key={i} className="relative aspect-[3/4] rounded-xl overflow-hidden group">
+                                            <img src={img} className="w-full h-full object-cover" />
+                                            <button onClick={() => updateAll({ ...pageData, poses: { ...pageData.poses, images: pageData.poses.images.filter((_, idx) => idx !== i) } })} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><X size={12} /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 8. CTA TAB (Maternity Only) */}
+                {activeTab === 'cta' && isMaternity && (
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        updateAll({
+                            ...pageData,
+                            cta: { title: fd.get('title'), text: fd.get('text') }
+                        });
+                    }} className="max-w-xl space-y-6">
+                        <h2 className="font-display text-2xl text-[#5A2A45] mb-4">Call to Action (Footer Section)</h2>
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">CTA Title</label>
+                            <input name="title" defaultValue={pageData.cta.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">CTA Text</label>
+                            <textarea name="text" defaultValue={pageData.cta.text} rows={4} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                        </div>
+                        <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                            {saving ? 'Saving...' : 'SAVE CTA SECTION'}
+                        </button>
                     </form>
                 )}
 
