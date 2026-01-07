@@ -41,7 +41,9 @@ const createPost = async (req, res) => {
             content,
             excerpt,
             tags: tags ? tags.split(',') : [],
-            coverImage
+            coverImage,
+            isPublished: req.body.isPublished === 'true' || req.body.isPublished === true,
+            publishedAt: (req.body.isPublished === 'true' || req.body.isPublished === true) ? Date.now() : null
         });
         res.status(201).json(post);
     } catch (error) {
@@ -59,7 +61,16 @@ const updatePost = async (req, res) => {
         post.title = req.body.title || post.title;
         post.content = req.body.content || post.content;
         post.excerpt = req.body.excerpt || post.excerpt;
-        if (req.body.tags) post.tags = req.body.tags.split(',');
+
+        if (req.body.isPublished !== undefined) {
+            const willPublish = req.body.isPublished === 'true' || req.body.isPublished === true;
+            if (willPublish && !post.isPublished) {
+                post.publishedAt = Date.now();
+            }
+            post.isPublished = willPublish;
+        }
+
+        if (req.body.tags) post.tags = req.body.tags.split(',').map(t => t.trim());
 
         if (req.file) {
             post.coverImage = req.file.path;

@@ -27,6 +27,10 @@ export const updateBabyPage = (data) => api.put('/baby', data);
 export const getFamilyPage = () => api.get('/family');
 export const updateFamilyPage = (data) => api.put('/family', data);
 
+// --- PORTFOLIO LANDING PAGE API ---
+export const getPortfolioPage = () => api.get('/portfolio-page');
+export const updatePortfolioPage = (data) => api.put('/portfolio-page', data);
+
 // Pages API
 export const getPages = () => api.get('/pages');
 export const getPage = (slug) => api.get(`/pages/${slug}`);

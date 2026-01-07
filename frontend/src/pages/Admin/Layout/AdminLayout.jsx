@@ -127,6 +127,7 @@ const AdminLayout = () => {
             label: 'Portfolio',
             path: '/admin/portfolio',
             subItems: [
+                { label: 'Main Layout', path: '/admin/portfolio' },
                 { label: 'Newborn', path: '/admin/portfolio/newborn' },
                 { label: 'Maternity', path: '/admin/portfolio/maternity' },
                 { label: 'Baby', path: '/admin/portfolio/baby' },
