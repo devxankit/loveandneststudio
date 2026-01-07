@@ -1,23 +1,39 @@
 const mongoose = require('mongoose');
 
-const portfolioItemSchema = new mongoose.Schema({
-    url: { type: String, required: true },
-    title: { type: String },
-    altText: { type: String },
-    size: { type: String, enum: ['normal', 'large', 'tall', 'wide'], default: 'normal' }
-}, { _id: true });
-
 const familySchema = new mongoose.Schema({
     hero: {
-        title: { type: String, default: 'Family Portfolio' },
-        subtitle: { type: String, default: 'Love and laughter' },
-        bgImage: { type: String }
+        fixedBgImage: String,
+        experienceText: String,
+        titleLine1: String,
+        titleLine2: String,
     },
-    gallery: [portfolioItemSchema],
-    meta: {
+    philosophy: {
+        image: String,
+        titleLine1: String,
+        titleLine2: String,
+        text1: String,
+        text2: String,
+        author: String,
+        role: String,
+    },
+    banner: {
+        image: String,
+        quote: String,
+    },
+    selectedWorks: [{
+        image: String,
         title: String,
-        description: String,
-        keywords: String
+        subtitle: String,
+    }],
+    mosaic: {
+        image1: String,
+        title: String,
+        image2: String,
+    },
+    archGrid: {
+        images: [String], // Array of 5 images
+        lineArtImage: String,
+        title: String,
     }
 }, { timestamps: true });
 

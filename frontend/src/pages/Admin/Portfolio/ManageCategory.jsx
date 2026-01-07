@@ -2,7 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Plus, Trash2, Layout, Save, X, ImageIcon, Type, Sparkles } from 'lucide-react';
-import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage } from '../../../services/api';
+import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage, getFamilyPage, updateFamilyPage } from '../../../services/api';
+
+// Fallback images from assets for Family
+import familyHeroDefault from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 111323.png';
+import familyPhilosophyDefault from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 111330.png';
+import familyBannerDefault from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 120803.png';
+import familyPortrait2Default from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 120811.png';
+import familyStoryDefault from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 120820.png';
+import familyDetail1Default from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 120831.png';
+import familyDetail2Default from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 120844.png';
+import familyLineArtDefault from '../../../assets/images/portfolio/family/line art/Screenshot_2025-12-31_145813-removebg-preview.png';
+
+// Fallback images from assets for Baby
+import babyHero1 from '../../../assets/images/portfolio/baby/Screenshot 2025-12-31 153257.png';
+import babyHero2 from '../../../assets/images/portfolio/baby/Screenshot 2025-12-31 153305.png';
+import babyHero3 from '../../../assets/images/portfolio/baby/Screenshot 2025-12-31 153316.png';
+import babyWelcome from '../../../assets/images/portfolio/baby/Screenshot 2025-12-31 153341.png';
+
+// Fallback images from assets for Maternity
+import mImg1 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225737.png';
+import mImg2 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225745.png';
+import mImg3 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225753.png';
+import mImg4 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225801.png';
+import mImg5 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225807.png';
+import mImg6 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225812.png';
+import mImg7 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225901.png';
+import mImg8 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225916.png';
+import mImg9 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225924.png';
+import mImg10 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 230059.png';
+import mImg11 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 230114.png';
+import mImg12 from '../../../assets/images/portfolio/maternity/Screenshot 2026-01-01 230124.png';
+
+// Fallback images from assets for Newborn
+import newbornHeroDefault from '../../../assets/images/portfolio/baby/Screenshot 2025-12-31 153410.png';
+import newbornWelcomeDefault from '../../../assets/images/portfolio/baby/Screenshot 2025-12-31 153341.png';
 
 const ManageCategory = () => {
     const { category } = useParams(); // newborn, maternity, baby, family
@@ -17,6 +51,7 @@ const ManageCategory = () => {
     const isNewborn = category === 'newborn';
     const isMaternity = category === 'maternity';
     const isBaby = category === 'baby';
+    const isFamily = category === 'family';
 
     useEffect(() => {
         fetchData();
@@ -50,6 +85,19 @@ const ManageCategory = () => {
                     welcome: data.welcome || { handwriting: 'welcome!', title: "Let's break the ice", text: '...', image: '', buttonText: 'My Full Adventure' },
                     puzzleImages: data.puzzleImages || [],
                     gallery: [] // Ensure gallery exists to avoid length errors
+                });
+                if (activeTab === 'gallery') setActiveTab('hero');
+            } else if (isFamily) {
+                const res = await getFamilyPage();
+                const data = res.data.data || res.data; // Handle both direct and wrapped responses
+                setPageData({
+                    hero: data.hero || { fixedBgImage: '', experienceText: '13 Years of Experience', titleLine1: 'Preserving Your', titleLine2: 'Family Legacy' },
+                    philosophy: data.philosophy || { image: '', titleLine1: 'Cherishing Every', titleLine2: 'Fleeting Moment', text1: '', text2: '', author: 'Anamika', role: 'Lead Photographer' },
+                    banner: data.banner || { image: '', quote: '"Where life happens"' },
+                    selectedWorks: data.selectedWorks || [],
+                    mosaic: data.mosaic || { image1: '', title: 'Ready to tell your story?', image2: '' },
+                    archGrid: data.archGrid || { images: ['', '', '', '', ''], lineArtImage: '', title: 'Ready to frame your memories?' },
+                    gallery: []
                 });
                 if (activeTab === 'gallery') setActiveTab('hero');
             } else {
@@ -157,6 +205,8 @@ const ManageCategory = () => {
                 await updateMaternityPage(newData);
             } else if (isBaby) {
                 await updateBabyPage(newData);
+            } else if (isFamily) {
+                await updateFamilyPage(newData);
             } else {
                 const sectionsToUpdate = [];
                 if (newData.hero) sectionsToUpdate.push({ id: 'hero', content: newData.hero });
@@ -207,9 +257,9 @@ const ManageCategory = () => {
             {/* Tabs */}
             <div className="flex flex-wrap gap-2 md:gap-4 mb-8 border-b border-[#E6D1CB]">
                 {[
-                    ...(!isBaby ? [{ id: 'gallery', label: 'Gallery', icon: ImageIcon }] : []),
-                    { id: 'hero', label: 'Hero', icon: Layout },
-                    ...(!isMaternity && !isBaby ? [{ id: 'welcome', label: 'Welcome', icon: Sparkles }] : []),
+                    ...(!isBaby && !isFamily ? [{ id: 'gallery', label: 'Gallery', icon: ImageIcon }] : []),
+                    ...(!isFamily ? [{ id: 'hero', label: 'Hero', icon: Layout }] : []),
+                    ...(!isMaternity && !isBaby && !isFamily ? [{ id: 'welcome', label: 'Welcome', icon: Sparkles }] : []),
                     ...(isMaternity ? [
                         { id: 'editorial', label: 'Editorial', icon: Type },
                         { id: 'silhouette', label: 'Silhouette', icon: ImageIcon },
@@ -220,6 +270,13 @@ const ManageCategory = () => {
                     ...(isBaby ? [
                         { id: 'welcome', label: 'Welcome', icon: Sparkles },
                         { id: 'puzzle', label: 'Puzzle Grid', icon: Layout }
+                    ] : []),
+                    ...(isFamily ? [
+                        { id: 'hero', label: 'Hero', icon: Layout },
+                        { id: 'philosophy', label: 'Philosophy', icon: Sparkles },
+                        { id: 'banner', label: 'Banner', icon: ImageIcon },
+                        { id: 'mosaic', label: 'Mosaic', icon: Layout },
+                        { id: 'arch', label: 'Arch Grid', icon: Plus }
                     ] : [])
                 ].map((tab) => (
                     <button
@@ -277,18 +334,14 @@ const ManageCategory = () => {
                     </div>
                 )}
 
-                {activeTab === 'hero' && (
+                {activeTab === 'hero' && !isFamily && (
                     <div className="max-w-4xl space-y-8">
-                        {!isBaby ? (
+                        {!isBaby && !isFamily ? (
                             <form onSubmit={handleHeroSave} className="grid md:grid-cols-2 gap-8">
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Hero Background Image</label>
                                     <div className="relative aspect-[3/4] bg-[#F9F7F2] rounded-2xl overflow-hidden border-2 border-dashed border-[#5A2A45]/20 group hover:border-[#5A2A45]/40 transition-colors">
-                                        {pageData.hero.image ? (
-                                            <img src={pageData.hero.image} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="absolute inset-0 flex items-center justify-center text-[#5A2A45]/40">No Image</div>
-                                        )}
+                                        <img src={pageData.hero.image || (isMaternity ? mImg1 : isNewborn ? newbornHeroDefault : null)} className="w-full h-full object-cover" />
                                         <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold uppercase tracking-widest text-xs">
                                             Change Image
                                             <input type="file" name="newImage" className="hidden" accept="image/*" />
@@ -326,7 +379,7 @@ const ManageCategory = () => {
                                         </label>
                                     </div>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        {pageData.hero.images.map((img, i) => (
+                                        {(pageData.hero.images.length > 0 ? pageData.hero.images : [babyHero1, babyHero2, babyHero3]).map((img, i) => (
                                             <div key={i} className="aspect-square relative group rounded-xl overflow-hidden shadow-sm">
                                                 <img src={img} className="w-full h-full object-cover" />
                                                 <button onClick={() => updateAll({ ...pageData, hero: { ...pageData.hero, images: pageData.hero.images.filter((_, idx) => idx !== i) } })} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -395,7 +448,7 @@ const ManageCategory = () => {
                             <div className="order-1 md:order-2">
                                 <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Image</label>
                                 <div className="relative aspect-[4/5] bg-[#F9F7F2] rounded-2xl overflow-hidden border-2 border-dashed border-[#5A2A45]/20 group">
-                                    <img src={pageData.welcome?.image} className="w-full h-full object-contain p-4" />
+                                    <img src={pageData.welcome?.image || (isBaby ? babyWelcome : isNewborn ? newbornWelcomeDefault : null)} className="w-full h-full object-contain p-4" />
                                     <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold uppercase tracking-widest text-xs">
                                         Change <input type="file" name="newImage" className="hidden" accept="image/*" />
                                     </label>
@@ -480,11 +533,11 @@ const ManageCategory = () => {
                                 <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Featured Images</label>
                                 <div className="flex gap-4">
                                     <div className="w-1/2 aspect-[3/4] bg-[#F9F7F2] rounded-xl relative group overflow-hidden">
-                                        <img src={pageData.editorial.image1} className="w-full h-full object-cover" />
+                                        <img src={pageData.editorial.image1 || mImg2} className="w-full h-full object-cover" />
                                         <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold">CHANGE <input type="file" name="newImage1" className="hidden" /></label>
                                     </div>
                                     <div className="w-1/2 aspect-[3/4] bg-[#F9F7F2] rounded-xl relative group overflow-hidden">
-                                        <img src={pageData.editorial.image2} className="w-full h-full object-cover" />
+                                        <img src={pageData.editorial.image2 || mImg3} className="w-full h-full object-cover" />
                                         <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold">CHANGE <input type="file" name="newImage2" className="hidden" /></label>
                                     </div>
                                 </div>
@@ -521,7 +574,7 @@ const ManageCategory = () => {
                     }} className="max-w-4xl space-y-8">
                         <div className="grid md:grid-cols-2 gap-8">
                             <div className="aspect-[3/4] bg-[#F9F7F2] rounded-xl relative group overflow-hidden">
-                                <img src={pageData.silhouette.image} className="w-full h-full object-cover" />
+                                <img src={pageData.silhouette.image || mImg4} className="w-full h-full object-cover" />
                                 <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-xs font-bold">CHANGE IMAGE <input type="file" name="newImage" className="hidden" /></label>
                             </div>
                             <div className="space-y-4">
@@ -565,11 +618,7 @@ const ManageCategory = () => {
                                         return (
                                             <div key={i} className="flex items-center gap-4 bg-[#F9F7F2] p-4 rounded-2xl border border-[#5A2A45]/5 group">
                                                 <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm flex-shrink-0 bg-white flex items-center justify-center">
-                                                    {img ? (
-                                                        <img src={img} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <ImageIcon className="text-[#5A2A45]/10" size={32} />
-                                                    )}
+                                                    <img src={img || (i === 0 ? mImg5 : i === 1 ? mImg6 : i === 2 ? mImg7 : i === 3 ? mImg8 : mImg9)} className="w-full h-full object-cover" />
                                                 </div>
                                                 <div className="flex-grow">
                                                     <p className="text-[#5A2A45] font-bold text-xs uppercase mb-1">Journey Item {i}</p>
@@ -672,13 +721,7 @@ const ManageCategory = () => {
                                 return (
                                     <div key={i} className="space-y-2 group">
                                         <div className="aspect-square relative rounded-2xl overflow-hidden bg-[#F9F7F2] border border-[#5A2A45]/5 shadow-sm">
-                                            {img ? (
-                                                <img src={img} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <div className="absolute inset-0 flex items-center justify-center text-[#5A2A45]/10">
-                                                    <ImageIcon size={32} />
-                                                </div>
-                                            )}
+                                            <img src={img || (i === 0 ? mImg7 : i === 1 ? mImg8 : i === 2 ? mImg9 : i === 3 ? mImg10 : i === 4 ? mImg11 : mImg12)} className="w-full h-full object-cover" />
                                             <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity text-white font-bold text-[10px] uppercase tracking-widest">
                                                 {img ? 'Change Image' : 'Upload Image'}
                                                 <input type="file" className="hidden" onChange={async (e) => {
@@ -696,6 +739,264 @@ const ManageCategory = () => {
                                     </div>
                                 );
                             })}
+                        </div>
+                    </div>
+                )}
+
+                {/* 10. FAMILY TABS (Hero, Philosophy, Banner, Stories, Mosaic, Arch) */}
+                {activeTab === 'hero' && isFamily && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        let img = pageData.hero.fixedBgImage;
+                        if (fd.get('newBg')?.size > 0) img = await handleUploadImage(fd.get('newBg'));
+                        updateAll({
+                            ...pageData,
+                            hero: {
+                                fixedBgImage: img,
+                                experienceText: fd.get('expText'),
+                                titleLine1: fd.get('t1'),
+                                titleLine2: fd.get('t2')
+                            }
+                        });
+                    }} className="max-w-4xl space-y-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Background Watermark Image</label>
+                                <div className="aspect-video bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10">
+                                    <img src={pageData.hero.fixedBgImage || familyHeroDefault} className="w-full h-full object-cover opacity-30" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity">
+                                        Change Background
+                                        <input type="file" name="newBg" className="hidden" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Experience Subtitle</label>
+                                    <input name="expText" defaultValue={pageData.hero.experienceText} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" placeholder="e.g. 13 Years of Experience" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Title Line 1</label>
+                                    <input name="t1" defaultValue={pageData.hero.titleLine1} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" placeholder="Preserving Your" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Title Line 2 (Italic)</label>
+                                    <input name="t2" defaultValue={pageData.hero.titleLine2} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" placeholder="Family Legacy" />
+                                </div>
+                                <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                                    {saving ? 'Saving...' : 'SAVE HERO CONTENT'}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                )}
+
+                {activeTab === 'philosophy' && isFamily && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        let img = pageData.philosophy.image;
+                        if (fd.get('newImg')?.size > 0) img = await handleUploadImage(fd.get('newImg'));
+                        updateAll({
+                            ...pageData,
+                            philosophy: {
+                                image: img,
+                                titleLine1: fd.get('t1'),
+                                titleLine2: fd.get('t2'),
+                                text1: fd.get('text1'),
+                                text2: fd.get('text2'),
+                                author: fd.get('author'),
+                                role: fd.get('role')
+                            }
+                        });
+                    }} className="max-w-5xl space-y-8">
+                        <div className="grid md:grid-cols-2 gap-12">
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Philosophy Image</label>
+                                <div className="aspect-[4/5] bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-lg">
+                                    <img src={pageData.philosophy.image || familyPhilosophyDefault} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity">
+                                        Change Image
+                                        <input type="file" name="newImg" className="hidden" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Title Line 1</label>
+                                    <input name="t1" defaultValue={pageData.philosophy.titleLine1} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Title Line 2 (Italic)</label>
+                                    <input name="t2" defaultValue={pageData.philosophy.titleLine2} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description Paragraph 1</label>
+                                    <textarea name="text1" defaultValue={pageData.philosophy.text1} rows={4} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description Paragraph 2</label>
+                                    <textarea name="text2" defaultValue={pageData.philosophy.text2} rows={4} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Author Name</label>
+                                        <input name="author" defaultValue={pageData.philosophy.author} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display italic" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Role Title</label>
+                                        <input name="role" defaultValue={pageData.philosophy.role} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-outfit" />
+                                    </div>
+                                </div>
+                                <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                                    {saving ? 'Saving...' : 'SAVE PHILOSOPHY'}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                )}
+
+                {activeTab === 'banner' && isFamily && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        let img = pageData.banner.image;
+                        if (fd.get('newImg')?.size > 0) img = await handleUploadImage(fd.get('newImg'));
+                        updateAll({
+                            ...pageData,
+                            banner: { image: img, quote: fd.get('quote') }
+                        });
+                    }} className="max-w-4xl space-y-8">
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4">Cinematic Banner</label>
+                            <div className="aspect-[21/9] bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-xl">
+                                <img src={pageData.banner.image || familyBannerDefault} className="w-full h-full object-cover" />
+                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity">
+                                    Change Banner
+                                    <input type="file" name="newImg" className="hidden" />
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Banner Quote</label>
+                            <input name="quote" defaultValue={pageData.banner.quote} className="w-full p-6 bg-[#F9F7F2] rounded-2xl outline-none font-display italic text-xl text-[#5A2A45]" placeholder='"Where life happens"' />
+                        </div>
+                        <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                            {saving ? 'Saving...' : 'SAVE BANNER'}
+                        </button>
+                    </form>
+                )}
+
+
+
+                {activeTab === 'mosaic' && isFamily && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        updateAll({
+                            ...pageData,
+                            mosaic: { ...pageData.mosaic, title: fd.get('title') }
+                        });
+                    }} className="max-w-4xl space-y-8">
+                        <div className="grid grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Mosaic Image 1</label>
+                                <div className="aspect-square bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-lg">
+                                    <img src={pageData.mosaic.image1 || familyDetail1Default} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest">
+                                        Update Image
+                                        <input type="file" className="hidden" onChange={async (e) => {
+                                            const url = await handleUploadImage(e.target.files[0]);
+                                            if (url) updateAll({ ...pageData, mosaic: { ...pageData.mosaic, image1: url } });
+                                        }} />
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Mosaic Image 2</label>
+                                <div className="aspect-square bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-lg">
+                                    <img src={pageData.mosaic.image2 || familyDetail2Default} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest">
+                                        Update Image
+                                        <input type="file" className="hidden" onChange={async (e) => {
+                                            const url = await handleUploadImage(e.target.files[0]);
+                                            if (url) updateAll({ ...pageData, mosaic: { ...pageData.mosaic, image2: url } });
+                                        }} />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Mosaic Center Title</label>
+                            <input name="title" defaultValue={pageData.mosaic.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none text-center font-display text-xl" />
+                        </div>
+
+                        <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
+                            {saving ? 'Saving...' : 'SAVE MOSAIC SETTINGS'}
+                        </button>
+                    </form>
+                )}
+
+                {activeTab === 'arch' && isFamily && (
+                    <div className="space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Animated Arch Grid (5 Slots)</h3>
+                            <button onClick={() => updateAll({ ...pageData, archGrid: { ...pageData.archGrid, title: document.getElementById('arch-title').value } })}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs uppercase font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                                {saving ? 'Saving...' : 'SAVE ALL ARCH CHANGES'}
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                            {[0, 1, 2, 3, 4].map((i) => {
+                                const img = pageData.archGrid.images[i] || '';
+                                return (
+                                    <div key={i} className="space-y-2 group">
+                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] text-center">Slot {i + 1}</label>
+                                        <div className="aspect-[4/6] bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-md">
+                                            <img src={img || (i === 0 ? familyDetail2Default : i === 1 ? familyPhilosophyDefault : i === 2 ? familyStoryDefault : i === 3 ? familyPortrait2Default : familyDetail1Default)} className="w-full h-full object-cover" />
+                                            <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center px-4">
+                                                Update Slot {i + 1}
+                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                    const url = await handleUploadImage(e.target.files[0]);
+                                                    if (url) {
+                                                        const newImgs = [...pageData.archGrid.images];
+                                                        while (newImgs.length <= i) newImgs.push('');
+                                                        newImgs[i] = url;
+                                                        updateAll({ ...pageData, archGrid: { ...pageData.archGrid, images: newImgs.slice(0, 5) } });
+                                                    }
+                                                }} />
+                                            </label>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-12 pt-8 border-t border-[#5A2A45]/10">
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Center Line Art Overlay (PNG)</label>
+                                <div className="aspect-square bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 flex items-center justify-center">
+                                    <img src={pageData.archGrid.lineArtImage || familyLineArtDefault} className="max-w-[80%] h-auto object-contain" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity">
+                                        Change Line Art
+                                        <input type="file" className="hidden" onChange={async (e) => {
+                                            const url = await handleUploadImage(e.target.files[0]);
+                                            if (url) updateAll({ ...pageData, archGrid: { ...pageData.archGrid, lineArtImage: url } });
+                                        }} />
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Arch Section Footer Title</label>
+                                    <input id="arch-title" defaultValue={pageData.archGrid.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-2xl" placeholder="Ready to frame your memories?" />
+                                </div>
+                                <p className="text-xs text-[#8F8A86] leading-relaxed">
+                                    The Arch Grid uses Slot 3 (Center) as the main focus. Tip: Use Slot 3 for your favorite family portrait. The Line Art overlay will sit right on top of it.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 )}

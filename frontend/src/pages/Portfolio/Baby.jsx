@@ -4,6 +4,12 @@ import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
 import { getBabyPage } from '../../services/api';
 
+// Fallback images from assets
+import babyHero1 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153257.png';
+import babyHero2 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153305.png';
+import babyHero3 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153316.png';
+import babyWelcome from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153341.png';
+
 const Baby = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -27,7 +33,7 @@ const Baby = () => {
     const hero = data?.hero || {};
     const welcome = data?.welcome || {};
     const puzzleImages = data?.puzzleImages || [];
-    const bgImages = hero.images?.length > 0 ? hero.images : [];
+    const bgImages = (hero.images && hero.images.length > 0) ? hero.images : [babyHero1, babyHero2, babyHero3];
 
     // Map uploaded images to the puzzle layout
     const puzzleLayout = [
@@ -120,7 +126,7 @@ const Baby = () => {
                             <div className="relative">
                                 <div className="absolute top-4 -right-4 w-full h-full bg-[#E8C547] rounded-sm transform rotate-6 z-0" />
                                 <div className="relative bg-white p-3 pb-12 shadow-xl transform -rotate-3 z-10 w-[280px] md:w-[350px]">
-                                    <LazyImage src={welcome.image} alt="Baby Profile" className="w-full aspect-[4/5] object-cover grayscale-[20%]" />
+                                    <LazyImage src={welcome.image || babyWelcome} alt="Baby Profile" className="w-full aspect-[4/5] object-cover grayscale-[20%]" />
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#E5E5E5]/50 backdrop-blur-sm border border-white/40" />
                                 </div>
                                 <svg className="absolute -bottom-8 -left-8 w-8 h-8 text-[#D4AF37] animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>

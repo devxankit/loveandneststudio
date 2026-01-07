@@ -1,17 +1,5 @@
 import axios from 'axios';
 
-// --- NEWBORN API ---
-export const getNewbornPage = () => api.get('/newborn');
-export const updateNewbornPage = (data) => api.put('/newborn', data);
-
-// --- MATERNITY API ---
-export const getMaternityPage = () => api.get('/maternity');
-export const updateMaternityPage = (data) => api.put('/maternity', data);
-
-export const getBabyPage = () => api.get('/baby');
-export const updateBabyPage = (data) => api.put('/baby', data);
-
-// --- GENERIC UPLOAD ---
 // Create Axios Instance
 const api = axios.create({
     baseURL: 'http://localhost:5000/api', // Hardcoded for now, or use import.meta.env.VITE_API_URL
@@ -23,6 +11,21 @@ api.interceptors.request.use(config => {
     // if(token) config.headers.Authorization = `Bearer ${token}`;
     return config;
 }, error => Promise.reject(error));
+
+// --- NEWBORN API ---
+export const getNewbornPage = () => api.get('/newborn');
+export const updateNewbornPage = (data) => api.put('/newborn', data);
+
+// --- MATERNITY API ---
+export const getMaternityPage = () => api.get('/maternity');
+export const updateMaternityPage = (data) => api.put('/maternity', data);
+
+export const getBabyPage = () => api.get('/baby');
+export const updateBabyPage = (data) => api.put('/baby', data);
+
+// --- FAMILY API ---
+export const getFamilyPage = () => api.get('/family');
+export const updateFamilyPage = (data) => api.put('/family', data);
 
 // Pages API
 export const getPages = () => api.get('/pages');
