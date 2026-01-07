@@ -31,6 +31,10 @@ export const updateFamilyPage = (data) => api.put('/family', data);
 export const getPortfolioPage = () => api.get('/portfolio-page');
 export const updatePortfolioPage = (data) => api.put('/portfolio-page', data);
 
+// --- ABOUT PAGE API ---
+export const getAboutPage = () => api.get('/about-page');
+export const updateAboutPage = (data) => api.put('/about-page', data);
+
 // Pages API
 export const getPages = () => api.get('/pages');
 export const getPage = (slug) => api.get(`/pages/${slug}`);

@@ -42,6 +42,7 @@ app.use('/api/maternity', require('./routes/maternityRoutes'));
 app.use('/api/baby', require('./routes/babyRoutes'));
 app.use('/api/family', require('./routes/familyRoutes'));
 app.use('/api/portfolio-page', require('./routes/portfolioPageRoutes'));
+app.use('/api/about-page', require('./routes/aboutPageRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 
 // Base Route

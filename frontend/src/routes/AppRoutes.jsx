@@ -21,6 +21,7 @@ const AdminLayout = lazy(() => import('../pages/Admin/Layout/AdminLayout'));
 const AdminDashboard = lazy(() => import('../pages/Admin/Dashboard/AdminDashboard'));
 const ManagePortfolio = lazy(() => import('../pages/Admin/Portfolio/ManagePortfolio'));
 const ManageCategory = lazy(() => import('../pages/Admin/Portfolio/ManageCategory'));
+const ManageAbout = lazy(() => import('../pages/Admin/About/ManageAbout'));
 const ManagePages = lazy(() => import('../pages/Admin/Pages/ManagePages'));
 const PageEditor = lazy(() => import('../pages/Admin/Pages/PageEditor'));
 const ManageBlog = lazy(() => import('../pages/Admin/Blog/ManageBlog'));
@@ -77,6 +78,7 @@ const AppRoutes = () => {
                             <Route index element={<Navigate to="dashboard" replace />} />
                             <Route path="dashboard" element={<AdminDashboard />} />
                             <Route path="pages" element={<ManagePages />} />
+                            <Route path="pages/about" element={<ManageAbout />} />
                             <Route path="pages/:pageId" element={<PageEditor />} />
                             <Route path="portfolio" element={<ManagePortfolio />} />
                             <Route path="portfolio/:category" element={<ManageCategory />} />
