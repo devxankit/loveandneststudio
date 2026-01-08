@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -10,7 +10,7 @@ const Footer = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/settings');
+                const res = await api.get('/settings');
                 if (res.data.footerLogo) setFooterLogo(res.data.footerLogo);
                 if (res.data.siteTitle) setSiteTitle(res.data.siteTitle);
             } catch (error) {

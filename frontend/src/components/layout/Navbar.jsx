@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import axios from 'axios';
+import api from '../../services/api';
 import defaultLogo from '../../assets/logo/Gemini_Generated_Image_adt2l4adt2l4adt2-removebg-preview.png';
 
 const Navbar = () => {
@@ -25,7 +25,7 @@ const Navbar = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/settings');
+                const res = await api.get('/settings');
                 if (res.data.navbarLogo) {
                     setNavbarLogo(res.data.navbarLogo);
                 }

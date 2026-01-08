@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../../services/api';
 import SEO from '../../components/seo/SEO';
 
 // Animation variants
@@ -27,7 +27,7 @@ const Services = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/services');
+                const res = await api.get('/services');
                 setPageData(res.data);
             } catch (error) {
                 console.error("Error fetching services page data:", error);

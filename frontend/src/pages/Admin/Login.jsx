@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Mail, ArrowRight, ShieldCheck, KeyRound, CheckCircle2, AlertCircle } from 'lucide-react';
-import axios from 'axios';
+import api from '../../services/api';
 
 const InputField = ({ icon: Icon, type, name, value, onChange, placeholder, required = true, autoComplete }) => (
     <div className="group space-y-2 relative isolate">
@@ -35,14 +35,13 @@ const AdminLogin = () => {
     const [message, setMessage] = useState('');
 
     const navigate = useNavigate();
-    const API_URL = 'http://localhost:5000/api/auth';
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
         try {
-            const { data } = await axios.post(`${API_URL}/login`, credentials);
+            const { data } = await api.post('/auth/login', credentials);
             localStorage.setItem('adminToken', data.token);
             localStorage.setItem('adminEmail', data.email);
             localStorage.setItem('isAdmin', 'true');
@@ -59,7 +58,7 @@ const AdminLogin = () => {
         setLoading(true);
         setError('');
         try {
-            await axios.post(`${API_URL}/forgot-password`, { email: forgotEmail });
+            await api.post('/auth/forgot-password', { email: forgotEmail });
             setMessage('OTP sent to your email');
             setView('verify');
         } catch (err) {
@@ -74,7 +73,7 @@ const AdminLogin = () => {
         setLoading(true);
         setError('');
         try {
-            await axios.post(`${API_URL}/verify-otp`, { email: forgotEmail, otp });
+            await api.post('/auth/verify-otp', { email: forgotEmail, otp });
             setMessage('OTP verified! Choose a new password.');
             setView('reset');
         } catch (err) {
@@ -89,7 +88,7 @@ const AdminLogin = () => {
         setLoading(true);
         setError('');
         try {
-            await axios.post(`${API_URL}/reset-password`, {
+            await api.post('/auth/reset-password', {
                 email: forgotEmail,
                 otp,
                 newPassword

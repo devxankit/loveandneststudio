@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Sparkles } from 'lucide-react';
-import axios from 'axios';
+import api from '../../services/api';
 
 // Animation Variations
 const elegantFade = {
@@ -50,7 +50,7 @@ const ServiceGallery = () => {
     useEffect(() => {
         const fetchService = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/services');
+                const res = await api.get('/services');
                 const allServices = res.data.serviceList || [];
                 const found = allServices.find(s => s.id === id);
                 setService(found);
