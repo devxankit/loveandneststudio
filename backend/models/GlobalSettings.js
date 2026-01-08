@@ -13,6 +13,22 @@ const globalSettingsSchema = new mongoose.Schema({
     siteTitle: {
         type: String,
         default: 'Love & Nest Studio'
+    },
+    seoDescription: {
+        type: String,
+        default: 'Professional photography services specializing in maternity, newborn, and family portraits in Dehradun.'
+    },
+    ownerName: {
+        type: String,
+        default: 'Anamika'
+    },
+    contactPhone: {
+        type: String,
+        default: '+91 98765 43210'
+    },
+    contactEmail: {
+        type: String,
+        default: 'hello@loveandnest.com'
     }
 }, { timestamps: true });
 

@@ -146,7 +146,6 @@ const AdminLayout = () => {
         { icon: Sparkles, label: 'Services', path: '/admin/services' },
         { icon: PenTool, label: 'Blog', path: '/admin/blog' },
         { icon: MessageSquare, label: 'Testimonials', path: '/admin/testimonials' },
-        { icon: Users, label: 'Inquiries', path: '/admin/inquiries' },
         { icon: Command, label: 'Logo & Branding', path: '/admin/branding' },
         { icon: Settings, label: 'Settings', path: '/admin/settings' },
     ];

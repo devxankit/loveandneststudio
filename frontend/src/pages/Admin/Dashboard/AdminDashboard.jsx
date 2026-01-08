@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Image, FileText, Users, ShoppingBag, Clock, ArrowRight, TrendingUp } from 'lucide-react';
+import { Image, FileText, Users, ShoppingBag, Clock, ArrowRight, TrendingUp, MessageSquare } from 'lucide-react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const DashboardCard = ({ title, value, subtitle, icon: Icon, bgClass, textClass, delay }) => (
     <motion.div
@@ -16,10 +18,10 @@ const DashboardCard = ({ title, value, subtitle, icon: Icon, bgClass, textClass,
             <div className={`p-4 rounded-2xl ${bgClass} bg-opacity-10 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
                 <Icon size={24} className={textClass} strokeWidth={2.5} />
             </div>
-            <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full ${bgClass} bg-opacity-10 ${textClass}`}>
+            {/* <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full ${bgClass} bg-opacity-10 ${textClass}`}>
                 <TrendingUp size={12} />
-                <span>+12% vs last mo</span>
-            </div>
+                <span>Live</span>
+            </div> */}
         </div>
 
         <div className="relative z-10">
@@ -33,22 +35,41 @@ const DashboardCard = ({ title, value, subtitle, icon: Icon, bgClass, textClass,
 );
 
 const AdminDashboard = () => {
-    // Mock Data
-    const stats = [
-        { title: 'Portfolio Assets', value: '124', subtitle: 'Items', icon: Image, bgClass: 'bg-indigo-500', textClass: 'text-indigo-600' },
-        { title: 'Journal Posts', value: '18', subtitle: 'Published', icon: FileText, bgClass: 'bg-rose-500', textClass: 'text-rose-600' },
-        { title: 'Active Inquiries', value: '5', subtitle: 'Pending', icon: Users, bgClass: 'bg-emerald-500', textClass: 'text-emerald-600' },
-        { title: 'Services Listed', value: '7', subtitle: 'Packages', icon: ShoppingBag, bgClass: 'bg-amber-500', textClass: 'text-amber-600' },
-    ];
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const upcomingSessions = [
-        { name: 'Sharma Family', type: 'Newborn Session', date: 'Oct 24, 2026', time: '10:00 AM', status: 'Confirmed' },
-        { name: 'Priya & Rahul', type: 'Maternity', date: 'Oct 26, 2026', time: '02:00 PM', status: 'Pending' },
-        { name: 'Baby Vihaan', type: 'Cake Smash', date: 'Oct 28, 2026', time: '11:00 AM', status: 'Confirmed' },
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const res = await axios.get('http://localhost:5000/api/dashboard', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setData(res.data);
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center text-[#5A2A45]">Loading Dashboard...</div>;
+    if (!data) return <div className="min-h-screen flex items-center justify-center text-red-500">Error loading data.</div>;
+
+    const { stats, recentInquiries, ownerName } = data;
+
+    const dashboardStats = [
+        { title: 'Portfolio Assets', value: stats.portfolio, subtitle: 'Images', icon: Image, bgClass: 'bg-indigo-500', textClass: 'text-indigo-600' },
+        { title: 'Journal Posts', value: stats.blogs, subtitle: 'Published', icon: FileText, bgClass: 'bg-rose-500', textClass: 'text-rose-600' },
+        { title: 'Total Inquiries', value: stats.inquiries, subtitle: 'Messages', icon: MessageSquare, bgClass: 'bg-emerald-500', textClass: 'text-emerald-600' },
+        { title: 'Services Listed', value: stats.services, subtitle: 'Active Offerings', icon: ShoppingBag, bgClass: 'bg-amber-500', textClass: 'text-amber-600' },
     ];
 
     return (
-        <div className="space-y-8 lg:space-y-12 max-w-[1600px] mx-auto">
+        <div className="space-y-8 lg:space-y-12 max-w-[1600px] mx-auto pb-20">
 
             {/* Start Header */}
             <motion.div
@@ -57,7 +78,7 @@ const AdminDashboard = () => {
                 className="flex flex-col md:flex-row md:items-end justify-between gap-4"
             >
                 <div>
-                    <h1 className="font-display text-4xl lg:text-5xl text-[#5A2A45] mb-2">Welcome Back, Anamika.</h1>
+                    <h1 className="font-display text-4xl lg:text-5xl text-[#5A2A45] mb-2">Welcome Back, {ownerName}.</h1>
                     <p className="text-[#6E5A52] font-outfit text-lg font-light">Here is what’s happening in your studio today.</p>
                 </div>
                 <div className="text-right hidden md:block">
@@ -68,13 +89,13 @@ const AdminDashboard = () => {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {stats.map((stat, index) => (
+                {dashboardStats.map((stat, index) => (
                     <DashboardCard key={index} {...stat} delay={index * 0.1} />
                 ))}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Upcoming Sessions List */}
+                {/* Recent Inquiries List (Previously Upcoming Sessions) */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -83,46 +104,50 @@ const AdminDashboard = () => {
                 >
                     <div className="p-8 border-b border-[#5A2A45]/5 flex justify-between items-center bg-[#FAFAF9]">
                         <div>
-                            <h3 className="font-display text-2xl text-[#5A2A45]">Upcoming Sessions</h3>
-                            <p className="text-xs text-[#6E5A52]/60 uppercase tracking-widest mt-1">Next 7 Days</p>
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Recent Inquiries</h3>
+                            <p className="text-xs text-[#6E5A52]/60 uppercase tracking-widest mt-1">Latest messages from clients</p>
                         </div>
-                        <button className="text-xs font-bold uppercase tracking-widest text-[#B77A8C] hover:text-[#5A2A45] border border-[#B77A8C]/20 px-4 py-2 rounded-full hover:bg-[#B77A8C]/10 transition-colors">
-                            View Calendar
-                        </button>
+                        <Link to="/admin/inquiries" className="text-xs font-bold uppercase tracking-widest text-[#B77A8C] hover:text-[#5A2A45] border border-[#B77A8C]/20 px-4 py-2 rounded-full hover:bg-[#B77A8C]/10 transition-colors">
+                            View All
+                        </Link>
                     </div>
 
                     <div className="p-6 flex-1">
                         <div className="space-y-4">
-                            {upcomingSessions.map((session, i) => (
-                                <motion.div
-                                    key={i}
-                                    whileHover={{ scale: 1.01 }}
-                                    className="flex items-center justify-between p-5 bg-[#F9F7F2] rounded-2xl hover:bg-[#F1EBDD] transition-colors cursor-pointer group"
-                                >
-                                    <div className="flex items-center gap-5">
-                                        <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[#5A2A45] font-display font-medium text-xl shadow-sm group-hover:scale-110 transition-transform">
-                                            {session.name.charAt(0)}
+                            {recentInquiries && recentInquiries.length > 0 ? (
+                                recentInquiries.map((inquiry, i) => (
+                                    <motion.div
+                                        key={inquiry._id}
+                                        whileHover={{ scale: 1.01 }}
+                                        className="flex items-center justify-between p-5 bg-[#F9F7F2] rounded-2xl hover:bg-[#F1EBDD] transition-colors cursor-pointer group"
+                                    >
+                                        <div className="flex items-center gap-5">
+                                            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[#5A2A45] font-display font-medium text-xl shadow-sm group-hover:scale-110 transition-transform uppercase">
+                                                {inquiry.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-[#5A2A45] text-lg">{inquiry.name}</h4>
+                                                <p className="text-xs text-[#6E5A52] uppercase tracking-wide font-medium">{inquiry.serviceType || 'General Inquiry'}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h4 className="font-bold text-[#5A2A45] text-lg">{session.name}</h4>
-                                            <p className="text-xs text-[#6E5A52] uppercase tracking-wide font-medium">{session.type}</p>
+                                        <div className="text-right">
+                                            <div className="flex items-center justify-end gap-2 text-sm text-[#5A2A45] font-medium mb-1">
+                                                <Clock size={14} className="text-[#B77A8C]" />
+                                                <span>{new Date(inquiry.createdAt).toLocaleDateString()}</span>
+                                            </div>
+                                            <p className="text-xs text-[#6E5A52]/60 truncate max-w-[150px]">{inquiry.email}</p>
                                         </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="flex items-center justify-end gap-2 text-sm text-[#5A2A45] font-medium mb-1">
-                                            <Clock size={14} className="text-[#B77A8C]" />
-                                            <span>{session.time}</span>
-                                        </div>
-                                        <p className="text-xs text-[#6E5A52]/60">{session.date}</p>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                    </motion.div>
+                                ))
+                            ) : (
+                                <div className="text-center py-10 text-gray-400">No inquiries found.</div>
+                            )}
                         </div>
                     </div>
                     <div className="p-4 bg-[#FAFAF9] text-center border-t border-[#5A2A45]/5">
-                        <button className="text-xs font-bold uppercase tracking-[0.2em] text-[#5A2A45]/40 hover:text-[#5A2A45] transition-colors flex items-center justify-center gap-2 mx-auto">
-                            View All Sessions <ArrowRight size={12} />
-                        </button>
+                        <Link to="/admin/inquiries" className="text-xs font-bold uppercase tracking-[0.2em] text-[#5A2A45]/40 hover:text-[#5A2A45] transition-colors flex items-center justify-center gap-2 mx-auto">
+                            View All Messages <ArrowRight size={12} />
+                        </Link>
                     </div>
                 </motion.div>
 
@@ -138,17 +163,17 @@ const AdminDashboard = () => {
 
                         <div className="relative z-10">
                             <span className="inline-block px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest mb-4">
-                                Pro Tip
+                                Admin Tip
                             </span>
-                            <h3 className="font-display text-3xl mb-4 leading-tight">Update your <br /><span className="italic text-[#B77A8C]">Maternity Guide</span></h3>
+                            <h3 className="font-display text-3xl mb-4 leading-tight">Keep Portfolio <br /><span className="italic text-[#B77A8C]">Fresh & Updated</span></h3>
                             <p className="text-[#F1EBDD]/60 text-sm leading-relaxed">
-                                Clients are looking for "Best Time for Maternity Shoot". Consider adding a new blog post about styling.
+                                Regularly updating your portfolio with your latest work helps improve SEO and client trust.
                             </p>
                         </div>
 
-                        <button className="relative z-10 w-full py-4 bg-[#F1EBDD] text-[#5A2A45] rounded-xl font-bold uppercase tracking-widest mt-8 hover:bg-white transition-colors flex items-center justify-center gap-2 group/btn">
-                            Create Post <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                        </button>
+                        <Link to="/admin/portfolio" className="relative z-10 w-full py-4 bg-[#F1EBDD] text-[#5A2A45] rounded-xl font-bold uppercase tracking-widest mt-8 hover:bg-white transition-colors flex items-center justify-center gap-2 group/btn">
+                            Manage Portfolio <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                        </Link>
                     </motion.div>
                 </div>
             </div>

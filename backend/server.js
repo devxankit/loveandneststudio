@@ -46,6 +46,7 @@ app.use('/api/home-page', require('./routes/homePageRoutes'));
 app.use('/api/about-page', require('./routes/aboutPageRoutes'));
 app.use('/api/contact-page', require('./routes/contactPageRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 
 // Base Route
 app.get('/', (req, res) => {

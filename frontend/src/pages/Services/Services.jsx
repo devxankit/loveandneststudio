@@ -1,17 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 import SEO from '../../components/seo/SEO';
-
-// Import images
-import maternityImg from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225737.png';
-import newbornImg from '../../assets/images/hero/Screenshot 2025-12-30 141652.png';
-import babyImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153257.png';
-import cakeSmashImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153323.png';
-import familyImg from '../../assets/images/portfolio/family/Screenshot 2025-12-31 111323.png';
-import celebrationImg from '../../assets/images/portfolio/family/Screenshot 2025-12-31 120803.png';
-import lifestyleImg from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153353.png';
-import birthdayThumbnail from '../../assets/images/services/Screenshot 2026-01-05 114143.png';
 
 // Animation variants
 const fadeInUp = {
@@ -30,70 +21,37 @@ const staggerContainer = {
 };
 
 const Services = () => {
-    const services = [
-        {
-            id: 'maternity',
-            title: "Maternity",
-            description: "Soft, soulful portraits that celebrate motherhood, love, and the beautiful bond between parents and baby—before your little one arrives.",
-            image: maternityImg,
-            alt: "Maternity Photography"
-        },
-        {
-            id: 'birth',
-            title: "Birth",
-            description: "Capturing the raw, powerful, and miraculous journey of bringing life into the world. Every emotion, every first breath, preserved forever.",
-            image: newbornImg,
-            alt: "Birth Photography"
-        },
-        {
-            id: 'newborn',
-            title: "Newborn",
-            description: "Gentle, cozy newborn sessions designed with safety and comfort at the heart. Natural poses, minimal props, and timeless imagery.",
-            image: newbornImg,
-            alt: "Newborn Photography"
-        },
-        {
-            id: 'pre-bday',
-            title: "Pre Bday",
-            description: "Capturing the milestones and anticipation leading up to your little one's special day. The smiles, the giggles, and the growth.",
-            image: babyImg,
-            alt: "Pre Birthday Photography"
-        },
-        {
-            id: 'cakesmash',
-            title: "Cake Smash",
-            description: "Fun, colorful, and joy-filled first birthday shoots. Let your baby explore, play, and celebrate while we capture the magic (and the mess!).",
-            image: cakeSmashImg,
-            alt: "Cake Smash Photography"
-        },
-        {
-            id: 'toddler',
-            title: "Toddler",
-            description: "Energetic and personality-filled sessions that capture the wonder and curiosity of your growing child exploring the world.",
-            image: lifestyleImg,
-            alt: "Toddler Photography"
-        },
-        {
-            id: 'family',
-            title: "Family",
-            description: "Warm, timeless family portraits that reflect genuine connections, love, and togetherness—perfect for generations to treasure.",
-            image: celebrationImg,
-            alt: "Family Portraits"
-        },
-        {
-            id: 'birthday',
-            title: "Birthday",
-            description: "Documenting the joy, laughter, and celebration of your child's special milestones with family and friends.",
-            image: birthdayThumbnail,
-            alt: "Birthday Photography"
-        }
-    ];
+    const [pageData, setPageData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/services');
+                setPageData(res.data);
+            } catch (error) {
+                console.error("Error fetching services page data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return <div className="min-h-screen flex items-center justify-center text-[#5A2A45]">Loading...</div>;
+    }
+
+    if (!pageData) return null;
+
+    const { hero, serviceList } = pageData;
+    const activeServices = serviceList?.filter(s => s.isActive) || [];
 
     return (
         <div className="bg-white min-h-screen">
             <SEO
-                title="Our Services | Love & Nest"
-                description="Professional photography services including newborn, maternity, baby milestone, cake smash, and family portraits. Preserving memories that last a lifetime."
+                title={pageData.meta?.title || "Our Services | Love & Nest"}
+                description={pageData.meta?.description || "Professional photography services including newborn, maternity, baby milestone, cake smash, and family portraits."}
             />
 
             {/* Hero Section */}
@@ -136,7 +94,7 @@ const Services = () => {
                     >
                         <motion.div variants={fadeInUp} className="mb-6 flex items-center justify-center gap-4">
                             <span className="h-[1px] w-12 bg-primary"></span>
-                            <span className="text-primary-dark tracking-[0.3em] font-medium uppercase text-sm">Timeless Memories</span>
+                            <span className="text-primary-dark tracking-[0.3em] font-medium uppercase text-sm">{hero?.subtitle || 'Timeless Memories'}</span>
                             <span className="h-[1px] w-12 bg-primary"></span>
                         </motion.div>
 
@@ -144,8 +102,8 @@ const Services = () => {
                             variants={fadeInUp}
                             className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-6 md:mb-8 text-primary-dark leading-[1.1]"
                         >
-                            Our Photography <br className="hidden sm:block" />
-                            <span className="italic text-primary font-light">Services</span>
+                            {hero?.title?.split(' ').slice(0, -1).join(' ')} <br className="hidden sm:block" />
+                            <span className="italic text-primary font-light">{hero?.title?.split(' ').slice(-1)}</span>
                         </motion.h1>
 
                         <motion.div variants={fadeInUp} className="max-w-2xl mx-auto space-y-6 md:space-y-8">
@@ -168,12 +126,12 @@ const Services = () => {
                 </motion.div>
             </section>
 
-            {/* Main Services List - Grid Layout (Restored) */}
+            {/* Main Services List - Grid Layout */}
             <section className="py-20 px-4 md:px-6 lg:px-12 bg-white">
                 <div className="max-w-[1400px] mx-auto flex flex-wrap justify-center gap-4 md:gap-6">
-                    {services.map((service, index) => (
+                    {activeServices.map((service, index) => (
                         <motion.div
-                            key={index}
+                            key={service.id || index}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-50px" }}
@@ -181,12 +139,16 @@ const Services = () => {
                             className="flex flex-col group w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-20px)]"
                         >
                             {/* Image Container */}
-                            <div className="relative mb-4 overflow-hidden rounded-xl shadow-md aspect-[4/5] w-full">
-                                <img
-                                    src={service.image}
-                                    alt={service.alt}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
+                            <div className="relative mb-4 overflow-hidden rounded-xl shadow-md aspect-[4/5] w-full bg-gray-100">
+                                {service.coverImage ? (
+                                    <img
+                                        src={service.coverImage}
+                                        alt={service.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">No Image</div>
+                                )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
 
                                 {/* Hover Overlay Context */}
@@ -212,10 +174,16 @@ const Services = () => {
                             </div>
                         </motion.div>
                     ))}
+
+                    {activeServices.length === 0 && (
+                        <div className="text-center py-20 text-gray-400 font-outfit">
+                            Services are being curated. Coming soon!
+                        </div>
+                    )}
                 </div>
             </section>
 
-            {/* Premium Add-Ons Section - Boutique Style */}
+            {/* Premium Add-Ons Section */}
             <section className="py-28 px-6 lg:px-12 relative overflow-hidden bg-[#FEFDFB]">
                 {/* Dynamic Background */}
                 <div className="absolute inset-0 pointer-events-none">
@@ -246,7 +214,6 @@ const Services = () => {
                         </p>
                     </motion.div>
 
-                    {/* Add-on content here (simplified for this restore step) */}
                     <div className="text-center text-[#B77A8C] italic text-sm">
                         Scroll down or visit our contact page for further details.
                     </div>
