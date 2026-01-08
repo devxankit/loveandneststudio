@@ -225,15 +225,7 @@ const PortfolioContent = ({ data }) => {
                         {experience.titleLine1 || 'Every moment'} <br />
                         <span className="italic font-light text-[#B77A8C]">{experience.titleLine2 || 'is a masterpiece.'}</span>
                     </h2>
-                    <Link to={experience.buttonLink || '/contact'}>
-                        <motion.button
-                            whileHover={{ scale: 1.05, boxShadow: "0 25px 50px -12px rgba(90, 42, 69, 0.2)" }}
-                            whileTap={{ scale: 0.95 }}
-                            className="px-14 py-5 bg-[#5A2A45] text-[#F1EBDD] rounded-full font-outfit font-bold text-sm uppercase tracking-[0.3em] shadow-2xl transition-all duration-500"
-                        >
-                            {experience.buttonText || 'Book Your Story'}
-                        </motion.button>
-                    </Link>
+
                 </motion.div>
             </section>
         </>

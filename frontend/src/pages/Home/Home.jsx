@@ -466,13 +466,34 @@ const Home = () => {
 
                     <div className="w-full lg:w-1/2 z-10 relative bg-[#F9F7F2]">
                         <div ref={introRef} onMouseEnter={() => setActiveSection("01")}>
-                            <HomeSection index={20} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-24 min-h-[50vh] lg:min-h-screen border-none shadow-none" isSticky={true}>
-                                <motion.div initial={{ opacity: 0, scale: 1.15, y: 30 }} whileInView={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 1.8, ease: [0.165, 0.84, 0.44, 1] }} className="w-full aspect-[4/5] relative group perspective-1000 mb-8 lg:mb-0">
-                                    <div className="absolute -inset-2 md:-inset-4 border border-[#5A2A45]/5 z-0 transition-transform duration-1000 group-hover:scale-110"></div>
-                                    <div className="relative z-10 w-full h-full overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)]">
-                                        <LazyImage src={split.intro.image || hero1} alt="Excellence" className="w-full h-full object-cover grayscale transition-all duration-[2000ms] group-hover:scale-110 group-hover:grayscale-0" />
-                                    </div>
-                                </motion.div>
+                            <HomeSection index={20} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-24 min-h-[50vh] lg:min-h-screen border-none shadow-none flex flex-col justify-center items-center" isSticky={true}>
+                                <div className="flex flex-col items-center text-center space-y-10 max-w-lg mx-auto">
+                                    {/* Passport Style Image */}
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 1.2 }}
+                                        className="w-[180px] h-[220px] md:w-[220px] md:h-[280px] bg-white p-3 shadow-lg transition-transform duration-500 relative z-10"
+                                    >
+                                        <div className="w-full h-full overflow-hidden border border-black/5">
+                                            <LazyImage src={split.intro.image || hero1} alt="Anamika" className="w-full h-full object-cover grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-700" />
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Anamika's Introduction */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 1, delay: 0.2 }}
+                                        className="space-y-6"
+                                    >
+                                        <h3 className="font-display text-3xl md:text-4xl text-[#5A2A45]">Anamika Singh</h3>
+                                        <p className="font-outfit text-[#6E5A52] text-sm md:text-base leading-relaxed max-w-md mx-auto italic opacity-80">
+                                            "{split.intro.text || "Capturing the fleeting magic of childhood, because every tiny moment is a story waiting to be told."}"
+                                        </p>
+                                        <div className="w-12 h-[1px] bg-[#5A2A45]/20 mx-auto"></div>
+                                    </motion.div>
+                                </div>
                             </HomeSection>
                         </div>
 

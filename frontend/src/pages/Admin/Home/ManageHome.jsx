@@ -308,16 +308,22 @@ const ManageHome = () => {
                         {/* Intro & Artist */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div className="bg-white rounded-[2.5rem] p-10 border border-[#5A2A45]/5 shadow-sm space-y-6">
-                                <h4 className="font-display text-2xl text-[#5A2A45] border-b pb-4">01. Overview Intro</h4>
+                                <h4 className="font-display text-2xl text-[#5A2A45] border-b pb-4">01. Intro: Anamika's Passport</h4>
                                 <div className="space-y-4">
-                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86]">Heading (uses HTML for br)</label>
-                                    <input value={pageData.splitScreen.intro.heading} onChange={(e) => handleUpdateField('splitScreen.intro.heading', e.target.value)} className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none font-display text-xl" />
-                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86]">Quote Text</label>
-                                    <input value={pageData.splitScreen.intro.text} onChange={(e) => handleUpdateField('splitScreen.intro.text', e.target.value)} className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none" />
-                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86]">Intro Feature Image</label>
-                                    <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-[#FAF9F6] relative group">
-                                        {pageData.splitScreen.intro.image ? <img src={pageData.splitScreen.intro.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center opacity-20"><ImageIcon /></div>}
-                                        <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white"><Upload /><input type="file" className="hidden" onChange={(e) => handleUploadImage(e.target.files[0], 'splitScreen.intro.image')} /></label>
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86]">Introduction Text (Under Passport)</label>
+                                    <textarea value={pageData.splitScreen.intro.text} onChange={(e) => handleUpdateField('splitScreen.intro.text', e.target.value)} rows="4" className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none text-sm" />
+
+                                    <div className="grid grid-cols-2 gap-6 items-start">
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] mb-3">Passport Image</label>
+                                            <div className="w-[140px] h-[180px] bg-white p-2 shadow-lg border border-black/5 relative group">
+                                                <div className="w-full h-full overflow-hidden bg-[#FAF9F6]">
+                                                    {pageData.splitScreen.intro.image ? <img src={pageData.splitScreen.intro.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center opacity-20"><ImageIcon /></div>}
+                                                </div>
+                                                <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white"><Upload /><input type="file" className="hidden" onChange={(e) => handleUploadImage(e.target.files[0], 'splitScreen.intro.image')} /></label>
+                                            </div>
+                                            <p className="text-[10px] text-[#8F8A86] mt-2 italic">This image appears as a small passport photo.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
