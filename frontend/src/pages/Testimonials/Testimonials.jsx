@@ -241,7 +241,7 @@ const Testimonials = () => {
 
                 {/* Main Testimonials Section */}
                 <section className="pt-8 pb-24 px-4 md:px-8 max-w-[1400px] mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                    <div className="columns-1 lg:columns-2 gap-4 space-y-4 lg:space-y-0">
 
                         {reviews.map((review, index) => (
                             <motion.div
@@ -250,7 +250,7 @@ const Testimonials = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: index * 0.1 }}
-                                className={`${index % 2 !== 0 ? 'bg-[#5A2A45] text-white' : 'bg-white border border-stone-100/50'} rounded-[24px] p-6 shadow-sm relative overflow-hidden flex flex-col gap-4`}
+                                className={`break-inside-avoid mb-4 ${index % 2 !== 0 ? 'bg-[#5A2A45] text-white' : 'bg-white border border-stone-100/50'} rounded-[24px] p-6 shadow-sm relative overflow-hidden flex flex-col gap-4`}
                             >
                                 {index % 2 === 0 && <div className="absolute top-0 right-0 w-32 h-32 bg-[#E8CBB6]/10 rounded-bl-full -z-0"></div>}
 

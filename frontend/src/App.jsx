@@ -17,10 +17,10 @@ const Layout = ({ children }) => {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <div className="app selection:bg-[#5A2A45] selection:text-[#F1EBDD]">
+    <div className="app selection:bg-[#5A2A45] selection:text-[#F1EBDD] flex flex-col min-h-screen">
       {!isAdminRoute && <GrainOverlay />}
       {!isAdminRoute && <Navbar />}
-      <main className="relative z-0">
+      <main className="relative z-0 flex-grow min-h-screen">
         {children}
       </main>
       {!isAdminRoute && <Footer />}
