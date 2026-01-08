@@ -4,8 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 
 // Load config
-dotenv.config({ path: './.env', override: true });
-console.log("DEBUG ENV URI:", process.env.MONGO_URI);
+dotenv.config({ override: true });
 
 // Connect to Database
 connectDB();
@@ -36,6 +35,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/services', servicesRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/settings', globalSettingsRoutes);
+app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/pages', require('./routes/pageRoutes'));
 app.use('/api/newborn', require('./routes/newbornRoutes'));
 app.use('/api/maternity', require('./routes/maternityRoutes'));
@@ -50,6 +50,17 @@ app.use('/api/upload', require('./routes/uploadRoutes'));
 // Base Route
 app.get('/', (req, res) => {
     res.send('Love & Nest API is running...');
+});
+
+// Error Middleware
+app.use((err, req, res, next) => {
+    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+    console.error(`[Error] ${req.method} ${req.url}: ${err.message}`);
+    console.error(err.stack);
+    res.status(statusCode).json({
+        message: err.message,
+        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+    });
 });
 
 const PORT = process.env.PORT || 5000;

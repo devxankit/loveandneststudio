@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="app selection:bg-[#5A2A45] selection:text-[#F1EBDD]">
-      <GrainOverlay />
+      {!isAdminRoute && <GrainOverlay />}
       {!isAdminRoute && <Navbar />}
       <main className="relative z-0">
         {children}

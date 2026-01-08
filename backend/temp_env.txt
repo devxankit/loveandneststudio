@@ -1,0 +1,12 @@
+﻿PORT=5000
+MONGO_URI=mongodb+srv://loveandneststudio:lovean6Arce@loveandneststudio.9g5qrsl.mongodb.net/adminest?retryWrites=true&w=majority&authSource=admin
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=jagratimca25@ipsacademy.org
+EMAIL_PASS=yqoduyfkukvznloa
+EMAIL_FROM=Love & Nest Studio
+JWT_SECRET=supersecretjwtkey12345
+NODE_ENV=development
+CLOUDINARY_CLOUD_NAME=dfvj8v6bz
+CLOUDINARY_API_KEY=758169123285448
+CLOUDINARY_API_SECRET=6qHCHb8mS9vJ-3B_1pQ7Rz-mQ8U

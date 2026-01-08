@@ -1,0 +1,15 @@
+PORT=5000
+MONGO_URI=mongodb+srv://loveandneststudio:loveandneststudio@loveandneststudio.9g5qrsl.mongodb.net/loveandnest?retryWrites=true&w=majority&authSource=admin
+
+CLOUDINARY_CLOUD_NAME=djuyp9lut
+CLOUDINARY_API_KEY=461398248992549
+CLOUDINARY_API_SECRET=XhtvD0YzHI8MEAMhizXtnr40c_w
+
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=jagratimca25@ipsacademy.org
+EMAIL_PASS=yqoduyfkukvznloa
+EMAIL_FROM=jagratimca25@ipsacademy.org
+
+JWT_SECRET=change_this_secret
+JWT_EXPIRES_IN=7d

@@ -100,6 +100,15 @@ const AdminLayout = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+    // Auth Check
+    useEffect(() => {
+        const isAdmin = localStorage.getItem('isAdmin');
+        const token = localStorage.getItem('adminToken');
+        if (!isAdmin || !token) {
+            navigate('/admin/login');
+        }
+    }, [navigate]);
+
     // Auto-collapse sidebar on mobile
     useEffect(() => {
         const handleResize = () => {
@@ -145,6 +154,8 @@ const AdminLayout = () => {
     const handleLogout = () => {
         if (confirm("Are you sure you want to log out?")) {
             localStorage.removeItem('isAdmin');
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminEmail');
             navigate('/admin/login');
         }
     };
