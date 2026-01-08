@@ -14,8 +14,23 @@ connectDB();
 const app = express();
 
 // Middleware
+// Middleware
 app.use(compression()); // Enable Gzip compression
-app.use(cors());
+
+// 1. Inject PNA Header for ALL requests (including OPTIONS)
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Private-Network", "true");
+    next();
+});
+
+// 2. Standard CORS Configuration
+app.use(cors({
+    origin: ["http://localhost:5173", "https://www.loveandneststudio.com", "https://loveandneststudio.com", "http://localhost:5000"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Access-Control-Allow-Private-Network"]
+}));
+
 app.use(express.json()); // Body parser
 
 // Routes
