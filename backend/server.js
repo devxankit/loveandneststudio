@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
+const compression = require('compression');
+
 // Load config
 dotenv.config({ override: true });
 
@@ -12,6 +14,7 @@ connectDB();
 const app = express();
 
 // Middleware
+app.use(compression()); // Enable Gzip compression
 app.use(cors());
 app.use(express.json()); // Body parser
 
@@ -47,6 +50,8 @@ app.use('/api/about-page', require('./routes/aboutPageRoutes'));
 app.use('/api/contact-page', require('./routes/contactPageRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use('/sitemap.xml', require('./routes/sitemapRoutes'));
+app.use('/api/sitemap', require('./routes/sitemapRoutes'));
 
 // Base Route
 app.get('/', (req, res) => {

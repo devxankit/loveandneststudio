@@ -180,6 +180,10 @@ const ManageContact = () => {
                                     <input value={pageData.info.phone} onChange={(e) => handleUpdateField('info.phone', e.target.value)} className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none" />
                                 </div>
                                 <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] mb-3 flex items-center gap-2"><span className="text-green-600 font-bold">WA</span> WhatsApp Number</label>
+                                    <input value={pageData.info.whatsapp || ''} onChange={(e) => handleUpdateField('info.whatsapp', e.target.value)} className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none" placeholder="+91..." />
+                                </div>
+                                <div>
                                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] mb-3 flex items-center gap-2"><MapPin size={12} /> Studio Location</label>
                                     <input value={pageData.info.location} onChange={(e) => handleUpdateField('info.location', e.target.value)} className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none" />
                                 </div>

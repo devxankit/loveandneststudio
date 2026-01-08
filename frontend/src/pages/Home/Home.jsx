@@ -245,7 +245,50 @@ const Home = () => {
     return (
         <div onMouseEnter={stopScroll} onTouchStart={stopScroll} onWheel={stopScroll} onClick={stopScroll}>
             <GrainOverlay />
-            <SEO title="Love & Nest Studio | Timeless Photography" description="Capturing the beautiful in-between moments of motherhood, newborn, and family life." keywords="photography, maternity, newborn, family, pune, studio" />
+            <SEO
+                title="Love & Nest Studio | Timeless Maternity & Newborn Photography"
+                description="Love & Nest Studio by Anamika captures the beautiful in-between moments of motherhood, newborn, and family life. Dehradun's premier baby photography studio."
+                keywords="photography, maternity, newborn, family, dehradun, studio, baby photoshoot, anamika photography"
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": "LocalBusiness",
+                    "name": "Love & Nest Studio",
+                    "image": "https://loveandneststudio.com/images/logo-icon.png",
+                    "@id": "https://loveandneststudio.com",
+                    "url": "https://loveandneststudio.com",
+                    "telephone": "+919876543210",
+                    "priceRange": "$$$",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "streetAddress": "Studio D, Rajpur Road",
+                        "addressLocality": "Dehradun",
+                        "postalCode": "248001",
+                        "addressCountry": "IN"
+                    },
+                    "geo": {
+                        "@type": "GeoCoordinates",
+                        "latitude": 30.3165,
+                        "longitude": 78.0322
+                    },
+                    "openingHoursSpecification": {
+                        "@type": "OpeningHoursSpecification",
+                        "dayOfWeek": [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday",
+                            "Saturday"
+                        ],
+                        "opens": "10:00",
+                        "closes": "18:00"
+                    },
+                    "sameAs": [
+                        "https://www.instagram.com/loveandneststudio",
+                        "https://www.facebook.com/loveandneststudio"
+                    ]
+                }}
+            />
             <WhatsAppIntroPopup />
 
             <div className="bg-[#F1EBDD] min-h-screen font-outfit text-[#6E5A52]">
@@ -360,9 +403,14 @@ const Home = () => {
                             </motion.div>
                         </Link>
                     </div>
-                    <div className="flex gap-4 overflow-hidden py-10 md:py-16 relative z-10 px-2 md:px-4">
-                        <motion.div animate={{ x: [0, -1200] }} transition={{ duration: 45, repeat: Infinity, ease: "linear" }} className="flex gap-2 md:gap-4 shrink-0">
-                            {galleryImages.map((img, i) => (
+                    <div className="flex gap-4 overflow-hidden py-10 md:py-16 relative z-10 px-2 md:px-4 w-full">
+                        <motion.div
+                            animate={{ x: ["0%", "-50%"] }}
+                            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                            className="flex gap-2 md:gap-4 shrink-0 w-max"
+                        >
+                            {/* Duplicate images enough times to ensure seamless loop on large screens */}
+                            {[...galleryImages, ...galleryImages, ...galleryImages, ...galleryImages, ...galleryImages, ...galleryImages].map((img, i) => (
                                 <motion.div
                                     key={i}
                                     onClick={() => setExpandedGalleryIndex(expandedGalleryIndex === i ? null : i)}
@@ -370,8 +418,14 @@ const Home = () => {
                                         scale: expandedGalleryIndex === i ? 1.25 : 1,
                                         zIndex: expandedGalleryIndex === i ? 50 : 1
                                     }}
-                                    whileHover={{ scale: 1.05, rotate: 1, zIndex: 20 }}
-                                    transition={{ duration: 0.4 }}
+                                    whileHover={{
+                                        scale: 1.15,
+                                        y: -10,
+                                        rotate: -2,
+                                        zIndex: 100,
+                                        boxShadow: "0 30px 60px -12px rgba(90, 42, 69, 0.4)"
+                                    }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                     className="relative w-[140px] md:w-[220px] h-[200px] md:h-[320px] rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-xl group cursor-pointer bg-black/5"
                                 >
                                     <div className="absolute inset-0 bg-[#5A2A45]/10 group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none"></div>
@@ -422,22 +476,26 @@ const Home = () => {
                             </HomeSection>
                         </div>
 
-                        <HomeSection index={21} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-16 min-h-[70vh] lg:min-h-screen border-t border-black/5">
-                            <div className="w-full h-full flex flex-col justify-center">
-                                <div className="flex justify-between items-end mb-8 md:mb-12 border-b border-black/10 pb-4 md:pb-6">
-                                    <h2 className="font-display text-3xl md:text-5xl uppercase" dangerouslySetInnerHTML={{ __html: split.intro.heading || "Hello and <br /> Welcome" }} />
-                                    <span className="text-2xl md:text-4xl font-display opacity-30">0.1</span>
+                        <HomeSection index={21} isSticky={false} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-16 min-h-[70vh] lg:min-h-screen border-t border-black/5 flex flex-col justify-center items-center">
+                            <div className="w-full h-full flex flex-col items-center justify-center max-w-4xl mx-auto">
+                                <div className="w-full flex justify-between items-end mb-8 md:mb-12 border-b border-black/10 pb-4 md:pb-6">
+                                    <h2 className="font-display text-3xl md:text-5xl uppercase text-center md:text-left w-full" dangerouslySetInnerHTML={{ __html: split.intro.heading || "Hello and <br /> Welcome" }} />
+                                    <span className="text-2xl md:text-4xl font-display opacity-30 hidden md:block">0.1</span>
                                 </div>
-                                <div className="flex flex-col gap-6 md:gap-10">
-                                    <div className="aspect-[4/5] bg-white/5 p-2 md:p-4 relative grayscale hover:grayscale-0 transition-all duration-700 w-full md:w-2/3 mx-auto">
-                                        <LazyImage src={split.intro.image || familyImg} alt="Welcome" className="w-full h-full object-cover opacity-80" />
+
+                                <div className="flex flex-col gap-8 md:gap-12 items-center w-full">
+                                    {/* Compact Image Container */}
+                                    <div className="aspect-[4/5] bg-white/5 p-3 md:p-4 relative grayscale hover:grayscale-0 transition-all duration-700 w-full max-w-[320px] md:max-w-[380px] shadow-lg hover:shadow-2xl">
+                                        <LazyImage src={split.intro.image || familyImg} alt="Welcome" className="w-full h-full object-cover opacity-90" />
                                     </div>
-                                    <div className="space-y-4 md:space-y-6 text-center md:text-left">
-                                        <p className="text-lg md:text-2xl font-light leading-relaxed text-[#6E5A52]">
+
+                                    {/* Text & Button Stack - Centered on ALL screens */}
+                                    <div className="space-y-6 md:space-y-8 text-center flex flex-col items-center max-w-lg">
+                                        <p className="font-display text-2xl md:text-4xl italic text-[#6E5A52] leading-tight">
                                             "{split.intro.text || "Love you can feel forever."}"
                                         </p>
                                         <Link to="/about">
-                                            <button className="mt-4 px-6 py-2 border border-black/30 hover:bg-[#5A2A45] hover:text-[#FAF9F6] transition-all duration-300 text-[10px] uppercase tracking-widest cursor-pointer">
+                                            <button className="px-10 py-3 md:px-14 md:py-4 border border-[#5A2A45] hover:bg-[#5A2A45] hover:text-[#FAF9F6] transition-all duration-300 text-xs md:text-sm font-bold uppercase tracking-[0.25em] cursor-pointer rounded-sm hover:shadow-xl bg-transparent text-[#5A2A45]">
                                                 More About Us
                                             </button>
                                         </Link>
@@ -460,10 +518,10 @@ const Home = () => {
                                         </div>
                                         <div className="space-y-4 md:space-y-6">
                                             <div>
-                                                <h4 className="text-xs font-bold uppercase tracking-widest mb-1 opacity-50">{split.artist.role || "Lead Photographer"}</h4>
-                                                <p className="font-display text-xl md:text-2xl">{split.artist.name || "Anamika"}</p>
+                                                <h4 className="text-sm md:text-base font-bold uppercase tracking-widest mb-2 opacity-60 text-[#5A2A45]">{split.artist.role || "Lead Photographer"}</h4>
+                                                <p className="font-display text-4xl md:text-5xl text-[#1a1a1a] mb-4">{split.artist.name || "Anamika"}</p>
                                             </div>
-                                            <p className="text-sm leading-relaxed text-gray-600">{split.artist.bio || "A photographer with a passion..."}</p>
+                                            <p className="text-lg md:text-xl leading-relaxed text-gray-700 font-light">{split.artist.bio || "A photographer with a passion..."}</p>
                                         </div>
                                     </div>
                                 </div>

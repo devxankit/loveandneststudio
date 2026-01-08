@@ -9,6 +9,7 @@ const contactPageSchema = new mongoose.Schema({
     info: {
         email: { type: String, default: "loveandnest@gmail.com" },
         phone: { type: String, default: "+91 86790 76776" },
+        whatsapp: { type: String, default: "+91 86790 76776" },
         location: { type: String, default: "Dehradun, Uttarakhand" }
     },
     visuals: {

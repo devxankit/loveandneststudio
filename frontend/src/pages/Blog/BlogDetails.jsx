@@ -4,10 +4,30 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import SEO from '../../components/seo/SEO';
 import { getPost } from '../../services/api';
 import LazyImage from '../../components/common/LazyImage';
-import { Loader, ArrowLeft, Share2, Facebook, Twitter, Linkedin, Clock } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 // Fallback image
 import maternityHero from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225737.png';
+
+// --- Visual Components ---
+
+// Grain Texture for Film Look
+const GrainOverlay = () => (
+    <div className="fixed inset-0 pointer-events-none opacity-[0.05] z-50 mix-blend-overlay"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E")` }}>
+    </div>
+);
+
+const SectionFade = ({ children, delay = 0 }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, delay, ease: "easeOut" }}
+    >
+        {children}
+    </motion.div>
+);
 
 const BlogDetails = () => {
     const { id } = useParams();
@@ -15,17 +35,19 @@ const BlogDetails = () => {
     const [loading, setLoading] = useState(true);
 
     // Scroll Animation Hooks
-    const { scrollY, scrollYProgress } = useScroll();
+    const { scrollYProgress } = useScroll();
+
+    // Progress Bar Scale
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
         damping: 30,
         restDelta: 0.001
     });
 
-    // Parallax & Fade for Hero
-    const heroY = useTransform(scrollY, [0, 500], [0, 150]);
-    const heroOpacity = useTransform(scrollY, [0, 500], [1, 0.3]);
-    const contentY = useTransform(scrollY, [0, 500], [0, -50]);
+    // Hero Parallax Ops
+    const heroOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+    const heroScale = useTransform(scrollYProgress, [0, 0.4], [1.1, 1]);
+    const textY = useTransform(scrollYProgress, [0, 0.4], [0, 100]);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -65,8 +87,8 @@ const BlogDetails = () => {
         </div>
     );
 
-    // Calculate generic read time if not provided
-    const readTime = post.readTime || Math.max(1, Math.ceil((post.content?.split(/\s+/).length || 0) / 200)) + " min read";
+    // Calculate generic read time
+    const readTime = Math.max(1, Math.ceil((post.content?.split(/\s+/).length || 0) / 200)) + " min read";
 
     return (
         <>
@@ -75,140 +97,155 @@ const BlogDetails = () => {
                 description={post.excerpt || "Read our latest story."}
             />
 
+            <GrainOverlay />
+
             {/* Reading Progress Bar */}
             <motion.div
-                className="fixed top-0 left-0 right-0 h-1.5 bg-[#B77A8C] origin-left z-[60]"
+                className="fixed top-0 left-0 right-0 h-1 bg-[#B77A8C] origin-left z-[100]"
                 style={{ scaleX }}
             />
 
-            <article className="min-h-screen bg-[#FAF9F6] overflow-x-hidden">
+            {/* --- 1. Immersive Cinematic Hero --- */}
+            <div className="relative h-screen w-full overflow-hidden bg-[#1a1a1a]">
+                <motion.div style={{ opacity: heroOpacity, scale: heroScale }} className="absolute inset-0 z-0">
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60 z-10"></div>
+                    <LazyImage
+                        src={post.coverImage || maternityHero}
+                        alt={post.title}
+                        className="w-full h-full object-cover object-center"
+                    />
+                </motion.div>
 
-                {/* 1. Cinematic Hero Section with Parallax */}
-                <div className="relative h-[65vh] md:h-[85vh] w-full overflow-hidden">
-                    <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0 w-full h-full">
-                        <LazyImage
-                            src={post.coverImage || maternityHero}
-                            alt={post.title}
-                            className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-                    </motion.div>
+                {/* Back Nav */}
+                <div className="absolute top-0 left-0 w-full p-6 md:p-12 z-30">
+                    <Link to="/blog" className="inline-flex items-center gap-2 group text-white/80 hover:text-white transition-colors">
+                        <ArrowLeft size={20} />
+                        <span className="font-outfit uppercase text-xs tracking-widest font-bold">Back to Journal</span>
+                    </Link>
+                </div>
 
-                    {/* Navigation - Absolute Top Left */}
-                    <div className="absolute top-0 left-0 w-full p-6 md:p-12 z-30">
-                        <Link to="/blog" className="inline-flex items-center gap-2 group">
-                            <div className="w-10 h-10 md:w-12 md:h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 group-hover:bg-white group-hover:text-[#5A2A45] text-white transition-all duration-300">
-                                <ArrowLeft size={18} />
-                            </div>
-                            <span className="text-white/90 font-outfit uppercase text-[10px] md:text-xs tracking-widest font-bold opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                                Back
-                            </span>
-                        </Link>
-                    </div>
-
-                    {/* Hero Text Content */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 1, ease: "easeOut" }}
-                        className="absolute bottom-0 left-0 w-full p-6 md:p-20 z-20 pb-24 md:pb-32"
-                    >
-                        <div className="max-w-6xl mx-auto">
-                            <div className="flex flex-wrap items-center gap-4 text-white/90 mb-6 font-outfit text-xs uppercase tracking-widest">
-                                <span className="flex items-center gap-2">
-                                    <Clock size={14} className="text-[#E8CBB6]" />
-                                    {readTime}
-                                </span>
-                                <span className="w-1 h-1 bg-[#E8CBB6] rounded-full"></span>
-                                <span>{new Date(post.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                {/* Hero Text */}
+                <div className="absolute inset-0 z-20 flex flex-col justify-end pb-32 md:pb-24 px-6 md:px-20 max-w-[1600px] mx-auto w-full">
+                    <motion.div style={{ y: textY }}>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <div className="mb-6 flex flex-wrap gap-4 text-[#E8CBB6] font-outfit text-xs uppercase tracking-widest font-bold">
+                                <span>{new Date(post.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                                <span className="text-white/40">•</span>
+                                <span>{readTime}</span>
                                 {post.tags && post.tags.length > 0 && (
                                     <>
-                                        <span className="w-1 h-1 bg-[#E8CBB6] rounded-full"></span>
-                                        <span className="bg-[#B77A8C]/80 text-white px-3 py-1 rounded-full backdrop-blur-sm shadow-sm border border-white/10">{post.tags[0]}</span>
+                                        <span className="text-white/40">•</span>
+                                        <span>{post.tags[0]}</span>
                                     </>
                                 )}
                             </div>
 
-                            <motion.h1
-                                className="font-display text-4xl md:text-7xl lg:text-[5.5rem] leading-[1.1] md:leading-[1] text-white tracking-tight drop-shadow-lg"
-                            >
+                            <h1 className="font-display text-5xl md:text-8xl lg:text-8xl text-white leading-[0.95] mb-8 max-w-5xl shadow-black drop-shadow-lg">
                                 {post.title}
-                            </motion.h1>
-                        </div>
-                    </motion.div>
-                </div>
+                            </h1>
 
-                {/* 2. Editorial Content Body - Smooth Fade Up */}
-                <motion.div
-                    initial={{ opacity: 0, y: 100 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-                    className="relative z-10 px-4 md:px-6 -mt-16 md:-mt-24 mb-20"
-                >
-                    <div className="bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-20 shadow-2xl shadow-[#5A2A45]/5 border border-[#5A2A45]/5 mx-auto max-w-5xl overflow-hidden">
-
-                        {/* Decorative Background Blur */}
-                        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#E8CBB6]/10 rounded-full blur-[100px] -z-10 translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-
-                        {/* Excerpt */}
-                        {post.excerpt && (
-                            <div className="mb-14 md:mb-16 max-w-3xl mx-auto text-center">
-                                <span className="inline-block w-20 h-1 bg-[#B77A8C] mb-8 rounded-full opacity-60"></span>
-                                <p className="font-display text-2xl md:text-3xl text-[#5A2A45] leading-relaxed italic">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 border-t border-white/20 pt-8 max-w-4xl">
+                                <p className="text-white/80 font-outfit text-sm md:text-lg leading-relaxed max-w-xl font-light italic">
                                     "{post.excerpt}"
                                 </p>
-                            </div>
-                        )}
-
-                        {/* Main Content */}
-                        <div className="prose prose-lg md:prose-xl max-w-none
-                            prose-headings:font-display prose-headings:text-[#5A2A45] prose-headings:font-normal
-                            prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8 prose-h2:tracking-tight
-                            prose-h3:text-2xl md:prose-h3:text-2xl prose-h3:text-[#B77A8C] prose-h3:mb-4
-                            prose-p:font-outfit prose-p:text-[#6E5A52] prose-p:font-light prose-p:leading-loose prose-p:mb-6
-                            prose-a:text-[#B77A8C] prose-a:font-medium prose-a:underline prose-a:underline-offset-4 hover:prose-a:text-[#5A2A45] prose-a:transition-colors
-                            prose-blockquote:border-l-4 prose-blockquote:border-[#E8CBB6] prose-blockquote:bg-[#FAF9F6] prose-blockquote:py-6 prose-blockquote:px-8 prose-blockquote:rounded-r-2xl prose-blockquote:not-italic
-                            prose-strong:text-[#5A2A45] prose-strong:font-semibold
-                            prose-img:rounded-[2rem] prose-img:shadow-xl prose-img:my-12 prose-img:w-full prose-img:border prose-img:border-[#5A2A45]/5
-                            prose-ul:marker:text-[#B77A8C] prose-li:pl-2
-                            selection:bg-[#E8CBB6]/40 selection:text-[#5A2A45]
-                            ">
-                            <div dangerouslySetInnerHTML={{ __html: post.content }} />
-                        </div>
-
-                        {/* Footer / Share */}
-                        <div className="mt-24 pt-12 border-t border-[#5A2A45]/10 ">
-                            <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                                <div className="text-center md:text-left w-full">
-                                    <h4 className="font-display text-2xl text-[#5A2A45] mb-2">Did you enjoy this story?</h4>
-                                    <p className="font-outfit text-[#8F8A86] font-light">Share it with a friend who might need it.</p>
+                                <div className="text-right">
+                                    <p className="text-white text-xs font-bold uppercase tracking-widest mb-1">Written By</p>
+                                    <p className="text-[#E8CBB6] font-display text-xl">{post.author || 'Love & Nest Studio'}</p>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
-                </motion.div>
-
-                {/* 3. Next/Back Navigation Section */}
-                <section className="py-20 md:py-32 px-6 bg-[#FCFBF8]">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                        >
-                            <p className="font-outfit uppercase tracking-[0.2em] text-[#B77A8C] text-xs font-bold mb-6">More from the Journal</p>
-                            <h3 className="font-display text-4xl md:text-6xl text-[#5A2A45] mb-12">Continue Reading</h3>
-                            <Link
-                                to="/blog"
-                                className="inline-block bg-[#5A2A45] text-white px-12 py-5 rounded-full font-outfit uppercase tracking-widest text-xs font-bold hover:bg-[#6E5A52] transition-colors shadow-xl hover:shadow-2xl hover:-translate-y-1 duration-300"
-                            >
-                                View All Stories
-                            </Link>
                         </motion.div>
-                    </div>
-                </section>
+                    </motion.div>
+                </div>
+            </div>
 
+
+            {/* --- 2. Main Editorial Layout --- */}
+            <article className="bg-[#FAF9F6] relative z-10 px-6 md:px-12 py-24 md:py-32 overflow-hidden">
+                {/* Decorative Big Background Letter */}
+                <div className="absolute top-[5%] right-[-5%] text-[40vw] font-display text-[#5A2A45]/5 leading-none pointer-events-none select-none">
+                    {post.title.charAt(0)}
+                </div>
+
+                <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 relative">
+
+                    {/* Left Column: Sticky Sidebar */}
+                    <div className="hidden lg:block lg:col-span-3 relative">
+                        <div className="sticky top-32">
+                            <span className="block w-8 h-[2px] bg-[#B77A8C] mb-6"></span>
+                            <span className="block font-outfit text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-6">Story Details</span>
+
+                            <div className="space-y-4 mb-12">
+                                <div className="text-sm text-[#8F8A86] font-outfit">
+                                    <span className="block text-[10px] uppercase text-[#B77A8C] mb-1">Published</span>
+                                    {new Date(post.createdAt || Date.now()).toLocaleDateString()}
+                                </div>
+                                <div className="text-sm text-[#8F8A86] font-outfit">
+                                    <span className="block text-[10px] uppercase text-[#B77A8C] mb-1">Category</span>
+                                    {post.tags ? post.tags.join(', ') : 'Photography'}
+                                </div>
+                            </div>
+
+                            <div className="p-6 bg-white border border-[#E8CBB6]/40 rounded-sm shadow-sm">
+                                <p className="font-serif italic text-[#5A2A45] text-lg mb-4">"Ready to capture your own beautiful moments?"</p>
+                                <Link to="/contact" className="text-xs font-outfit font-bold uppercase tracking-widest text-[#B77A8C] hover:text-[#5A2A45] transition-colors border-b border-[#B77A8C]">Book Session</Link>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Main Content Column */}
+                    <div className="lg:col-span-8 lg:col-start-5 space-y-16">
+
+                        <SectionFade>
+                            {/* Rich Text Content Render */}
+                            <div className="prose prose-lg md:prose-xl max-w-none
+                                prose-headings:font-display prose-headings:text-[#5A2A45] prose-headings:font-normal
+                                prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-6 prose-h2:italic
+                                prose-h3:text-2xl md:prose-h3:text-3xl prose-h3:text-[#5A2A45] prose-h3:mb-4 prose-h3:mt-12
+                                prose-p:font-outfit prose-p:text-[#8F8A86] prose-p:font-light prose-p:leading-relaxed prose-p:mb-6 prose-p:text-lg
+                                prose-a:text-[#B77A8C] prose-a:underline hover:prose-a:text-[#5A2A45]
+                                prose-blockquote:border-l-4 prose-blockquote:border-[#E8CBB6] prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-[#5A2A45]
+                                prose-strong:text-[#5A2A45] prose-strong:font-semibold
+                                prose-img:rounded-md prose-img:shadow-xl prose-img:my-10 prose-img:w-full
+                                prose-li:text-[#8F8A86] prose-li:font-outfit prose-li:text-lg
+                            ">
+                                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                            </div>
+                        </SectionFade>
+
+                        <div className="w-full h-[1px] bg-[#E8CBB6]/30 my-8"></div>
+
+                        {/* Call to Action - Static Style */}
+                        <SectionFade>
+                            <div className="bg-[#5A2A45] text-white p-12 md:p-16 text-center rounded-sm shadow-2xl relative overflow-hidden">
+                                <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+                                <div className="relative z-10">
+                                    <h3 className="font-display text-3xl md:text-5xl mb-6">Preserve your story.</h3>
+                                    <p className="font-outfit text-white/80 text-lg leading-relaxed max-w-2xl mx-auto mb-10">
+                                        Every chapter of your life deserves to be remembered with grace and beauty. Let us help you tell your story.
+                                    </p>
+                                    <Link to="/contact">
+                                        <button className="px-10 py-5 bg-white text-[#5A2A45] font-outfit uppercase tracking-widest text-sm hover:bg-[#E8CBB6] transition-colors rounded-full shadow-lg">
+                                            Start a Conversation
+                                        </button>
+                                    </Link>
+                                </div>
+                            </div>
+                        </SectionFade>
+
+                        <div className="flex justify-center pt-16">
+                            <Link to="/blog" className="group flex items-center gap-3 text-[#B77A8C] hover:text-[#5A2A45] transition-colors">
+                                <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
+                                <span className="font-outfit text-xs font-bold uppercase tracking-widest">Back to Journal</span>
+                            </Link>
+                        </div>
+                    </div>
+
+                </div>
             </article>
         </>
     );

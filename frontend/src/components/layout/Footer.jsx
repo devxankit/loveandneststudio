@@ -28,22 +28,22 @@ const Footer = () => {
             <div className="absolute bottom-[-50%] left-[-10%] w-[60vw] sm:w-[40vw] h-[60vw] sm:h-[40vw] bg-[#B77A8C] rounded-full blur-[80px] sm:blur-[120px] opacity-10 pointer-events-none"></div>
 
             <div className="max-w-[1400px] mx-auto relative z-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-x-8 sm:gap-y-12 lg:gap-8 text-center sm:text-left mb-12 sm:mb-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-x-8 sm:gap-y-12 lg:gap-8 text-center mb-12 sm:mb-16">
 
                     {/* 1. Brand / Logo */}
-                    <div className="col-span-1 space-y-6">
+                    <div className="col-span-1 space-y-6 flex flex-col items-center">
                         <Link to="/" className="inline-block">
                             {footerLogo ? (
                                 <img
                                     src={footerLogo}
                                     alt={siteTitle}
-                                    className="max-h-20 sm:max-h-24 mx-auto sm:mx-0 object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                                    className="max-h-20 sm:max-h-24 mx-auto object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
                                 />
                             ) : (
                                 <h3 className="font-display text-4xl italic text-[#FAF9F6]">{siteTitle}</h3>
                             )}
                         </Link>
-                        <p className="text-sm text-white/50 leading-relaxed max-w-[280px] mx-auto sm:mx-0 font-outfit font-light">
+                        <p className="text-sm text-white/50 leading-relaxed max-w-[280px] mx-auto font-outfit font-light">
                             Capturing the poetry of your life,<br className="hidden sm:block" /> one frame at a time.
                         </p>
                         <div className="pt-2">
@@ -54,12 +54,12 @@ const Footer = () => {
                     </div>
 
                     {/* 2. Explore Links */}
-                    <div className="col-span-1">
+                    <div className="col-span-1 flex flex-col items-center">
                         <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Explore</h4>
-                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60">
+                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 w-full flex flex-col items-center">
                             {['Home', 'About Anamika', 'Portfolio', 'Journal'].map((item, i) => (
-                                <li key={i} className="group">
-                                    <Link to={item === 'Home' ? '/' : item === 'Journal' ? '/blog' : `/${item.split(' ')[0].toLowerCase()}`} className="group-hover:text-white transition-all flex items-center justify-center sm:justify-start gap-3">
+                                <li key={i} className="group w-max">
+                                    <Link to={item === 'Home' ? '/' : item === 'Journal' ? '/blog' : `/${item.split(' ')[0].toLowerCase()}`} className="group-hover:text-white transition-all flex items-center gap-3">
                                         <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-opacity"></span>
                                         {item}
                                     </Link>
@@ -69,12 +69,12 @@ const Footer = () => {
                     </div>
 
                     {/* 3. Services Links */}
-                    <div className="col-span-1">
+                    <div className="col-span-1 flex flex-col items-center">
                         <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Services</h4>
-                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60">
+                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 w-full flex flex-col items-center">
                             {['Maternity', 'Newborn', 'Baby', 'Family'].map((item, i) => (
-                                <li key={i} className="group">
-                                    <Link to="/services" className="group-hover:text-white transition-all flex items-center justify-center sm:justify-start gap-3">
+                                <li key={i} className="group w-max">
+                                    <Link to="/services" className="group-hover:text-white transition-all flex items-center gap-3">
                                         <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-opacity"></span>
                                         {item}
                                     </Link>
@@ -84,19 +84,19 @@ const Footer = () => {
                     </div>
 
                     {/* 4. Connect / Newsletter */}
-                    <div className="col-span-1">
+                    <div className="col-span-1 flex flex-col items-center">
                         <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Connect</h4>
 
                         {/* Newsletter Input */}
-                        <div className="mb-8 sm:mb-10 group max-w-xs mx-auto sm:mx-0">
-                            <div className="relative border-b border-white/10 pb-3 flex transition-colors group-hover:border-white/30">
-                                <input type="email" placeholder="Your email address" className="bg-transparent border-none outline-none text-sm w-full text-white placeholder-white/20 font-light" />
-                                <button className="text-[10px] uppercase tracking-widest text-[#B77A8C] hover:text-white transition-colors">Join</button>
+                        <div className="mb-8 sm:mb-10 group max-w-xs mx-auto w-full">
+                            <div className="relative border-b border-white/10 pb-3 flex transition-colors group-hover:border-white/30 justify-center">
+                                <input type="email" placeholder="Your email address" className="bg-transparent border-none outline-none text-sm w-full text-white placeholder-white/20 font-light text-center" />
+                                <button className="absolute right-0 text-[10px] uppercase tracking-widest text-[#B77A8C] hover:text-white transition-colors">Join</button>
                             </div>
                         </div>
 
                         {/* Social Icons */}
-                        <div className="flex justify-center sm:justify-start gap-3">
+                        <div className="flex justify-center gap-3">
                             {[
                                 { icon: <><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" /><path d="m10 15 5-3-5-3z" /></>, href: "https://youtube.com/@loveandnest?si=O7DUvepeflrB2_p5", color: "hover:bg-[#FF0000]" },
                                 { icon: <><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></>, href: "https://instagram.com", color: "hover:bg-[#E1306C]" },
@@ -120,7 +120,7 @@ const Footer = () => {
                 </div>
 
                 {/* Copyright */}
-                <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-white/30 font-outfit text-center md:text-left">
+                <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-white/30 font-outfit text-center">
                     <span className="mb-4 md:mb-0">© {currentYear} Love & Nest Studio. All rights reserved.</span>
                     <div className="flex gap-6 sm:gap-8 flex-wrap justify-center">
                         <span className="hover:text-white cursor-pointer transition-colors">Privacy</span>

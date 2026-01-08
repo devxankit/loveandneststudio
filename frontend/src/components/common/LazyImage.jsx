@@ -21,7 +21,14 @@ const LazyImage = ({
             ([entry]) => {
                 if (entry.isIntersecting) {
                     setIsInView(true);
-                    setImageSrc(src);
+
+                    let optimizedSrc = src;
+                    // Auto-optimize Cloudinary Images
+                    if (src && src.includes('cloudinary.com') && !src.includes('f_auto,q_auto')) {
+                        optimizedSrc = src.replace('/upload/', '/upload/f_auto,q_auto/');
+                    }
+
+                    setImageSrc(optimizedSrc);
                     observer.disconnect();
                 }
             },
