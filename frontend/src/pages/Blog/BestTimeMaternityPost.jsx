@@ -290,12 +290,7 @@ const BestTimeMaternityPost = () => {
                         </SectionFade>
 
 
-                        <div className="flex justify-center pt-16">
-                            <Link to="/blog" className="group flex items-center gap-3 text-[#B77A8C] hover:text-[#5A2A45] transition-colors">
-                                <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
-                                <span className="font-outfit text-xs font-bold uppercase tracking-widest">Back to Journal</span>
-                            </Link>
-                        </div>
+
 
                     </div>
                 </div>

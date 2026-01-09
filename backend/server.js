@@ -17,19 +17,41 @@ const app = express();
 // Middleware
 app.use(compression()); // Enable Gzip compression
 
-// 1. Inject PNA Header for ALL requests (including OPTIONS)
+// 1. Inject PNA Header for ALL requests
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Private-Network", "true");
     next();
 });
 
-// 2. Standard CORS Configuration
-app.use(cors({
-    origin: ["http://localhost:5173", "https://www.loveandneststudio.com", "https://loveandneststudio.com", "http://localhost:5000"],
+// 2. Allowed Origins
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5000",
+    "https://www.loveandneststudio.com",
+    "https://loveandneststudio.com",
+    "https://loveandnest-frontend.vercel.app" // Add Vercel frontend domain if applicable
+];
+
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log("Blocked by CORS:", origin); // Helpful for debugging
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Access-Control-Allow-Private-Network"]
-}));
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Access-Control-Allow-Private-Network"],
+    optionsSuccessStatus: 204
+};
+
+// 3. Apply CORS
+app.use(cors(corsOptions));
+
 
 app.use(express.json()); // Body parser
 

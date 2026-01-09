@@ -7,7 +7,14 @@ const ManageHome = () => {
     const [activeTab, setActiveTab] = useState('hero');
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [pageData, setPageData] = useState(null);
+    const [pageData, setPageData] = useState({
+        hero: { heading: '', subheading: '', overlay_text: '', slides: [] },
+        expertise: { title: '', items: [] },
+        checklist: { title: '', items: [] },
+        gallery: { title: '', images: [] },
+        split_screen: { left: {}, right: {} },
+        collage: { images: [] }
+    });
 
     useEffect(() => {
         fetchData();

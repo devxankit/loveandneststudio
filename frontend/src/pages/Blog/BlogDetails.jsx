@@ -105,63 +105,42 @@ const BlogDetails = () => {
                 style={{ scaleX }}
             />
 
-            {/* --- 1. Immersive Cinematic Hero --- */}
-            <div className="relative h-screen w-full overflow-hidden bg-[#1a1a1a]">
-                <motion.div style={{ opacity: heroOpacity, scale: heroScale }} className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60 z-10"></div>
-                    <LazyImage
-                        src={post.coverImage || maternityHero}
-                        alt={post.title}
-                        className="w-full h-full object-cover object-center"
-                    />
+            {/* --- Editorial Header (Clean Magazine Style) --- */}
+            <header className="relative pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto text-center z-10">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                >
+                    {/* Meta Info */}
+                    <div className="flex items-center justify-center gap-4 text-[#B77A8C] font-outfit text-xs uppercase tracking-[0.2em] font-bold mb-6">
+                        <span>{new Date(post.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                        <span className="w-1 h-1 rounded-full bg-[#E8CBB6]"></span>
+                        <span>{readTime}</span>
+                        {/* Categories */}
+                        {post.tags && post.tags.length > 0 && (
+                            <>
+                                <span className="w-1 h-1 rounded-full bg-[#E8CBB6]"></span>
+                                <span>{post.tags[0]}</span>
+                            </>
+                        )}
+                    </div>
+
+                    {/* Title */}
+                    <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-[#5A2A45] leading-[1.1] mb-8 max-w-5xl mx-auto">
+                        {post.title}
+                    </h1>
+
+                    {/* Author & Divider */}
+                    <div className="flex flex-col items-center gap-6">
+                        <div className="w-16 h-[1px] bg-[#E8CBB6]"></div>
+                        <p className="font-outfit text-[#8F8A86] text-xs uppercase tracking-widest">
+                            Words by <span className="text-[#5A2A45] font-bold">Anamika</span>
+                        </p>
+                    </div>
                 </motion.div>
+            </header>
 
-                {/* Back Nav */}
-                <div className="absolute top-0 left-0 w-full p-6 md:p-12 z-30">
-                    <Link to="/blog" className="inline-flex items-center gap-2 group text-white/80 hover:text-white transition-colors">
-                        <ArrowLeft size={20} />
-                        <span className="font-outfit uppercase text-xs tracking-widest font-bold">Back to Journal</span>
-                    </Link>
-                </div>
-
-                {/* Hero Text */}
-                <div className="absolute inset-0 z-20 flex flex-col justify-end pb-32 md:pb-24 px-6 md:px-20 max-w-[1600px] mx-auto w-full">
-                    <motion.div style={{ y: textY }}>
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <div className="mb-6 flex flex-wrap gap-4 text-[#E8CBB6] font-outfit text-xs uppercase tracking-widest font-bold">
-                                <span>{new Date(post.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                                <span className="text-white/40">•</span>
-                                <span>{readTime}</span>
-                                {post.tags && post.tags.length > 0 && (
-                                    <>
-                                        <span className="text-white/40">•</span>
-                                        <span>{post.tags[0]}</span>
-                                    </>
-                                )}
-                            </div>
-
-                            <h1 className="font-display text-5xl md:text-8xl lg:text-8xl text-white leading-[0.95] mb-8 max-w-5xl shadow-black drop-shadow-lg">
-                                {post.title}
-                            </h1>
-
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 border-t border-white/20 pt-8 max-w-4xl">
-                                <p className="text-white/80 font-outfit text-sm md:text-lg leading-relaxed max-w-xl font-light italic">
-                                    "{post.excerpt}"
-                                </p>
-                                <div className="text-right">
-                                    <p className="text-white text-xs font-bold uppercase tracking-widest mb-1">Written By</p>
-                                    <p className="text-[#E8CBB6] font-display text-xl">{post.author || 'Love & Nest Studio'}</p>
-                                </div>
-                            </div>
-
-                        </motion.div>
-                    </motion.div>
-                </div>
-            </div>
 
 
             {/* --- 2. Main Editorial Layout --- */}
@@ -269,9 +248,89 @@ const BlogDetails = () => {
                                         }
                                     }
 
-                                    /* 3. Headers & General Text */
-                                    .dynamic-content h2, .dynamic-content h3 {
+                                    /* 3. Headers Adjustment */
+                                    .dynamic-content h2 {
                                         font-family: 'Playfair Display', serif;
+                                        font-size: 2rem;
+                                        margin-top: 4rem;
+                                        margin-bottom: 1.5rem;
+                                        color: #5A2A45;
+                                        font-style: italic;
+                                    }
+                                    @media (min-width: 768px) {
+                                        .dynamic-content h2 { font-size: 2.25rem; }
+                                    }
+
+                                    .dynamic-content h3 {
+                                        font-family: 'Playfair Display', serif;
+                                        font-size: 1.5rem;
+                                        margin-top: 3rem;
+                                        margin-bottom: 1rem;
+                                        color: #5A2A45;
+                                    }
+                                    @media (min-width: 768px) {
+                                        .dynamic-content h3 { font-size: 1.875rem; }
+                                    }
+
+                                    /* 4. Body Text & Spacing */
+                                    .dynamic-content p {
+                                        font-family: 'Outfit', sans-serif;
+                                        font-size: 1.125rem;
+                                        line-height: 1.8;
+                                        color: #8F8A86;
+                                        margin-bottom: 1.5rem;
+                                        font-weight: 300;
+                                    }
+
+                                    /* 5. Blockquotes */
+                                    .dynamic-content blockquote {
+                                        border-left: 4px solid #E8CBB6;
+                                        padding-left: 1.5rem;
+                                        margin: 2.5rem 0;
+                                        font-family: 'Playfair Display', serif;
+                                        font-style: italic;
+                                        font-size: 1.25rem;
+                                        color: #5A2A45;
+                                        background: rgba(249, 247, 242, 0.5); /* subtle background */
+                                        padding: 2rem;
+                                        border-radius: 0 1rem 1rem 0;
+                                    }
+
+                                    /* 6. Lists */
+                                    .dynamic-content ul, .dynamic-content ol {
+                                        margin-bottom: 2rem;
+                                        padding-left: 1.5rem;
+                                    }
+                                    .dynamic-content li {
+                                        font-family: 'Outfit', sans-serif;
+                                        font-size: 1.125rem;
+                                        color: #8F8A86;
+                                        margin-bottom: 0.75rem;
+                                        padding-left: 0.5rem;
+                                        position: relative;
+                                    }
+                                    .dynamic-content ul li::marker {
+                                        color: #B77A8C;
+                                    }
+                                    .dynamic-content ol li::marker {
+                                        color: #5A2A45;
+                                        font-family: 'outfit';
+                                        font-weight: bold;
+                                    }
+
+                                    /* 7. Inline Elements */
+                                    .dynamic-content strong {
+                                        color: #5A2A45;
+                                        font-weight: 600;
+                                    }
+                                    .dynamic-content a {
+                                        color: #B77A8C;
+                                        text-decoration: underline;
+                                        text-underline-offset: 4px;
+                                        transition: color 0.3s ease;
+                                    }
+                                    .dynamic-content a:hover {
+                                        color: #5A2A45;
                                     }
                                 `}</style>
                                 <div className="dynamic-content" dangerouslySetInnerHTML={{
@@ -303,12 +362,7 @@ const BlogDetails = () => {
                             </div>
                         </SectionFade>
 
-                        <div className="flex justify-center pt-16">
-                            <Link to="/blog" className="group flex items-center gap-3 text-[#B77A8C] hover:text-[#5A2A45] transition-colors">
-                                <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
-                                <span className="font-outfit text-xs font-bold uppercase tracking-widest">Back to Journal</span>
-                            </Link>
-                        </div>
+
                     </div>
 
                 </div>

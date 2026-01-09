@@ -7,7 +7,14 @@ const ManageContact = () => {
     const [activeTab, setActiveTab] = useState('hero');
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [pageData, setPageData] = useState(null);
+    const [pageData, setPageData] = useState({
+        hero: { subheading: '', heading: '', text: '' },
+        info: { email: '', phone: '', whatsapp: '', location: '' },
+        visuals: { entranceImage: '', entranceLabel: '', verticalImage: '' },
+        socials: { instagram: '', facebook: '', threads: '', pinterest: '', youtube: '' },
+        collage: { images: [] },
+        meta: { title: '', description: '' }
+    });
 
     useEffect(() => {
         fetchData();

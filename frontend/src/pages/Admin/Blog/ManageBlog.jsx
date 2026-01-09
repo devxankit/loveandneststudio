@@ -4,6 +4,7 @@ import { Edit3, Trash2, Calendar, Eye, Search, Filter, Plus, X, Upload, Loader }
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { getPosts, deletePost, createPost, updatePost, uploadImage } from '../../../services/api';
+import LazyImage from '../../../components/common/LazyImage'; // Imported optimized image component
 
 const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
     const [formData, setFormData] = useState({
@@ -123,29 +124,25 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
 
     if (!isOpen) return null;
 
+    // Helper for preview thumb
+    const getPreviewUrl = (url) => {
+        if (!url) return null;
+        if (url.startsWith('blob:')) return url; // Local blob
+        if (url.includes('cloudinary.com') && !url.includes('w_')) {
+            return url.replace('/upload/', '/upload/w_200,f_auto,q_auto/');
+        }
+        return url;
+    };
+
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-center justify-center p-4">
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-[2.5rem] w-full max-w-6xl max-h-[92vh] overflow-hidden shadow-2xl flex flex-col"
-            >
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-[#5A2A45]/40 backdrop-blur-sm" onClick={onClose} />
+            <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 50, opacity: 0 }} className="bg-[#FAF9F6] w-full max-w-7xl h-[90vh] rounded-[3rem] shadow-2xl relative flex flex-col overflow-hidden">
+
                 {/* Header */}
-                <div className="p-8 border-b border-[#5A2A45]/5 flex justify-between items-center bg-[#FAF9F6]">
-                    <div>
-                        <h2 className="font-display text-3xl text-[#5A2A45]">{post ? 'Refine Story' : 'Draft New Story'}</h2>
-                        <p className="text-xs text-[#8F8A86] uppercase tracking-widest mt-1">Journal Entry #{post?._id?.slice(-6) || 'New'}</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <label className="flex items-center gap-3 cursor-pointer group">
-                            <span className="text-xs font-bold uppercase tracking-widest text-[#5A2A45]/60 group-hover:text-[#5A2A45]">Published</span>
-                            <div className="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="isPublished" checked={formData.isPublished} onChange={handleChange} className="sr-only peer" />
-                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#B77A8C]"></div>
-                            </div>
-                        </label>
-                        <button onClick={onClose} className="p-3 hover:bg-[#F1EBDD] rounded-full text-[#5A2A45] transition-colors"><X size={24} /></button>
-                    </div>
+                <div className="px-8 py-6 border-b border-[#5A2A45]/5 flex justify-between items-center bg-white/50 backdrop-blur-md">
+                    <h2 className="font-display text-2xl text-[#5A2A45]">{post ? 'Edit Narrative' : 'New Story'}</h2>
+                    <button onClick={onClose} className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#5A2A45]/5 transition-colors text-[#5A2A45]"><X size={20} /></button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-8">
@@ -156,7 +153,7 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
                                 <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#8F8A86]">Cover Narrative</label>
                                 <div className="aspect-[4/5] bg-[#F9F7F2] rounded-3xl relative group overflow-hidden border-2 border-dashed border-[#5A2A45]/10 hover:border-[#5A2A45]/30 transition-all duration-500 shadow-inner">
                                     {preview ? (
-                                        <img src={preview} alt="Preview" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                        <LazyImage src={getPreviewUrl(preview)} alt="Preview" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                                     ) : (
                                         <div className="absolute inset-0 flex flex-col items-center justify-center text-[#5A2A45]/30 p-8 text-center">
                                             <Upload size={40} strokeWidth={1} className="mb-4" />
@@ -166,7 +163,6 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
                                     <input type="file" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" accept="image/*" />
                                 </div>
                             </div>
-
                             <div className="space-y-6">
                                 <div>
                                     <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#8F8A86] mb-3">Story Excerpt</label>
@@ -200,7 +196,52 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
                                 <style>{`
                                     .ql-toolbar.ql-snow { border: none !important; background: white; padding: 15px; border-bottom: 1px solid rgba(90,42,69,0.05) !important; }
                                     .ql-container.ql-snow { border: none !important; font-family: 'Outfit', sans-serif; }
-                                    .ql-editor { min-height: 400px; padding: 30px; font-size: 1.1rem; color: #6E5A52; line-height: 1.8; }
+                                    
+                                    /* Editor Typography Mirroring Frontend */
+                                    .ql-editor { 
+                                        min-height: 400px; 
+                                        padding: 30px; 
+                                        font-family: 'Outfit', sans-serif;
+                                        font-size: 1.125rem; 
+                                        color: #8F8A86; 
+                                        line-height: 1.8; 
+                                    }
+                                    
+                                    /* Headings */
+                                    .ql-editor h1, .ql-editor h2, .ql-editor h3 {
+                                        font-family: 'Playfair Display', serif;
+                                        color: #5A2A45;
+                                        margin-top: 1.5em;
+                                        margin-bottom: 0.5em;
+                                    }
+                                    .ql-editor h2 { font-size: 2rem; font-style: italic; }
+                                    .ql-editor h3 { font-size: 1.5rem; }
+
+                                    /* Blockquotes */
+                                    .ql-editor blockquote {
+                                        border-left: 4px solid #E8CBB6 !important;
+                                        padding-left: 1.5rem;
+                                        font-family: 'Playfair Display', serif;
+                                        font-style: italic;
+                                        color: #5A2A45;
+                                        background: rgba(249, 247, 242, 0.5);
+                                    }
+
+                                    /* Intro Drop Cap Simulation */
+                                    .ql-editor p:first-of-type {
+                                        font-size: 1.25rem;
+                                        color: rgba(90, 42, 69, 0.85);
+                                    }
+                                    .ql-editor p:first-of-type::first-letter {
+                                        float: left;
+                                        font-family: 'Playfair Display', serif;
+                                        font-size: 3.5rem;
+                                        line-height: 0.8;
+                                        color: #B77A8C;
+                                        margin-right: 0.5rem;
+                                    }
+
+                                    /* Placeholder */
                                     .ql-editor.ql-blank::before { color: rgba(90,42,69,0.2) !important; font-style: normal; }
                                  `}</style>
                             </div>
@@ -220,59 +261,69 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
     );
 };
 
-const BlogPostCard = ({ post, onEdit, onDelete }) => (
-    <motion.div
-        layout
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white rounded-[2rem] border border-[#5A2A45]/5 overflow-hidden group hover:shadow-[0_20px_40px_rgba(90,42,69,0.08)] transition-all duration-500"
-    >
-        <div className="flex flex-col md:flex-row h-full">
-            <div className="md:w-[280px] h-[240px] md:h-auto relative overflow-hidden bg-[#F1EBDD]">
-                {post.coverImage ? (
-                    <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[#5A2A45]/10 font-display text-5xl">L&O</div>
-                )}
-                {!post.isPublished && (
-                    <div className="absolute top-4 left-4">
-                        <span className="bg-[#B77A8C] text-white text-[8px] font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full shadow-lg">Draft</span>
-                    </div>
-                )}
-            </div>
+const BlogPostCard = ({ post, onEdit, onDelete }) => {
+    // Generate optimized thumbnail URL for performance
+    const thumbUrl = post.coverImage && post.coverImage.includes('cloudinary.com')
+        ? post.coverImage.replace('/upload/', '/upload/w_500,q_auto,f_auto/')
+        : post.coverImage;
 
-            <div className="p-8 flex-1 flex flex-col justify-between">
-                <div>
-                    <div className="flex items-center gap-4 text-[10px] text-[#8F8A86] font-bold mb-4 uppercase tracking-[0.2em]">
-                        <span className="flex items-center gap-1.5"><Calendar size={14} className="text-[#B77A8C]/60" /> {new Date(post.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#E8CBB6]"></span>
-                        <span>{Math.ceil((post.content?.split(' ').length || 0) / 200)} Min Read</span>
-                    </div>
-                    <h3 className="font-display text-3xl text-[#5A2A45] leading-[1.2] mb-4 group-hover:text-[#B77A8C] transition-colors duration-300 line-clamp-2">{post.title}</h3>
-                    <p className="text-[#6E5A52] text-sm leading-relaxed line-clamp-2 font-light opacity-80">{post.excerpt}</p>
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-white rounded-[2rem] border border-[#5A2A45]/5 overflow-hidden group hover:shadow-[0_20px_40px_rgba(90,42,69,0.08)] transition-all duration-500"
+        >
+            <div className="flex flex-col md:flex-row h-full">
+                <div className="md:w-[280px] h-[240px] md:h-auto relative overflow-hidden bg-[#F1EBDD]">
+                    {thumbUrl ? (
+                        <LazyImage src={thumbUrl} alt={post.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[#5A2A45]/10 font-display text-5xl">L&O</div>
+                    )}
+                    {!post.isPublished && (
+                        <div className="absolute top-4 left-4 z-10">
+                            <span className="bg-[#B77A8C] text-white text-[8px] font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full shadow-lg">Draft</span>
+                        </div>
+                    )}
                 </div>
 
-                <div className="flex items-center justify-between pt-6 mt-6 border-t border-[#F1EBDD]">
-                    <div className="flex items-center gap-2">
-                        <button onClick={() => onEdit(post)} className="flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-[#FAF9F6] text-[#5A2A45] text-[10px] font-bold uppercase tracking-widest hover:bg-[#5A2A45] hover:text-[#F1EBDD] transition-all duration-300">
-                            <Edit3 size={14} /> Refine
-                        </button>
-                        <button onClick={() => onDelete(post._id)} className="p-2.5 rounded-full hover:bg-rose-50 text-rose-300 hover:text-rose-500 transition-colors">
-                            <Trash2 size={16} />
-                        </button>
+                <div className="p-8 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center gap-4 text-[10px] text-[#8F8A86] font-bold mb-4 uppercase tracking-[0.2em]">
+                            <span className="flex items-center gap-1.5"><Calendar size={14} className="text-[#B77A8C]/60" /> {new Date(post.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#E8CBB6]"></span>
+                            <span>{Math.ceil((post.content?.split(' ').length || 0) / 200)} Min Read</span>
+                        </div>
+                        <h3 className="font-display text-2xl text-[#5A2A45] mb-3 leading-tight group-hover:text-[#B77A8C] transition-colors">{post.title}</h3>
+                        <p className="font-outfit text-[#6E5A52]/70 text-sm leading-relaxed line-clamp-2 mb-6">{post.excerpt}</p>
                     </div>
-                    <button
-                        onClick={() => window.open(`${window.location.origin}/blog/${post.slug}`, '_blank')}
-                        className="flex items-center gap-2 text-[#B77A8C] text-[10px] font-bold uppercase tracking-[0.2em] hover:text-[#5A2A45] transition-all"
-                    >
-                        Live Preview <Eye size={16} />
-                    </button>
+
+                    <div className="flex items-center justify-between border-t border-[#f0ebe5] pt-6">
+                        <div className="flex flex-wrap gap-2">
+                            {post.tags && post.tags.map((tag, i) => (
+                                <span key={i} className="px-3 py-1 bg-[#F9F7F2] rounded-md text-[9px] font-bold uppercase tracking-wider text-[#B77A8C]">{tag}</span>
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {/* Use a Link or regular button for view logic */}
+                            <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-[#5A2A45]/10 flex items-center justify-center text-[#6E5A52] hover:bg-[#5A2A45] hover:text-white transition-all hover:scale-110">
+                                <Eye size={16} />
+                            </a>
+                            <button onClick={() => onEdit(post)} className="w-10 h-10 rounded-full border border-[#5A2A45]/10 flex items-center justify-center text-[#6E5A52] hover:bg-[#5A2A45] hover:text-white transition-all hover:scale-110">
+                                <Edit3 size={16} />
+                            </button>
+                            <button onClick={() => onDelete(post._id)} className="w-10 h-10 rounded-full border border-[#5A2A45]/10 flex items-center justify-center text-[#6E5A52] hover:bg-red-500 hover:text-white hover:border-red-500 transition-all hover:scale-110">
+                                <Trash2 size={16} />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </motion.div>
-);
+        </motion.div>
+    );
+};
 
 const ManageBlog = () => {
     const [posts, setPosts] = useState([]);
@@ -299,8 +350,19 @@ const ManageBlog = () => {
 
     const handleDelete = async (id) => {
         if (confirm("Move this narrative to your archives? This action is permanent.")) {
-            await deletePost(id);
-            fetchPosts();
+            // Optimistic Update: Immediately remove from UI
+            const previousPosts = [...posts];
+            setPosts(posts.filter(post => post._id !== id));
+
+            try {
+                await deletePost(id);
+                // Success: Do nothing, UI is already correct
+            } catch (error) {
+                console.error("Delete failed", error);
+                // Revert UI on failure
+                setPosts(previousPosts);
+                alert("Failed to delete post.");
+            }
         }
     };
 

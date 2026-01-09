@@ -102,11 +102,7 @@ const ServiceGallery = () => {
 
             {/* Header Text */}
             <div className="max-w-4xl mx-auto px-5 md:px-8 mb-12 md:mb-20 relative z-10 flex flex-col items-center text-center">
-                <motion.div variants={textVariant} className="self-start md:self-center w-full md:w-auto flex justify-center md:block mb-8 md:mb-10">
-                    <Link to="/services" className="inline-flex items-center gap-2 text-[#6E5A52] hover:text-[#5A2A45] font-medium text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all border-b border-transparent hover:border-[#5A2A45] pb-1 hover:gap-3">
-                        <ArrowLeft size={12} className="md:w-3 md:h-3" /> Back to Services
-                    </Link>
-                </motion.div>
+
 
                 <motion.h1 variants={textVariant} className="font-display text-3xl sm:text-4xl md:text-6xl text-[#5A2A45] mb-4 leading-tight px-2">
                     {title}

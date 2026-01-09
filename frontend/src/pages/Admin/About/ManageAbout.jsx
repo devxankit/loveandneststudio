@@ -11,7 +11,18 @@ const ManageAbout = () => {
     const [activeTab, setActiveTab] = useState('bio');
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [pageData, setPageData] = useState(null);
+    const [pageData, setPageData] = useState({
+        hero: { images: [] },
+        bio: {
+            intro: '',
+            photographer: { heading: '', text: '' },
+            philosophy: { heading: '', text: '' },
+            approach: { heading: '', text: '' },
+            style: { heading: '', text: '', quote: '' },
+            footerQuote: '',
+            thankYouText: ''
+        }
+    });
 
     useEffect(() => {
         fetchData();
