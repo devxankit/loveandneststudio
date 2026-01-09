@@ -115,6 +115,7 @@ const BlogPostModal = ({ isOpen, onClose, post, onSave }) => {
             onClose();
         } catch (error) {
             console.error("Save failed", error);
+            alert(error.response?.data?.message || "Failed to save post. Please check all fields.");
         } finally {
             setSaving(false);
         }

@@ -202,6 +202,7 @@ const BlogDetails = () => {
 
                         <SectionFade>
                             {/* Rich Text Content Render */}
+                            {/* Rich Text Content Render */}
                             <div className="prose prose-lg md:prose-xl max-w-none
                                 prose-headings:font-display prose-headings:text-[#5A2A45] prose-headings:font-normal
                                 prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-6 prose-h2:italic
@@ -210,10 +211,75 @@ const BlogDetails = () => {
                                 prose-a:text-[#B77A8C] prose-a:underline hover:prose-a:text-[#5A2A45]
                                 prose-blockquote:border-l-4 prose-blockquote:border-[#E8CBB6] prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-[#5A2A45]
                                 prose-strong:text-[#5A2A45] prose-strong:font-semibold
-                                prose-img:rounded-md prose-img:shadow-xl prose-img:my-10 prose-img:w-full
                                 prose-li:text-[#8F8A86] prose-li:font-outfit prose-li:text-lg
                             ">
-                                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                                <style>{`
+                                    @keyframes fadeUpReveal {
+                                        from { opacity: 0; transform: translateY(30px); }
+                                        to { opacity: 1; transform: translateY(0); }
+                                    }
+                                    
+                                    /* Staggered Reveal Animation */
+                                    .dynamic-content > * {
+                                        opacity: 0;
+                                        animation: fadeUpReveal 0.8s ease-out forwards;
+                                    }
+                                    .dynamic-content > *:nth-child(1) { animation-delay: 0.1s; }
+                                    .dynamic-content > *:nth-child(2) { animation-delay: 0.2s; }
+                                    .dynamic-content > *:nth-child(3) { animation-delay: 0.3s; }
+                                    .dynamic-content > *:nth-child(4) { animation-delay: 0.4s; }
+                                    .dynamic-content > *:nth-child(5) { animation-delay: 0.5s; }
+                                    .dynamic-content > *:nth-child(6) { animation-delay: 0.6s; }
+                                    .dynamic-content > *:nth-child(n+7) { animation-delay: 0.7s; }
+
+                                    /* --- Editorial Styling Updates (Exact Match) --- */
+
+                                    /* 1. Intro Paragraph */
+                                    /* Matches: text-xl md:text-2xl text-[#5A2A45]/80 leading-relaxed md:leading-loose */
+                                    .dynamic-content > p:first-of-type {
+                                        font-family: 'Outfit', sans-serif;
+                                        font-size: 1.25rem; /* text-xl */
+                                        line-height: 1.625; /* leading-relaxed */
+                                        color: rgba(90, 42, 69, 0.8); /* #5A2A45 with 80% opacity */
+                                        margin-bottom: 2.5rem;
+                                    }
+                                    @media (min-width: 768px) {
+                                        .dynamic-content > p:first-of-type {
+                                            font-size: 1.5rem; /* text-2xl */
+                                            line-height: 2; /* leading-loose */
+                                        }
+                                    }
+
+                                    /* 2. Drop Cap */
+                                    /* Matches: float-left text-7xl md:text-8xl font-display text-[#B77A8C] mr-4 mt-[-20px] leading-[0.8] */
+                                    .dynamic-content > p:first-of-type::first-letter {
+                                        float: left;
+                                        font-family: 'Playfair Display', serif;
+                                        font-size: 4.5rem; /* text-7xl */
+                                        line-height: 0.8;
+                                        color: #B77A8C;
+                                        margin-right: 1rem; /* mr-4 */
+                                        margin-top: -10px; /* Slight adjustment for CSS float vs flex */
+                                        margin-bottom: -5px;
+                                    }
+                                    @media (min-width: 768px) {
+                                        .dynamic-content > p:first-of-type::first-letter {
+                                            font-size: 6rem; /* text-8xl */
+                                            margin-top: -15px; 
+                                        }
+                                    }
+
+                                    /* 3. Headers & General Text */
+                                    .dynamic-content h2, .dynamic-content h3 {
+                                        font-family: 'Playfair Display', serif;
+                                    }
+                                `}</style>
+                                <div className="dynamic-content" dangerouslySetInnerHTML={{
+                                    __html: post.content.replace(
+                                        /<img\s+([^>]+)>/g,
+                                        '<div class="group relative block w-full my-12 max-w-4xl mx-auto"><div class="bg-white p-2 rounded-[15px] shadow-[0_5px_20px_rgba(0,0,0,0.1)] relative z-0 overflow-hidden after:content-[\'\'] after:absolute after:inset-0 after:bg-[linear-gradient(120deg,transparent_30%,rgba(255,255,255,0.6)_50%,transparent_70%)] after:skew-x-[-20deg] after:-left-[150%] after:pointer-events-none group-hover:after:animate-[sheen-hover_1.5s_cubic-bezier(0.4,0,0.2,1)_forwards]"><img $1 class="w-full object-cover rounded-lg transition-transform duration-500 group-hover:scale-105" /></div></div>'
+                                    )
+                                }} />
                             </div>
                         </SectionFade>
 

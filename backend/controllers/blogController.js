@@ -30,16 +30,30 @@ const getPostBySlug = async (req, res) => {
 // @access  Private/Admin
 const createPost = async (req, res) => {
     try {
+        console.log("Create Post Payload:", req.body);
         const { title, content, excerpt, tags } = req.body;
         let coverImage = '';
         if (req.file) {
             coverImage = req.file.path;
         }
 
+        if (!title) {
+            return res.status(400).json({ message: "Title is required" });
+        }
+
+        // Generate slug from title
+        const slug = title
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
         const post = await BlogPost.create({
             title,
+            slug,
             content,
-            excerpt,
+            excerpt: excerpt || 'No excerpt provided', // Fallback
             tags: tags ? tags.split(',') : [],
             coverImage,
             isPublished: req.body.isPublished === 'true' || req.body.isPublished === true,
@@ -47,6 +61,7 @@ const createPost = async (req, res) => {
         });
         res.status(201).json(post);
     } catch (error) {
+        console.error("Create Post Error:", error);
         res.status(400).json({ message: error.message });
     }
 };
