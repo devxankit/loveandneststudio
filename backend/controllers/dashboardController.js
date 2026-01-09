@@ -1,7 +1,7 @@
 const BlogPost = require('../models/BlogPost');
 const Testimonial = require('../models/Testimonial');
 const Services = require('../models/Services');
-const Contact = require('../models/Contact');
+const Inquiry = require('../models/Inquiry');
 const Newborn = require('../models/Newborn');
 const Maternity = require('../models/Maternity');
 const Baby = require('../models/Baby');
@@ -28,7 +28,7 @@ const getDashboardStats = async (req, res) => {
             BlogPost.countDocuments(),
             Testimonial.countDocuments(),
             Services.countDocuments(),
-            Contact.countDocuments(),
+            Inquiry.countDocuments(),
             Newborn.countDocuments(),
             Maternity.countDocuments(),
             Baby.countDocuments(),
@@ -39,7 +39,7 @@ const getDashboardStats = async (req, res) => {
         const portfolioCount = newbornCount + maternityCount + babyCount + familyCount;
 
         // Get recent inquiries (last 5)
-        const recentInquiries = await Contact.find().sort({ createdAt: -1 }).limit(5);
+        const recentInquiries = await Inquiry.find().sort({ createdAt: -1 }).limit(5);
 
         res.status(200).json({
             stats: {

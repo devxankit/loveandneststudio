@@ -1,0 +1,167 @@
+Starting bulk upload to Cloudinary...
+Starting bulk upload to Cloudinary...
+Starting bulk upload... Scanning: C:\Users\victus\Desktop\loveandneststudio\frontend\src\assets\images
+Found 81 images.
+Uploading: about\01-1.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937491/loveandnest/assets/about/01-1.png
+Uploading: about\02-01.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937494/loveandnest/assets/about/02-01.png
+Uploading: about\0385.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937498/loveandnest/assets/about/0385.png
+Uploading: about\0390.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937501/loveandnest/assets/about/0390.png
+Uploading: about\0398.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937503/loveandnest/assets/about/0398.png
+Uploading: about\0414.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937506/loveandnest/assets/about/0414.png
+Uploading: about\0418.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937508/loveandnest/assets/about/0418.png
+Uploading: about\0424.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937510/loveandnest/assets/about/0424.png
+Uploading: about\0426.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937511/loveandnest/assets/about/0426.png
+Uploading: about\0434.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937513/loveandnest/assets/about/0434.png
+Uploading: about\0444.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937515/loveandnest/assets/about/0444.png
+Uploading: about\0464.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937517/loveandnest/assets/about/0464.png
+Uploading: about\DSC_0374 ad on jpeg.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937519/loveandnest/assets/about/DSC_0374%20ad%20on%20jpeg.png
+Uploading: about\DSC_0393.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937521/loveandnest/assets/about/DSC_0393.png
+Uploading: about\DSC_0410.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937522/loveandnest/assets/about/DSC_0410.png
+Uploading: about\DSC_0414.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937524/loveandnest/assets/about/DSC_0414.png
+Uploading: about\DSC_0424.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937525/loveandnest/assets/about/DSC_0424.png
+Uploading: about\DSC_0428.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937526/loveandnest/assets/about/DSC_0428.png
+Uploading: about\DSC_0444.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937528/loveandnest/assets/about/DSC_0444.png
+Uploading: about\DSC_0445.jpg -> Folder: loveandnest/assets/about
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937529/loveandnest/assets/about/DSC_0445.png
+Uploading: about\_FOR BA .jpg -> Folder: loveandnest/assets/about
+❌ Failed: C:\Users\victus\Desktop\loveandneststudio\frontend\src\assets\images\about\_FOR BA .jpg - public_id must not end with a whitespace.
+Uploading: contract\Screenshot 2025-12-30 104112.png -> Folder: loveandnest/assets/contract
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937531/loveandnest/assets/contract/Screenshot%202025-12-30%20104112.png
+Uploading: contract\Screenshot 2025-12-30 104125.png -> Folder: loveandnest/assets/contract
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937532/loveandnest/assets/contract/Screenshot%202025-12-30%20104125.png
+Uploading: contract\Screenshot 2025-12-30 104143.png -> Folder: loveandnest/assets/contract
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937533/loveandnest/assets/contract/Screenshot%202025-12-30%20104143.png
+Uploading: contract\_FOR BA .jpg -> Folder: loveandnest/assets/contract
+❌ Failed: C:\Users\victus\Desktop\loveandneststudio\frontend\src\assets\images\contract\_FOR BA .jpg - public_id must not end with a whitespace.
+Uploading: hero\New folder\0434.jpg -> Folder: loveandnest/assets/hero/New folder
+❌ Failed: C:\Users\victus\Desktop\loveandneststudio\frontend\src\assets\images\hero\New folder\0434.jpg - File size too large. Got 12911716. Maximum is 10485760. Upgrade your plan to enjoy higher limits https://www.cloudinary.com/pricing/upgrades/file-limit
+Uploading: hero\Screenshot 2025-12-30 141652.png -> Folder: loveandnest/assets/hero
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937541/loveandnest/assets/hero/Screenshot%202025-12-30%20141652.png
+Uploading: hero\Screenshot 2025-12-30 141700.png -> Folder: loveandnest/assets/hero
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937542/loveandnest/assets/hero/Screenshot%202025-12-30%20141700.png
+Uploading: hero\Screenshot 2025-12-30 141711.png -> Folder: loveandnest/assets/hero
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937544/loveandnest/assets/hero/Screenshot%202025-12-30%20141711.png
+Uploading: hero\Screenshot 2025-12-30 141721.png -> Folder: loveandnest/assets/hero
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937545/loveandnest/assets/hero/Screenshot%202025-12-30%20141721.png
+Uploading: hero\Screenshot 2025-12-30 141756.png -> Folder: loveandnest/assets/hero
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937546/loveandnest/assets/hero/Screenshot%202025-12-30%20141756.png
+Uploading: hero\Screenshot 2025-12-30 141833.png -> Folder: loveandnest/assets/hero
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937547/loveandnest/assets/hero/Screenshot%202025-12-30%20141833.png
+Uploading: hero\Screenshot 2025-12-30 141842.png -> Folder: loveandnest/assets/hero
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937548/loveandnest/assets/hero/Screenshot%202025-12-30%20141842.png
+Uploading: portfolio\baby\line art\Screenshot_2025-12-31_145813-removebg-preview.png -> Folder: loveandnest/assets/portfolio/baby/line art
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937549/loveandnest/assets/portfolio/baby/line%20art/Screenshot_2025-12-31_145813-removebg-preview.png
+Uploading: portfolio\baby\line art\Screenshot_2025-12-31_152813-removebg-preview.png -> Folder: loveandnest/assets/portfolio/baby/line art
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937550/loveandnest/assets/portfolio/baby/line%20art/Screenshot_2025-12-31_152813-removebg-preview.png
+Uploading: portfolio\baby\line art\Screenshot_2025-12-31_153004-removebg-preview.png -> Folder: loveandnest/assets/portfolio/baby/line art
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937551/loveandnest/assets/portfolio/baby/line%20art/Screenshot_2025-12-31_153004-removebg-preview.png
+Uploading: portfolio\baby\line art\Screenshot_2025-12-31_153041-removebg-preview.png -> Folder: loveandnest/assets/portfolio/baby/line art
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937552/loveandnest/assets/portfolio/baby/line%20art/Screenshot_2025-12-31_153041-removebg-preview.png
+Uploading: portfolio\baby\line art\Screenshot_2025-12-31_153051-removebg-preview.png -> Folder: loveandnest/assets/portfolio/baby/line art
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937553/loveandnest/assets/portfolio/baby/line%20art/Screenshot_2025-12-31_153051-removebg-preview.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153257.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937554/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153257.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153305.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937555/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153305.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153316.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937556/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153316.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153323.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937557/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153323.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153332.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937558/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153332.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153341.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937559/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153341.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153353.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937560/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153353.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153401.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937561/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153401.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153410.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937562/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153410.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153418 - Copy.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937563/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153418%20-%20Copy.png
+Uploading: portfolio\baby\Screenshot 2025-12-31 153424 - Copy.png -> Folder: loveandnest/assets/portfolio/baby
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937565/loveandnest/assets/portfolio/baby/Screenshot%202025-12-31%20153424%20-%20Copy.png
+Uploading: portfolio\family\line art\Screenshot_2025-12-31_145813-removebg-preview.png -> Folder: loveandnest/assets/portfolio/family/line art
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937566/loveandnest/assets/portfolio/family/line%20art/Screenshot_2025-12-31_145813-removebg-preview.png
+Uploading: portfolio\family\Screenshot 2025-12-31 111323.png -> Folder: loveandnest/assets/portfolio/family
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937567/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20111323.png
+Uploading: portfolio\family\Screenshot 2025-12-31 111330.png -> Folder: loveandnest/assets/portfolio/family
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937568/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20111330.png
+Uploading: portfolio\family\Screenshot 2025-12-31 120803.png -> Folder: loveandnest/assets/portfolio/family
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937569/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20120803.png
+Uploading: portfolio\family\Screenshot 2025-12-31 120811.png -> Folder: loveandnest/assets/portfolio/family
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937570/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20120811.png
+Uploading: portfolio\family\Screenshot 2025-12-31 120820.png -> Folder: loveandnest/assets/portfolio/family
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937571/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20120820.png
+Uploading: portfolio\family\Screenshot 2025-12-31 120831.png -> Folder: loveandnest/assets/portfolio/family
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937572/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20120831.png
+Uploading: portfolio\family\Screenshot 2025-12-31 120844.png -> Folder: loveandnest/assets/portfolio/family
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937573/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20120844.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225737.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937574/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225737.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225745.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937575/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225745.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225753.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937576/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225753.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225801.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937577/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225801.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225807.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937578/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225807.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225812.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937579/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225812.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225901.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937581/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225901.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225916.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937582/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225916.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 225924.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937583/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225924.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 230059.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937584/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20230059.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 230114.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937585/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20230114.png
+Uploading: portfolio\maternity\Screenshot 2026-01-01 230124.png -> Folder: loveandnest/assets/portfolio/maternity
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937586/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20230124.png
+Uploading: services\Screenshot 2026-01-05 114143.png -> Folder: loveandnest/assets/services
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937587/loveandnest/assets/services/Screenshot%202026-01-05%20114143.png
+Uploading: services\Screenshot 2026-01-05 114155.png -> Folder: loveandnest/assets/services
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937588/loveandnest/assets/services/Screenshot%202026-01-05%20114155.png
+Uploading: services\Screenshot 2026-01-05 114207.png -> Folder: loveandnest/assets/services
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937589/loveandnest/assets/services/Screenshot%202026-01-05%20114207.png
+Uploading: services\Screenshot 2026-01-05 114223.png -> Folder: loveandnest/assets/services
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937590/loveandnest/assets/services/Screenshot%202026-01-05%20114223.png
+Uploading: services\Screenshot 2026-01-05 114238.png -> Folder: loveandnest/assets/services
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937590/loveandnest/assets/services/Screenshot%202026-01-05%20114238.png
+Uploading: services\Screenshot 2026-01-05 114251.png -> Folder: loveandnest/assets/services
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937592/loveandnest/assets/services/Screenshot%202026-01-05%20114251.png
+Uploading: services\Screenshot 2026-01-05 114307.png -> Folder: loveandnest/assets/services
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937593/loveandnest/assets/services/Screenshot%202026-01-05%20114307.png
+Uploading: testimonials\Screenshot 2025-12-31 114249.png -> Folder: loveandnest/assets/testimonials
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937594/loveandnest/assets/testimonials/Screenshot%202025-12-31%20114249.png
+Uploading: testimonials\Screenshot 2025-12-31 114257.png -> Folder: loveandnest/assets/testimonials
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937595/loveandnest/assets/testimonials/Screenshot%202025-12-31%20114257.png
+Uploading: testimonials\Screenshot 2025-12-31 114307.png -> Folder: loveandnest/assets/testimonials
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937596/loveandnest/assets/testimonials/Screenshot%202025-12-31%20114307.png
+Uploading: testimonials\Screenshot 2025-12-31 114317.png -> Folder: loveandnest/assets/testimonials
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937597/loveandnest/assets/testimonials/Screenshot%202025-12-31%20114317.png
+Uploading: testimonials\Screenshot 2025-12-31 114335.png -> Folder: loveandnest/assets/testimonials
+✅ Success: https://res.cloudinary.com/djuyp9lut/image/upload/v1767937598/loveandnest/assets/testimonials/Screenshot%202025-12-31%20114335.png
+Done! Mapping saved to image_mapping.json

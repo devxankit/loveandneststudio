@@ -18,14 +18,18 @@ const SpecimenTag = ({ text, className = "" }) => (
     </div>
 );
 
-// Images (Hero)
-import hero1 from '../../assets/images/hero/Screenshot 2025-12-30 141652.png';
-import hero2 from '../../assets/images/hero/Screenshot 2025-12-30 141700.png';
-import hero3 from '../../assets/images/hero/Screenshot 2025-12-30 141711.png';
-import hero4 from '../../assets/images/hero/Screenshot 2025-12-30 141721.png';
-import hero5 from '../../assets/images/hero/Screenshot 2025-12-30 141756.png';
-import hero6 from '../../assets/images/hero/Screenshot 2025-12-30 141833.png';
-import hero7 from '../../assets/images/hero/Screenshot 2025-12-30 141842.png';
+// Cloudinary Optimized Images
+const hero1 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937541/loveandnest/assets/hero/Screenshot%202025-12-30%20141652.png";
+const hero2 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937542/loveandnest/assets/hero/Screenshot%202025-12-30%20141700.png";
+const hero3 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937544/loveandnest/assets/hero/Screenshot%202025-12-30%20141711.png";
+const hero4 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937545/loveandnest/assets/hero/Screenshot%202025-12-30%20141721.png";
+const hero5 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937546/loveandnest/assets/hero/Screenshot%202025-12-30%20141756.png";
+const hero6 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937547/loveandnest/assets/hero/Screenshot%202025-12-30%20141833.png";
+const hero7 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937548/loveandnest/assets/hero/Screenshot%202025-12-30%20141842.png";
+// About & Portfolio Fallbacks
+const aboutImg = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937491/loveandnest/assets/about/01-1.png";
+const familyImg = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937567/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20111323.png";
+
 
 const HorizontalCollage = ({ images = [] }) => {
     // If no images passed (default handling upstream but safety check here)
@@ -91,9 +95,8 @@ const HorizontalCollage = ({ images = [] }) => {
     );
 };
 
-// Other Section Images
-import aboutImg from '../../assets/images/about/01-1.jpg';
-import familyImg from '../../assets/images/portfolio/family/Screenshot 2025-12-31 111323.png';
+// Other Section Images were defined above as constants
+
 
 const HomeSection = ({ children, className = "", index = 0, style = {}, isSticky = true, fullHeight = true }) => {
     return (

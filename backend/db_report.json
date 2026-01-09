@@ -1,0 +1,77 @@
+[
+  {
+    "name": "blogposts",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "globalsettings",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "admins",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "services",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "homepages",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "testimonials",
+    "status": "Active",
+    "count": 6
+  },
+  {
+    "name": "inquiries",
+    "status": "Active",
+    "count": 0
+  },
+  {
+    "name": "aboutpages",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "portfoliopages",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "babies",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "maternities",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "pagecontents",
+    "status": "Potential Duplicate",
+    "count": 5
+  },
+  {
+    "name": "newborns",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "families",
+    "status": "Active",
+    "count": 1
+  },
+  {
+    "name": "contactpages",
+    "status": "Active",
+    "count": 1
+  }
+]
