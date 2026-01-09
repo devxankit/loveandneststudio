@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-
 import api from '../../services/api';
 import defaultLogo from '../../assets/logo/Gemini_Generated_Image_adt2l4adt2l4adt2-removebg-preview.png';
 
-const Navbar = () => {
+const Navbar = React.memo(() => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isPortfolioHovered, setIsPortfolioHovered] = useState(false);
     const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
@@ -14,7 +14,10 @@ const Navbar = () => {
     const location = useLocation();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
-        setIsScrolled(latest > 50);
+        const scrolled = latest > 50;
+        if (scrolled !== isScrolled) {
+            setIsScrolled(scrolled);
+        }
     });
 
     useEffect(() => {
@@ -274,6 +277,6 @@ const Navbar = () => {
             </AnimatePresence>
         </>
     );
-};
+});
 
 export default Navbar;

@@ -101,7 +101,7 @@ const About = () => {
                 keywords="about anamika, photography studio founder, newborn photographer, refined photography, family heirlooms"
             />
             <div className="w-full">
-                <section className="bg-gradient-to-br from-[#D6A9B4] to-[#B7C1B8] text-white text-center py-10 px-8 relative overflow-hidden min-h-screen flex items-center justify-center">
+                <section className="bg-gradient-to-br from-[#D6A9B4] to-[#B7C1B8] text-white text-center py-10 px-8 relative overflow-hidden h-[45vh] min-h-[350px] flex items-center justify-center">
                     {/* Floating Animated Images */}
                     <div className="absolute inset-0 z-0 opacity-30 select-none pointer-events-none">
                         {displayHeroImages.map((img, index) => (
@@ -203,7 +203,8 @@ const About = () => {
                                             <LazyImage
                                                 src={category.image}
                                                 alt={category.name}
-                                                className="w-full aspect-[4/5] object-cover rounded-lg transition-transform duration-500 group-hover:scale-105"
+                                                aspectRatio="4/5"
+                                                className="w-full object-cover rounded-lg transition-transform duration-500 group-hover:scale-105"
                                             />
                                         </div>
                                     </div>

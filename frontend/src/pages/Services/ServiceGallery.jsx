@@ -93,7 +93,7 @@ const ServiceGallery = () => {
             animate="visible"
             exit="exit"
             variants={getContainerVariant()}
-            className="min-h-screen bg-[#FDFBF7] pt-20 md:pt-28 pb-10 md:pb-16 overflow-x-hidden"
+            className="min-h-screen bg-[#FDFBF7] pt-24 md:pt-32 pb-20 md:pb-24 overflow-x-hidden"
         >
             {/* Subtle Background */}
             <div className="fixed inset-0 pointer-events-none z-0">
@@ -101,40 +101,43 @@ const ServiceGallery = () => {
             </div>
 
             {/* Header Text */}
-            <div className="max-w-4xl mx-auto px-6 mb-12 md:mb-16 relative z-10 flex flex-col items-center text-center">
-                <motion.div variants={textVariant}>
-                    <Link to="/services" className="inline-flex items-center gap-2 text-[#6E5A52] hover:text-[#5A2A45] font-medium text-[9px] md:text-xs uppercase tracking-[0.2em] mb-4 md:mb-6 transition-colors border-b border-transparent hover:border-[#5A2A45] pb-1">
-                        <ArrowLeft size={10} className="md:w-3 md:h-3" /> Back to Services
+            <div className="max-w-4xl mx-auto px-5 md:px-8 mb-12 md:mb-20 relative z-10 flex flex-col items-center text-center">
+                <motion.div variants={textVariant} className="self-start md:self-center w-full md:w-auto flex justify-center md:block mb-8 md:mb-10">
+                    <Link to="/services" className="inline-flex items-center gap-2 text-[#6E5A52] hover:text-[#5A2A45] font-medium text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all border-b border-transparent hover:border-[#5A2A45] pb-1 hover:gap-3">
+                        <ArrowLeft size={12} className="md:w-3 md:h-3" /> Back to Services
                     </Link>
                 </motion.div>
 
-                <motion.h1 variants={textVariant} className="font-display text-4xl md:text-6xl text-[#5A2A45] mb-3 leading-tight">
+                <motion.h1 variants={textVariant} className="font-display text-3xl sm:text-4xl md:text-6xl text-[#5A2A45] mb-4 leading-tight px-2">
                     {title}
                 </motion.h1>
                 {subtitle && (
-                    <motion.p variants={textVariant} className="text-[#B77A8C] font-display italic text-lg md:text-2xl mb-6">
+                    <motion.p variants={textVariant} className="text-[#B77A8C] font-display italic text-lg md:text-2xl mb-8 max-w-2xl mx-auto">
                         {subtitle}
                     </motion.p>
                 )}
-                <motion.div variants={textVariant} className="w-16 h-0.5 bg-[#5A2A45]/20 rounded-full mb-6"></motion.div>
+                <motion.div variants={textVariant} className="w-12 md:w-20 h-0.5 bg-[#5A2A45]/20 rounded-full mb-8"></motion.div>
 
-                <motion.p variants={textVariant} className="max-w-2xl text-[#6E5A52] font-outfit font-light text-base md:text-lg leading-relaxed px-4 md:px-0">
+                <motion.p variants={textVariant} className="max-w-prose text-[#6E5A52] font-outfit font-light text-base md:text-lg leading-relaxed px-2 md:px-0">
                     {description}
                 </motion.p>
             </div>
 
             {/* Dynamic Gallery Grid */}
-            <div className="relative z-10 px-4 md:px-8 mb-16">
+            <div className="relative z-10 px-4 md:px-10 max-w-7xl mx-auto mb-16 md:mb-24">
                 <DynamicGalleryGrid images={displayImages} />
             </div>
 
             {/* Detailed Description */}
             {(details) && (
-                <motion.div variants={textVariant} className="max-w-3xl mx-auto px-6 mt-12 mb-12 text-center relative z-10 bg-white/50 backdrop-blur-sm p-8 rounded-2xl border border-[#5A2A45]/5 shadow-sm">
-                    <Sparkles size={24} className="text-[#B77A8C] mx-auto mb-4 opacity-50" />
-                    <p className="font-outfit text-[#5A2A45]/80 leading-loose text-sm md:text-base whitespace-pre-line">
-                        {details}
-                    </p>
+                <motion.div variants={textVariant} className="max-w-3xl mx-auto px-6 md:px-0 mt-8 mb-12 relative z-10">
+                    <div className="bg-white/60 backdrop-blur-xl p-8 md:p-12 rounded-[2rem] border border-[#5A2A45]/5 shadow-[0_10px_40px_-10px_rgba(90,42,69,0.05)] text-center">
+                        <Sparkles size={24} className="text-[#B77A8C] mx-auto mb-6 opacity-60" />
+                        <h3 className="font-display text-xl text-[#5A2A45] mb-4">Service Details</h3>
+                        <p className="font-outfit text-[#5A2A45]/80 leading-loose text-sm md:text-base whitespace-pre-line">
+                            {details}
+                        </p>
+                    </div>
                 </motion.div>
             )}
 

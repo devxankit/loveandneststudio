@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const LazyImage = ({
+const LazyImage = React.memo(({
     src,
     alt,
     className = '',
@@ -28,7 +28,13 @@ const LazyImage = ({
                         optimizedSrc = src.replace('/upload/', '/upload/f_auto,q_auto/');
                     }
 
-                    setImageSrc(optimizedSrc);
+                    // Preload image
+                    const img = new Image();
+                    img.src = optimizedSrc;
+                    img.onload = () => {
+                        setImageSrc(optimizedSrc);
+                    };
+
                     observer.disconnect();
                 }
             },
@@ -62,7 +68,7 @@ const LazyImage = ({
                 alt={alt}
                 onLoad={handleImageLoad}
                 className={`
-                    w-full h-full object-cover transition-all duration-1000 ease-[cubic-bezier(0.2, 0, 0.2, 1)]
+                    w-full h-full object-cover transition-all duration-700 ease-out
                     ${isLoaded ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-110 blur-xl'}
                 `}
                 loading="lazy"
@@ -75,6 +81,6 @@ const LazyImage = ({
             )}
         </div>
     );
-};
+});
 
 export default LazyImage;
