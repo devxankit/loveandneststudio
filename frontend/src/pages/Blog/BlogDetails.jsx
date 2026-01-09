@@ -20,9 +20,9 @@ const GrainOverlay = () => (
 
 const SectionFade = ({ children, delay = 0 }) => (
     <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.8, delay, ease: "easeOut" }}
     >
         {children}
@@ -105,40 +105,58 @@ const BlogDetails = () => {
                 style={{ scaleX }}
             />
 
-            {/* --- Editorial Header (Clean Magazine Style) --- */}
-            <header className="relative pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto text-center z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
+            {/* --- Editorial Header (Full Screen Horizontal Gradient) --- */}
+            <header className="relative min-h-screen flex flex-col justify-center items-center px-6 md:px-12 max-w-full text-center z-10 bg-gradient-to-r from-[#3e1c2f] via-[#5A2A45] to-[#3e1c2f] overflow-hidden">
+                {/* Subtle Texture Overlay */}
+
+
+                {/* Ambient Glows */}
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#B77A8C] rounded-full mix-blend-overlay filter blur-[128px] opacity-20 animate-pulse"></div>
+                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#E8CBB6] rounded-full mix-blend-overlay filter blur-[128px] opacity-10"></div>
+
+                <div className="relative z-10 max-w-[1400px] mx-auto py-20">
                     {/* Meta Info */}
-                    <div className="flex items-center justify-center gap-4 text-[#B77A8C] font-outfit text-xs uppercase tracking-[0.2em] font-bold mb-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                        className="flex items-center justify-center gap-4 text-[#E8CBB6] font-outfit text-sm uppercase tracking-[0.25em] font-bold mb-10"
+                    >
                         <span>{new Date(post.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                        <span className="w-1 h-1 rounded-full bg-[#E8CBB6]"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-white/40"></span>
                         <span>{readTime}</span>
                         {/* Categories */}
                         {post.tags && post.tags.length > 0 && (
                             <>
-                                <span className="w-1 h-1 rounded-full bg-[#E8CBB6]"></span>
-                                <span>{post.tags[0]}</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+                                <span className="text-white/80">{post.tags[0]}</span>
                             </>
                         )}
-                    </div>
+                    </motion.div>
 
                     {/* Title */}
-                    <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-[#5A2A45] leading-[1.1] mb-8 max-w-5xl mx-auto">
+                    <motion.h1
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
+                        className="font-display text-5xl md:text-7xl lg:text-8xl text-[#FDFBF7] leading-[1.05] mb-12 max-w-6xl mx-auto drop-shadow-lg"
+                    >
                         {post.title}
-                    </h1>
+                    </motion.h1>
 
                     {/* Author & Divider */}
-                    <div className="flex flex-col items-center gap-6">
-                        <div className="w-16 h-[1px] bg-[#E8CBB6]"></div>
-                        <p className="font-outfit text-[#8F8A86] text-xs uppercase tracking-widest">
-                            Words by <span className="text-[#5A2A45] font-bold">Anamika</span>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                        className="flex flex-col items-center gap-8"
+                    >
+                        <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#E8CBB6]/60 to-transparent"></div>
+                        <p className="font-outfit text-white/70 text-sm uppercase tracking-widest">
+                            Words by <span className="text-[#E8CBB6] font-bold mx-2">Anamika</span>
                         </p>
-                    </div>
-                </motion.div>
+                    </motion.div>
+                </div>
             </header>
 
 
@@ -341,30 +359,30 @@ const BlogDetails = () => {
                                 }} />
                             </div>
                         </SectionFade>
-
-                        <div className="w-full h-[1px] bg-[#E8CBB6]/30 my-8"></div>
-
-                        {/* Call to Action - Static Style */}
-                        <SectionFade>
-                            <div className="bg-[#5A2A45] text-white p-12 md:p-16 text-center rounded-sm shadow-2xl relative overflow-hidden">
-                                <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-                                <div className="relative z-10">
-                                    <h3 className="font-display text-3xl md:text-5xl mb-6">Preserve your story.</h3>
-                                    <p className="font-outfit text-white/80 text-lg leading-relaxed max-w-2xl mx-auto mb-10">
-                                        Every chapter of your life deserves to be remembered with grace and beauty. Let us help you tell your story.
-                                    </p>
-                                    <Link to="/contact">
-                                        <button className="px-10 py-5 bg-white text-[#5A2A45] font-outfit uppercase tracking-widest text-sm hover:bg-[#E8CBB6] transition-colors rounded-full shadow-lg">
-                                            Start a Conversation
-                                        </button>
-                                    </Link>
-                                </div>
-                            </div>
-                        </SectionFade>
-
-
                     </div>
+                </div>
 
+                {/* Call to Action - Full Width Breakout */}
+                <div className="w-full">
+                    <SectionFade>
+                        <div className="w-screen relative left-[calc(-50vw+50%)] bg-gradient-to-r from-[#3e1c2f] via-[#5A2A45] to-[#3e1c2f] text-white py-24 px-6 md:px-12 text-center shadow-2xl overflow-hidden mt-12">
+                            <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+                            {/* Subtle Texture Overlay for Consistency */}
+
+
+                            <div className="relative z-10 max-w-4xl mx-auto">
+                                <h3 className="font-display text-4xl md:text-6xl mb-8 drop-shadow-md">Preserve your story.</h3>
+                                <p className="font-outfit text-white/90 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-12 font-light tracking-wide">
+                                    Every chapter of your life deserves to be remembered with grace and beauty. Let us help you tell your story.
+                                </p>
+                                <Link to="/contact">
+                                    <button className="px-12 py-5 bg-white text-[#5A2A45] font-outfit uppercase tracking-[0.2em] text-xs font-bold hover:bg-[#E8CBB6] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1">
+                                        Start a Conversation
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
+                    </SectionFade>
                 </div>
             </article>
         </>
