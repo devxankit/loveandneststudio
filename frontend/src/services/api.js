@@ -1,8 +1,16 @@
 import axios from 'axios';
 
 // Create Axios Instance
+const baseURL = import.meta.env.VITE_API_URL;
+
+if (!baseURL) {
+    console.error('⚠️ VITE_API_URL is not defined! API calls may fail. Please check your .env or deployment configuration.');
+} else {
+    console.log('API Base URL:', baseURL);
+}
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: baseURL,
 });
 
 // Request Interceptor (if we add Auth later)
