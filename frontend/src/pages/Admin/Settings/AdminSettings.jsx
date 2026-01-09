@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Save, User, Lock, Globe, Mail, Shield, Smartphone, AlertCircle, CheckCircle2 } from 'lucide-react';
-import axios from 'axios';
+import api from '../../../services/api';
 
 const SettingsSection = ({ title, icon: Icon, children }) => (
     <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm border border-[#5A2A45]/5 mb-6">
@@ -53,15 +53,12 @@ const AdminSettings = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [status, setStatus] = useState({ type: '', message: '' });
 
-    const API_URL_AUTH = 'http://localhost:5000/api/auth';
-    const API_URL_SETTINGS = 'http://localhost:5000/api/settings';
-
     // Fetch Initial Data
     useEffect(() => {
         const fetchAllData = async () => {
             try {
                 // Fetch Global Settings
-                const settingsRes = await axios.get(API_URL_SETTINGS);
+                const settingsRes = await api.get('/settings');
 
                 // Merge fetched settings into state
                 setFormData(prev => ({
@@ -76,8 +73,7 @@ const AdminSettings = () => {
                 // if the specific GET /profile endpoint isn't strictly standard. 
                 // However, if your authController has a 'getMe' or 'profile' GET endpoint, un-comment below:
                 /*
-                const token = localStorage.getItem('adminToken');
-                const authRes = await axios.get(`${API_URL_AUTH}/profile`, { headers: { Authorization: `Bearer ${token}` } });
+                const authRes = await api.get('/auth/profile');
                 setFormData(prev => ({ ...prev, email: authRes.data.email }));
                 */
 
@@ -106,9 +102,6 @@ const AdminSettings = () => {
         setStatus({ type: '', message: '' });
 
         try {
-            const token = localStorage.getItem('adminToken');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-
             // 1. Update Global Settings (Owner Info & Site Info)
             const settingsData = {
                 ownerName: formData.ownerName,
@@ -116,14 +109,14 @@ const AdminSettings = () => {
                 siteTitle: formData.siteTitle,
                 seoDescription: formData.seoDescription
             };
-            await axios.put(API_URL_SETTINGS, settingsData);
+            await api.put('/settings', settingsData);
 
             // 2. Update Admin Auth (Email & Password)
             const authData = { email: formData.email };
             if (formData.newPassword) {
                 authData.password = formData.newPassword;
             }
-            const authRes = await axios.put(`${API_URL_AUTH}/profile`, authData, config);
+            const authRes = await api.put('/auth/profile', authData);
 
             // Update local storage if email/token changed
             if (authRes.data.token) {

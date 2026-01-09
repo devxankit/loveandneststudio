@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Save, Command, Trash2 } from 'lucide-react';
-import axios from 'axios';
+import api from '../../../services/api';
 
 const BrandingPage = () => {
     const [settings, setSettings] = useState({
@@ -18,7 +18,7 @@ const BrandingPage = () => {
 
     const fetchSettings = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/settings');
+            const res = await api.get('/settings');
             setSettings(res.data);
             setIsLoading(false);
         } catch (error) {
@@ -37,7 +37,7 @@ const BrandingPage = () => {
         setUploading({ ...uploading, [type]: true });
 
         try {
-            const res = await axios.post('http://localhost:5000/api/upload', formData, {
+            const res = await api.post('/upload', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setSettings(prev => ({ ...prev, [type]: res.data.url }));
@@ -52,7 +52,7 @@ const BrandingPage = () => {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            await axios.put('http://localhost:5000/api/settings', settings);
+            await api.put('/settings', settings);
             alert('Settings saved successfully!');
         } catch (error) {
             console.error('Error saving settings:', error);

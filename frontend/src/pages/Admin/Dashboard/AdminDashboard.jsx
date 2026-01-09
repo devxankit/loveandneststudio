@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Image, FileText, Users, ShoppingBag, Clock, ArrowRight, TrendingUp, MessageSquare } from 'lucide-react';
-import axios from 'axios';
+import api from '../../../services/api';
 import { Link } from 'react-router-dom';
 
 const DashboardCard = ({ title, value, subtitle, icon: Icon, bgClass, textClass, delay }) => (
@@ -41,10 +41,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const token = localStorage.getItem('adminToken');
-                const res = await axios.get('http://localhost:5000/api/dashboard', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const res = await api.get('/dashboard');
                 setData(res.data);
             } catch (error) {
                 console.error("Error fetching dashboard data:", error);
