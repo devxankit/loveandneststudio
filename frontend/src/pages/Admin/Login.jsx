@@ -42,7 +42,7 @@ const AdminLogin = () => {
         setError('');
         try {
             const { data } = await api.post('/auth/login', credentials);
-            localStorage.setItem('adminToken', data.token);
+            localStorage.setItem('token', data.token);
             localStorage.setItem('adminEmail', data.email);
             localStorage.setItem('isAdmin', 'true');
             navigate('/admin/dashboard');

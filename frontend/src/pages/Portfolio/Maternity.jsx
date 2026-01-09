@@ -8,18 +8,20 @@ import { Link } from 'react-router-dom';
 import { getMaternityPage } from '../../services/api';
 
 // Fallback images
-import img1 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225737.png';
-import img2 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225745.png';
-import img3 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225753.png';
-import img4 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225801.png';
-import img5 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225807.png';
-import img6 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225812.png';
-import img7 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225901.png';
-import img8 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225916.png';
-import img9 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 225924.png';
-import img10 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 230059.png';
-import img11 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 230114.png';
-import img12 from '../../assets/images/portfolio/maternity/Screenshot 2026-01-01 230124.png';
+// Fallback images
+const img1 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937574/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225737.png";
+const img2 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937575/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225745.png";
+const img3 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937576/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225753.png";
+const img4 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937577/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225801.png";
+const img5 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937578/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225807.png";
+const img6 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937579/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225812.png";
+const img7 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937581/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225901.png";
+const img8 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937582/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225916.png";
+const img9 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937583/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225924.png";
+const img10 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937584/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%230059.png";
+const img11 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937585/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%230114.png";
+const img12 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937586/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%230124.png";
+
 
 const Maternity = () => {
     const [pageData, setPageData] = useState(null);

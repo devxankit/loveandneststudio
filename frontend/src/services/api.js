@@ -7,8 +7,8 @@ const api = axios.create({
 
 // Request Interceptor (if we add Auth later)
 api.interceptors.request.use(config => {
-    // const token = localStorage.getItem('adminToken');
-    // if(token) config.headers.Authorization = `Bearer ${token}`;
+    const token = localStorage.getItem('token'); // changed 'adminToken' to 'token' to be safe, standard practice usually uses 'token'
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
 }, error => Promise.reject(error));
 

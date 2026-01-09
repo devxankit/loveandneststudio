@@ -56,13 +56,13 @@ const AdminDashboard = () => {
     if (loading) return <div className="min-h-screen flex items-center justify-center text-[#5A2A45]">Loading Dashboard...</div>;
     if (!data) return <div className="min-h-screen flex items-center justify-center text-red-500">Error loading data.</div>;
 
-    const { stats, recentInquiries, ownerName } = data;
+    const { stats, ownerName } = data;
 
     const dashboardStats = [
-        { title: 'Portfolio Assets', value: stats.portfolio, subtitle: 'Images', icon: Image, bgClass: 'bg-indigo-500', textClass: 'text-indigo-600' },
-        { title: 'Journal Posts', value: stats.blogs, subtitle: 'Published', icon: FileText, bgClass: 'bg-rose-500', textClass: 'text-rose-600' },
-        { title: 'Total Inquiries', value: stats.inquiries, subtitle: 'Messages', icon: MessageSquare, bgClass: 'bg-emerald-500', textClass: 'text-emerald-600' },
-        { title: 'Services Listed', value: stats.services, subtitle: 'Active Offerings', icon: ShoppingBag, bgClass: 'bg-amber-500', textClass: 'text-amber-600' },
+        { title: 'Portfolio Assets', value: stats.portfolio, subtitle: 'Images', icon: Image, bgClass: 'bg-[#5A2A45]', textClass: 'text-[#B77A8C]' },
+        { title: 'Journal Posts', value: stats.blogs, subtitle: 'Published', icon: FileText, bgClass: 'bg-[#B77A8C]', textClass: 'text-[#5A2A45]' },
+        { title: 'Total Inquiries', value: stats.inquiries, subtitle: 'Messages', icon: MessageSquare, bgClass: 'bg-[#6E5A52]', textClass: 'text-[#F1EBDD]' },
+        { title: 'Services Listed', value: stats.services, subtitle: 'Active Offerings', icon: ShoppingBag, bgClass: 'bg-[#E6D1CB]', textClass: 'text-[#5A2A45]' },
     ];
 
     return (
@@ -92,87 +92,32 @@ const AdminDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Recent Inquiries List (Previously Upcoming Sessions) */}
+
+                {/* Admin Tip Card - Now taking more space or just being central */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="lg:col-span-2 bg-white rounded-[2rem] shadow-sm border border-[#5A2A45]/5 overflow-hidden flex flex-col"
+                    className="lg:col-span-3 bg-[#5A2A45] text-[#F1EBDD] rounded-[2rem] shadow-xl overflow-hidden relative p-8 md:p-12 min-h-[300px] flex flex-col md:flex-row items-center justify-between group"
                 >
-                    <div className="p-8 border-b border-[#5A2A45]/5 flex justify-between items-center bg-[#FAFAF9]">
-                        <div>
-                            <h3 className="font-display text-2xl text-[#5A2A45]">Recent Inquiries</h3>
-                            <p className="text-xs text-[#6E5A52]/60 uppercase tracking-widest mt-1">Latest messages from clients</p>
-                        </div>
-                        <Link to="/admin/inquiries" className="text-xs font-bold uppercase tracking-widest text-[#B77A8C] hover:text-[#5A2A45] border border-[#B77A8C]/20 px-4 py-2 rounded-full hover:bg-[#B77A8C]/10 transition-colors">
-                            View All
-                        </Link>
+                    <div className="absolute top-[-100px] right-[-100px] w-96 h-96 bg-[#B77A8C] rounded-full blur-[120px] opacity-30 group-hover:opacity-40 transition-opacity" />
+
+                    <div className="relative z-10 max-w-2xl">
+                        <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold uppercase tracking-widest mb-6 border border-white/20">
+                            Admin Insight
+                        </span>
+                        <h3 className="font-display text-4xl md:text-5xl mb-6 leading-tight">Keep Portfolio <br /><span className="italic text-[#B77A8C]">Fresh & Updated</span></h3>
+                        <p className="text-[#F1EBDD]/70 text-base md:text-lg leading-relaxed max-w-xl">
+                            Regularly updating your portfolio with your latest work helps improve SEO and client trust. Recent studies show fresh content increases engagement by 40%.
+                        </p>
                     </div>
 
-                    <div className="p-6 flex-1">
-                        <div className="space-y-4">
-                            {recentInquiries && recentInquiries.length > 0 ? (
-                                recentInquiries.map((inquiry, i) => (
-                                    <motion.div
-                                        key={inquiry._id}
-                                        whileHover={{ scale: 1.01 }}
-                                        className="flex items-center justify-between p-5 bg-[#F9F7F2] rounded-2xl hover:bg-[#F1EBDD] transition-colors cursor-pointer group"
-                                    >
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[#5A2A45] font-display font-medium text-xl shadow-sm group-hover:scale-110 transition-transform uppercase">
-                                                {inquiry.name.charAt(0)}
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-[#5A2A45] text-lg">{inquiry.name}</h4>
-                                                <p className="text-xs text-[#6E5A52] uppercase tracking-wide font-medium">{inquiry.serviceType || 'General Inquiry'}</p>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <div className="flex items-center justify-end gap-2 text-sm text-[#5A2A45] font-medium mb-1">
-                                                <Clock size={14} className="text-[#B77A8C]" />
-                                                <span>{new Date(inquiry.createdAt).toLocaleDateString()}</span>
-                                            </div>
-                                            <p className="text-xs text-[#6E5A52]/60 truncate max-w-[150px]">{inquiry.email}</p>
-                                        </div>
-                                    </motion.div>
-                                ))
-                            ) : (
-                                <div className="text-center py-10 text-gray-400">No inquiries found.</div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="p-4 bg-[#FAFAF9] text-center border-t border-[#5A2A45]/5">
-                        <Link to="/admin/inquiries" className="text-xs font-bold uppercase tracking-[0.2em] text-[#5A2A45]/40 hover:text-[#5A2A45] transition-colors flex items-center justify-center gap-2 mx-auto">
-                            View All Messages <ArrowRight size={12} />
+                    <div className="relative z-10 mt-10 md:mt-0 flex-shrink-0">
+                        <Link to="/admin/portfolio" className="inline-flex items-center gap-3 px-8 py-4 bg-[#F1EBDD] text-[#5A2A45] rounded-xl font-bold uppercase tracking-widest hover:bg-white transition-all transform hover:scale-105 shadow-lg group/btn">
+                            Manage Portfolio <ArrowRight size={20} className="group-hover/btn:translate-x-1 transition-transform" />
                         </Link>
                     </div>
                 </motion.div>
-
-                {/* Quick Action / Highlight Card */}
-                <div className="space-y-6">
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="bg-[#5A2A45] text-[#F1EBDD] rounded-[2rem] shadow-xl overflow-hidden relative p-8 min-h-[300px] flex flex-col justify-between group"
-                    >
-                        <div className="absolute top-[-50px] right-[-50px] w-48 h-48 bg-[#B77A8C] rounded-full blur-[80px] opacity-30 group-hover:opacity-40 transition-opacity" />
-
-                        <div className="relative z-10">
-                            <span className="inline-block px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest mb-4">
-                                Admin Tip
-                            </span>
-                            <h3 className="font-display text-3xl mb-4 leading-tight">Keep Portfolio <br /><span className="italic text-[#B77A8C]">Fresh & Updated</span></h3>
-                            <p className="text-[#F1EBDD]/60 text-sm leading-relaxed">
-                                Regularly updating your portfolio with your latest work helps improve SEO and client trust.
-                            </p>
-                        </div>
-
-                        <Link to="/admin/portfolio" className="relative z-10 w-full py-4 bg-[#F1EBDD] text-[#5A2A45] rounded-xl font-bold uppercase tracking-widest mt-8 hover:bg-white transition-colors flex items-center justify-center gap-2 group/btn">
-                            Manage Portfolio <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                        </Link>
-                    </motion.div>
-                </div>
             </div>
         </div>
     );

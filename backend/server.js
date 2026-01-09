@@ -48,7 +48,7 @@ app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/services', servicesRoutes);
 app.use('/api/settings', globalSettingsRoutes);
 app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/pages', require('./routes/pageRoutes'));
+app.use('/api/dashboard', require('./routes/dashboardRoutes')); // Added Dashboard Route
 app.use('/api/newborn', require('./routes/newbornRoutes'));
 app.use('/api/maternity', require('./routes/maternityRoutes'));
 app.use('/api/baby', require('./routes/babyRoutes'));
@@ -58,7 +58,8 @@ app.use('/api/home-page', require('./routes/homePageRoutes'));
 app.use('/api/about-page', require('./routes/aboutPageRoutes'));
 app.use('/api/contact-page', require('./routes/contactPageRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
-app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+
+
 app.use('/sitemap.xml', require('./routes/sitemapRoutes'));
 app.use('/api/sitemap', require('./routes/sitemapRoutes'));
 

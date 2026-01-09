@@ -103,7 +103,7 @@ const AdminLayout = () => {
     // Auth Check
     useEffect(() => {
         const isAdmin = localStorage.getItem('isAdmin');
-        const token = localStorage.getItem('adminToken');
+        const token = localStorage.getItem('token');
         if (!isAdmin || !token) {
             navigate('/admin/login');
         }
@@ -153,7 +153,7 @@ const AdminLayout = () => {
     const handleLogout = () => {
         if (confirm("Are you sure you want to log out?")) {
             localStorage.removeItem('isAdmin');
-            localStorage.removeItem('adminToken');
+            localStorage.removeItem('token');
             localStorage.removeItem('adminEmail');
             navigate('/admin/login');
         }
