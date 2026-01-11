@@ -80,6 +80,8 @@ app.use('/api/home-page', require('./routes/homePageRoutes'));
 app.use('/api/about-page', require('./routes/aboutPageRoutes'));
 app.use('/api/contact-page', require('./routes/contactPageRoutes'));
 app.use('/api/hospital', require('./routes/hospitalRoutes'));
+app.use('/api/cakesmash', require('./routes/cakeSmashRoutes'));
+app.use('/api/toddler', require('./routes/toddlerRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 
 

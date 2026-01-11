@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Plus, Trash2, Layout, Save, X, ImageIcon, Type, Sparkles } from 'lucide-react';
-import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage, getFamilyPage, updateFamilyPage } from '../../../services/api';
+import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage, getFamilyPage, updateFamilyPage, getCakeSmashPage, updateCakeSmashPage, getHospitalPage, updateHospitalPage, getHospitalSession, updateHospitalSession, getToddlerPage, updateToddlerPage } from '../../../services/api';
 
 // Fallback images from assets for Family
 import familyHeroDefault from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 111323.png';
@@ -52,6 +52,9 @@ const ManageCategory = () => {
     const isMaternity = category === 'maternity';
     const isBaby = category === 'baby';
     const isFamily = category === 'family';
+    const isCakeSmash = category === 'cakesmash';
+    const isHospital = category === 'hospital';
+    const isToddler = category === 'toddler';
 
     useEffect(() => {
         fetchData();
@@ -60,7 +63,14 @@ const ManageCategory = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            if (isNewborn) {
+            if (isToddler) {
+                const { data } = await getToddlerPage();
+                setPageData({
+                    hero: data.hero || { title: 'Toddler', subtitle: 'Photography & Videography', tagline: 'From Planning to Execution', images: [] },
+                    gallery: data.gallery || [],
+                    themeColor: data.themeColor || '#5A2A45'
+                });
+            } else if (isNewborn) {
                 const { data } = await getNewbornPage();
                 setPageData({
                     hero: data.hero || { title: `Sweet ${title}`, subtitle: 'Helping Your Littles Shine', image: '' },
@@ -83,6 +93,7 @@ const ManageCategory = () => {
                 setPageData({
                     hero: data.hero || { title: 'Coming Soon', subtitle: 'Something Beautiful', text: '...', images: [] },
                     welcome: data.welcome || { handwriting: 'welcome!', title: "Let's break the ice", text: '...', image: '', buttonText: 'My Full Adventure' },
+                    adventureModal: data.adventureModal || { topImage: '', content: '', sideImage: '' },
                     puzzleImages: data.puzzleImages || [],
                     gallery: [] // Ensure gallery exists to avoid length errors
                 });
@@ -97,6 +108,34 @@ const ManageCategory = () => {
                     selectedWorks: data.selectedWorks || [],
                     mosaic: data.mosaic || { image1: '', title: 'Ready to tell your story?', image2: '' },
                     archGrid: data.archGrid || { images: ['', '', '', '', ''], lineArtImage: '', title: 'Ready to frame your memories?' },
+                    gallery: []
+                });
+                if (activeTab === 'gallery') setActiveTab('hero');
+            } else if (isHospital) {
+                const { data } = await getHospitalPage();
+                // We also fetch all sessions to show them in a tab
+                const sessions = await Promise.all(['birth', 'newborn', 'family'].map(async (type) => {
+                    const res = await getHospitalSession(type);
+                    return res.data;
+                }));
+
+                setPageData({
+                    hero: data.hero || { title: 'Hospital Sessions', description: '...', image: '', buttonText: 'Read More' },
+                    categoriesSection: data.categoriesSection || { title: 'Current Obsessions' },
+                    categories: data.categories || [],
+                    sessions: sessions, // Array of session data
+                    gallery: []
+                });
+                if (activeTab === 'gallery') setActiveTab('hero');
+            } else if (isCakeSmash) {
+                const { data } = await getCakeSmashPage();
+                setPageData(data || {
+                    hero: { title: 'Cake Smash & Birthday', subtitle: 'Celebrating Milestones', backgroundImage: '' },
+                    celebrationText: { title: 'A Sweet Celebration', description: '' },
+                    giftGrid: { title: 'A Sweet Celebration', tagline: 'Pure Childhood Joy', images: ['', '', '', ''] },
+                    hangingGrid: { title: 'Capturing Every Giggle', tagline: 'The Gallery', images: ['', '', ''] },
+                    experience: [],
+                    cta: { title: "Let's Plan the Party!", buttonText: "Book A Session", buttonLink: "/contact" },
                     gallery: []
                 });
                 if (activeTab === 'gallery') setActiveTab('hero');
@@ -207,6 +246,10 @@ const ManageCategory = () => {
                 await updateBabyPage(newData);
             } else if (isFamily) {
                 await updateFamilyPage(newData);
+            } else if (isCakeSmash) {
+                await updateCakeSmashPage(newData);
+            } else if (isToddler) {
+                await updateToddlerPage(newData);
             } else {
                 const sectionsToUpdate = [];
                 if (newData.hero) sectionsToUpdate.push({ id: 'hero', content: newData.hero });
@@ -257,21 +300,20 @@ const ManageCategory = () => {
             {/* Tabs */}
             <div className="flex flex-wrap gap-2 md:gap-4 mb-8 border-b border-[#E6D1CB]">
                 {[
-                    ...(!isBaby && !isFamily ? [{ id: 'gallery', label: 'Gallery', icon: ImageIcon }] : []),
-                    ...(!isFamily ? [{ id: 'hero', label: 'Hero', icon: Layout }] : []),
-                    ...(!isMaternity && !isBaby && !isFamily ? [{ id: 'welcome', label: 'Welcome', icon: Sparkles }] : []),
                     ...(isMaternity ? [
+                        { id: 'hero', label: 'Hero', icon: Layout },
                         { id: 'editorial', label: 'Editorial', icon: Type },
                         { id: 'silhouette', label: 'Silhouette', icon: ImageIcon },
                         { id: 'journey', label: 'Journey', icon: Sparkles },
                         { id: 'poses', label: 'Poses Grid', icon: Layout },
+                        { id: 'gallery', label: 'Gallery', icon: ImageIcon },
                         { id: 'cta', label: 'CTA', icon: Save }
-                    ] : []),
-                    ...(isBaby ? [
+                    ] : isBaby ? [
+                        { id: 'hero', label: 'Hero', icon: Layout },
                         { id: 'welcome', label: 'Welcome', icon: Sparkles },
+                        { id: 'adventure', label: 'Adventure Modal', icon: Type },
                         { id: 'puzzle', label: 'Puzzle Grid', icon: Layout }
-                    ] : []),
-                    ...(isFamily ? [
+                    ] : isFamily ? [
                         { id: 'hero', label: 'Hero', icon: Layout },
                         { id: 'philosophy', label: 'Philosophy', icon: Sparkles },
                         { id: 'banner', label: 'Banner', icon: ImageIcon },
@@ -279,7 +321,24 @@ const ManageCategory = () => {
                         { id: 'mosaic', label: 'Mosaic', icon: Layout },
                         { id: 'arch', label: 'Arch Grid', icon: Plus },
                         { id: 'collage', label: 'Holiday Collage', icon: ImageIcon }
-                    ] : [])
+                    ] : isHospital ? [
+                        { id: 'hero', label: 'Hero', icon: Type },
+                        { id: 'categories', label: 'Categories', icon: Layout },
+                        { id: 'sessions', label: 'Sessions', icon: ImageIcon }
+                    ] : isCakeSmash ? [
+                        { id: 'hero', label: 'Hero', icon: Layout },
+                        { id: 'intro', label: 'Intro Text', icon: Type },
+                        { id: 'giftGrid', label: 'Gift Grid', icon: Layout },
+                        { id: 'hanging', label: 'Hanging Grid', icon: ImageIcon },
+                        { id: 'cta', label: 'CTA', icon: Save }
+                    ] : isToddler ? [
+                        { id: 'hero', label: 'Arched Hero', icon: Layout },
+                        { id: 'gallery', label: 'Art Grid', icon: ImageIcon }
+                    ] : [ // Newborn or Default
+                        { id: 'hero', label: 'Hero', icon: Layout },
+                        { id: 'welcome', label: 'Welcome', icon: Sparkles },
+                        { id: 'gallery', label: 'Gallery', icon: ImageIcon }
+                    ])
                 ].map((tab) => (
                     <button
                         key={tab.id}
@@ -293,11 +352,11 @@ const ManageCategory = () => {
 
             <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-[#5A2A45]/5 min-h-[500px]">
 
-                {/* 1. GALLERY TAB */}
-                {activeTab === 'gallery' && (
+                {/* 1. GALLERY TAB (Restricted to categories that use the simple gallery) */}
+                {activeTab === 'gallery' && !isBaby && !isFamily && !isHospital && !isCakeSmash && (
                     <div className="space-y-6">
                         <div className="flex items-center justify-between">
-                            <h2 className="font-display text-2xl text-[#5A2A45]">Gallery Images</h2>
+                            <h2 className="font-display text-2xl text-[#5A2A45]">{isToddler ? 'Art Grid Archive' : 'Gallery Images'}</h2>
                             <span className="text-xs bg-[#F9F7F2] px-3 py-1 rounded-full text-[#6E5A52] font-bold">{pageData.gallery?.length || 0} items</span>
                         </div>
 
@@ -336,99 +395,202 @@ const ManageCategory = () => {
                     </div>
                 )}
 
-                {activeTab === 'hero' && !isFamily && (
+                {/* GENERIC HERO TAB (Excluding categories with dedicated Hero blocks) */}
+                {activeTab === 'hero' && !isFamily && !isHospital && !isBaby && !isCakeSmash && !isToddler && (
                     <div className="max-w-4xl space-y-8">
-                        {!isBaby && !isFamily ? (
-                            <form onSubmit={handleHeroSave} className="grid md:grid-cols-2 gap-8">
-                                <div>
-                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Hero Background Image</label>
-                                    <div className="relative aspect-[3/4] bg-[#F9F7F2] rounded-2xl overflow-hidden border-2 border-dashed border-[#5A2A45]/20 group hover:border-[#5A2A45]/40 transition-colors">
-                                        <img src={pageData.hero.image || (isMaternity ? mImg1 : isNewborn ? newbornHeroDefault : null)} className="w-full h-full object-cover" />
-                                        <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold uppercase tracking-widest text-xs">
-                                            Change Image
-                                            <input type="file" name="newImage" className="hidden" accept="image/*" />
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="space-y-6">
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Title</label>
-                                        <input name="title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-display text-2xl text-[#5A2A45] outline-none" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
-                                        <input name="subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-outfit text-[#6E5A52] outline-none" />
-                                    </div>
-                                    <div className="pt-4">
-                                        <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl active:scale-[0.98]">
-                                            {saving ? 'Saving...' : 'SAVE CHANGES'}
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        ) : (
-                            <div className="space-y-8">
-                                {/* Baby Hero - Background Images */}
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Background Scrolling Images</label>
-                                        <label className="bg-[#5A2A45] text-white px-3 py-1 rounded-full text-[10px] uppercase font-bold cursor-pointer hover:bg-[#4a2238]">
-                                            Add Background Image
-                                            <input type="file" className="hidden" onChange={async (e) => {
-                                                const url = await handleUploadImage(e.target.files[0]);
-                                                if (url) updateAll({ ...pageData, hero: { ...pageData.hero, images: [...pageData.hero.images, url] } });
-                                            }} />
-                                        </label>
-                                    </div>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        {(pageData.hero.images.length > 0 ? pageData.hero.images : [babyHero1, babyHero2, babyHero3]).map((img, i) => (
-                                            <div key={i} className="aspect-square relative group rounded-xl overflow-hidden shadow-sm">
-                                                <img src={img} className="w-full h-full object-cover" />
-                                                <button onClick={() => updateAll({ ...pageData, hero: { ...pageData.hero, images: pageData.hero.images.filter((_, idx) => idx !== i) } })} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <Trash2 size={12} />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Baby Hero - Text Content */}
-                                <div className="grid md:grid-cols-2 gap-8">
-                                    <div className="space-y-4">
-                                        <div>
-                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Coming Soon Title</label>
-                                            <input id="h-title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
-                                            <input id="h-subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <div>
-                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description Text</label>
-                                            <textarea id="h-text" defaultValue={pageData.hero.text} rows={4} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none resize-none" />
-                                        </div>
-                                        <button onClick={() => updateAll({
-                                            ...pageData,
-                                            hero: {
-                                                ...pageData.hero,
-                                                title: document.getElementById('h-title').value,
-                                                subtitle: document.getElementById('h-subtitle').value,
-                                                text: document.getElementById('h-text').value
-                                            }
-                                        })} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase text-xs shadow-lg">
-                                            {saving ? 'Saving...' : 'SAVE HERO TEXT'}
-                                        </button>
-                                    </div>
+                        <form onSubmit={handleHeroSave} className="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Hero Background Image</label>
+                                <div className="relative aspect-[3/4] bg-[#F9F7F2] rounded-2xl overflow-hidden border-2 border-dashed border-[#5A2A45]/20 group hover:border-[#5A2A45]/40 transition-colors">
+                                    <img src={pageData.hero.image || (isMaternity ? mImg1 : isNewborn ? newbornHeroDefault : null)} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold uppercase tracking-widest text-xs">
+                                        Change Image
+                                        <input type="file" name="newImage" className="hidden" accept="image/*" />
+                                    </label>
                                 </div>
                             </div>
-                        )}
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Title</label>
+                                    <input name="title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-display text-2xl text-[#5A2A45] outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
+                                    <input name="subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl font-outfit text-[#6E5A52] outline-none" />
+                                </div>
+                                <div className="pt-4">
+                                    <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl active:scale-[0.98]">
+                                        {saving ? 'Saving...' : 'SAVE CHANGES'}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 )}
 
-                {/* 3. WELCOME TAB (Non-Maternity, Non-Baby) */}
-                {activeTab === 'welcome' && !isMaternity && !isBaby && (
+                {/* BABY HERO TAB */}
+                {activeTab === 'hero' && isBaby && (
+                    <div className="max-w-4xl space-y-8">
+                        <div className="space-y-8">
+                            {/* Baby Hero - Background Images */}
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Background Scrolling Images</label>
+                                    <label className="bg-[#5A2A45] text-white px-3 py-1 rounded-full text-[10px] uppercase font-bold cursor-pointer hover:bg-[#4a2238]">
+                                        Add Background Image
+                                        <input type="file" className="hidden" onChange={async (e) => {
+                                            const url = await handleUploadImage(e.target.files[0]);
+                                            if (url) updateAll({ ...pageData, hero: { ...pageData.hero, images: [...pageData.hero.images, url] } });
+                                        }} />
+                                    </label>
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {(pageData.hero.images.length > 0 ? pageData.hero.images : [babyHero1, babyHero2, babyHero3]).map((img, i) => (
+                                        <div key={i} className="aspect-square relative group rounded-xl overflow-hidden shadow-sm">
+                                            <img src={img} className="w-full h-full object-cover" />
+                                            <button onClick={() => updateAll({ ...pageData, hero: { ...pageData.hero, images: pageData.hero.images.filter((_, idx) => idx !== i) } })} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <Trash2 size={12} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Baby Hero - Text Content */}
+                            <div className="grid md:grid-cols-2 gap-8">
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Coming Soon Title</label>
+                                        <input id="h-title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
+                                        <input id="h-subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                    </div>
+                                </div>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description Text</label>
+                                        <textarea id="h-text" defaultValue={pageData.hero.text} rows={4} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none resize-none" />
+                                    </div>
+                                    <button onClick={() => updateAll({
+                                        ...pageData,
+                                        hero: {
+                                            ...pageData.hero,
+                                            title: document.getElementById('h-title').value,
+                                            subtitle: document.getElementById('h-subtitle').value,
+                                            text: document.getElementById('h-text').value
+                                        }
+                                    })} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase text-xs shadow-lg">
+                                        {saving ? 'Saving...' : 'SAVE HERO TEXT'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* TODDLER HERO TAB */}
+                {activeTab === 'hero' && isToddler && (
+                    <div className="max-w-[1240px] space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Editorial Hero Management</h2>
+                            <button
+                                onClick={() => updateAll({
+                                    ...pageData,
+                                    hero: {
+                                        ...pageData.hero,
+                                        title: document.getElementById('t-title').value,
+                                        tagline: document.getElementById('t-tagline').value,
+                                        phoneNumber: document.getElementById('t-phone').value,
+                                        email: document.getElementById('t-email').value,
+                                    }
+                                })}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:brightness-110 transition-all flex items-center gap-2"
+                            >
+                                <Save size={16} /> {saving ? 'Saving...' : 'Save Editorial Content'}
+                            </button>
+                        </div>
+
+                        <div className="grid lg:grid-cols-2 gap-12">
+                            {/* Left: Text Content */}
+                            <div className="space-y-6">
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div className="md:col-span-2">
+                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Headline</label>
+                                        <input id="t-title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-2xl" placeholder="e.g. Pure Wonder" />
+                                    </div>
+                                    <div className="md:col-span-2">
+                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Editorial Tagline</label>
+                                        <textarea id="t-tagline" defaultValue={pageData.hero.tagline} rows="3" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none italic leading-relaxed" placeholder="e.g. Capturing the raw essence of growing up..." />
+                                    </div>
+                                    <div className="md:col-span-2 border-t border-[#5A2A45]/5 pt-6 mt-2">
+                                        <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#B77A8C] mb-6">Contact Pill Information</h4>
+                                        <div className="grid md:grid-cols-2 gap-6">
+                                            <div>
+                                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Pill Phone</label>
+                                                <input id="t-phone" defaultValue={pageData.hero.phoneNumber} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm" placeholder="+91 987..." />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Pill Email</label>
+                                                <input id="t-email" defaultValue={pageData.hero.email} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm" placeholder="hello@..." />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right: Layered Gallery Frames */}
+                            <div className="space-y-6 bg-[#F9F7F2]/50 p-8 rounded-[3rem] border border-[#5A2A45]/5">
+                                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#5A2A45] text-center mb-6">Layered Gallery Frames</label>
+                                <div className="grid grid-cols-2 gap-8">
+                                    {/* Slot 1: Large Arched Frame */}
+                                    <div className="space-y-4 col-span-1">
+                                        <div className="aspect-[3/4] bg-white rounded-t-full relative group overflow-hidden border-4 border-white shadow-xl">
+                                            <img src={pageData.hero.images[0] || 'https://via.placeholder.com/600x800'} className="w-full h-full object-cover" />
+                                            <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center p-4">
+                                                Update Main<br />Arched Frame
+                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                    const url = await handleUploadImage(e.target.files[0]);
+                                                    if (url) {
+                                                        const newImgs = [...(pageData.hero.images || ['', '', '', ''])];
+                                                        newImgs[0] = url;
+                                                        updateAll({ ...pageData, hero: { ...pageData.hero, images: newImgs } });
+                                                    }
+                                                }} />
+                                            </label>
+                                        </div>
+                                        <p className="text-[9px] text-center text-[#5A2A45] font-bold uppercase tracking-widest opacity-60">1. Main Center Frame</p>
+                                    </div>
+
+                                    {/* Slot 2: Small Floating Moment */}
+                                    <div className="space-y-4 pt-12">
+                                        <div className="aspect-square bg-white rounded-3xl relative group overflow-hidden border-4 border-white shadow-lg rotate-[-5deg]">
+                                            <img src={pageData.hero.images[1] || 'https://via.placeholder.com/400'} className="w-full h-full object-cover" />
+                                            <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center p-4">
+                                                Update Floating<br />Corner Piece
+                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                    const url = await handleUploadImage(e.target.files[0]);
+                                                    if (url) {
+                                                        const newImgs = [...(pageData.hero.images || ['', '', '', ''])];
+                                                        newImgs[1] = url;
+                                                        updateAll({ ...pageData, hero: { ...pageData.hero, images: newImgs } });
+                                                    }
+                                                }} />
+                                            </label>
+                                        </div>
+                                        <p className="text-[9px] text-center text-[#5A2A45] font-bold uppercase tracking-widest opacity-60">2. Bottom-Left Moment</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+
+
+                {/* 3. WELCOME TAB (For categories using the generic welcome section) */}
+                {activeTab === 'welcome' && !isMaternity && !isBaby && !isFamily && !isHospital && !isCakeSmash && (
                     <form onSubmit={handleWelcomeSave} className="max-w-3xl space-y-8">
                         {/* ... (keep existing welcome form content) */}
                         <div className="grid md:grid-cols-2 gap-8">
@@ -512,6 +674,293 @@ const ManageCategory = () => {
                             </div>
                         </div>
                     </form>
+                )}
+
+                {/* ADVENTURE MODAL TAB (Baby Only) */}
+                {activeTab === 'adventure' && isBaby && (
+                    <div className="space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Adventure Modal Content</h2>
+                            <button onClick={() => updateAll({
+                                ...pageData,
+                                adventureModal: {
+                                    ...pageData.adventureModal,
+                                    content: document.getElementById('adv-content').value
+                                }
+                            })} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs uppercase font-bold shadow-lg">
+                                {saving ? 'Saving...' : 'SAVE MODAL CONTENT'}
+                            </button>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-12">
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4 text-center">Top Hero Image</label>
+                                    <div className="aspect-video bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-md">
+                                        <img src={pageData.adventureModal?.topImage} className="w-full h-full object-cover" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center px-4">
+                                            Change Top Image
+                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                const url = await handleUploadImage(e.target.files[0]);
+                                                if (url) updateAll({ ...pageData, adventureModal: { ...pageData.adventureModal, topImage: url } });
+                                            }} />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4 text-center">Vertical side Image</label>
+                                    <div className="aspect-[3/4] max-w-[300px] mx-auto bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-md">
+                                        <img src={pageData.adventureModal?.sideImage} className="w-full h-full object-cover" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center px-4">
+                                            Change Side Image
+                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                const url = await handleUploadImage(e.target.files[0]);
+                                                if (url) updateAll({ ...pageData, adventureModal: { ...pageData.adventureModal, sideImage: url } });
+                                            }} />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Modal Story Content</label>
+                                <textarea
+                                    id="adv-content"
+                                    defaultValue={pageData.adventureModal?.content}
+                                    rows={15}
+                                    className="w-full p-6 bg-[#F9F7F2] rounded-2xl outline-none font-outfit text-gray-600 leading-relaxed resize-none"
+                                    placeholder="Enter the full adventure story here..."
+                                />
+                                <p className="text-[10px] text-[#8F8A86] italic uppercase tracking-wider">Note: This content appears when users click the 'My Full Adventure' button.</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* HOSPITAL HERO TAB */}
+                {isHospital && activeTab === 'hero' && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        let img = pageData.hero.image;
+                        if (fd.get('newHero')?.size > 0) img = await handleUploadImage(fd.get('newHero'));
+                        updateAll({
+                            ...pageData,
+                            hero: {
+                                title: fd.get('title'),
+                                description: fd.get('desc'),
+                                buttonText: fd.get('btn'),
+                                image: img
+                            }
+                        }, updateHospitalPage);
+                    }} className="max-w-4xl space-y-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Hospital Title</label>
+                                    <input name="title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Hero Description</label>
+                                    <textarea name="desc" defaultValue={pageData.hero.description} rows={6} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none resize-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Text</label>
+                                    <input name="btn" defaultValue={pageData.hero.buttonText} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl">
+                                    {saving ? 'Saving...' : 'SAVE HERO'}
+                                </button>
+                            </div>
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Hero Image</label>
+                                <div className="aspect-video bg-[#F9F7F2] rounded-xl relative group overflow-hidden border-2 border-dashed border-[#5A2A45]/20">
+                                    <img src={pageData.hero.image} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold">
+                                        CHANGE PHOTO <input type="file" name="newHero" className="hidden" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                )}
+
+                {isHospital && activeTab === 'categories' && (
+                    <div className="space-y-8">
+                        <div className="bg-white p-6 rounded-3xl border border-[#5A2A45]/10 shadow-sm mb-8">
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Categories Section Title (Hand-written style)</label>
+                            <div className="flex gap-4">
+                                <input
+                                    defaultValue={pageData.categoriesSection?.title}
+                                    className="flex-grow p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-2xl"
+                                    placeholder="e.g., Current Obsessions"
+                                    onChange={(e) => setPageData({ ...pageData, categoriesSection: { ...pageData.categoriesSection, title: e.target.value } })}
+                                />
+                                <button onClick={() => updateAll(pageData, updateHospitalPage)} className="bg-[#5A2A45] text-white px-8 py-2 rounded-xl text-xs font-bold uppercase">
+                                    {saving ? 'Saving...' : 'SAVE TITLE'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Hospital Categories</h3>
+                            <button onClick={async () => {
+                                const newCats = [...pageData.categories];
+                                newCats.push({ title: 'New Category', description: 'Description', image: '', link: '/portfolio/hospital/new' });
+                                updateAll({ ...pageData, categories: newCats }, updateHospitalPage);
+                            }} className="bg-[#5A2A45] text-white px-4 py-2 rounded-full text-xs uppercase font-bold flex items-center gap-2">
+                                <Plus size={14} /> Add Category
+                            </button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {pageData.categories.map((cat, index) => (
+                                <div key={index} className="bg-[#F9F7F2] p-4 rounded-2xl border border-[#5A2A45]/10 space-y-4">
+                                    <div className="aspect-[4/5] rounded-xl overflow-hidden relative group">
+                                        <img src={cat.image} className="w-full h-full object-cover" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold">
+                                            CHANGE <input type="file" className="hidden" onChange={async (e) => {
+                                                const url = await handleUploadImage(e.target.files[0]);
+                                                if (url) {
+                                                    const newCats = [...pageData.categories];
+                                                    newCats[index].image = url;
+                                                    updateAll({ ...pageData, categories: newCats }, updateHospitalPage);
+                                                }
+                                            }} />
+                                        </label>
+                                    </div>
+                                    <input
+                                        defaultValue={cat.title}
+                                        className="w-full p-2 bg-white rounded-lg outline-none font-bold text-[#5A2A45]"
+                                        onChange={(e) => {
+                                            const newCats = [...pageData.categories];
+                                            newCats[index].title = e.target.value;
+                                            setPageData({ ...pageData, categories: newCats });
+                                        }}
+                                    />
+                                    <textarea
+                                        defaultValue={cat.description}
+                                        rows={3}
+                                        className="w-full p-2 bg-white rounded-lg outline-none text-xs text-gray-600"
+                                        onChange={(e) => {
+                                            const newCats = [...pageData.categories];
+                                            newCats[index].description = e.target.value;
+                                            setPageData({ ...pageData, categories: newCats });
+                                        }}
+                                    />
+                                    <div className="flex justify-between items-center">
+                                        <input
+                                            defaultValue={cat.link}
+                                            className="p-1 text-[10px] bg-white rounded-md outline-none text-gray-400"
+                                            onChange={(e) => {
+                                                const newCats = [...pageData.categories];
+                                                newCats[index].link = e.target.value;
+                                                setPageData({ ...pageData, categories: newCats });
+                                            }}
+                                        />
+                                        <button onClick={() => {
+                                            const newCats = pageData.categories.filter((_, i) => i !== index);
+                                            updateAll({ ...pageData, categories: newCats }, updateHospitalPage);
+                                        }} className="text-red-400 hover:text-red-600">
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
+                                    <button onClick={() => updateAll(pageData, updateHospitalPage)} className="w-full bg-[#5A2A45]/10 text-[#5A2A45] py-2 rounded-lg text-xs font-bold uppercase hover:bg-[#5A2A45] hover:text-white transition-all">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* HOSPITAL SESSIONS TAB */}
+                {isHospital && activeTab === 'sessions' && (
+                    <div className="space-y-12">
+                        <div className="border-b border-[#5A2A45]/10 pb-4">
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Sub-Session Galleries</h3>
+                            <p className="text-xs text-gray-500 mt-1 uppercase tracking-widest">Manage fresh 48, birth story, and family sessions.</p>
+                        </div>
+
+                        <div className="space-y-16">
+                            {(pageData.sessions || []).map((session, sIndex) => (
+                                <div key={sIndex} className="bg-white p-8 rounded-3xl shadow-sm border border-[#5A2A45]/5 space-y-8">
+                                    <div className="flex items-center justify-between">
+                                        <h4 className="font-display text-xl text-[#5A2A45] capitalize">{session.type} Session</h4>
+                                        <button
+                                            onClick={async () => {
+                                                setSaving(true);
+                                                try {
+                                                    await updateHospitalSession(session.type, session);
+                                                    setMessage({ type: 'success', text: `${session.type} session updated successfully!` });
+                                                } catch (err) {
+                                                    setMessage({ type: 'error', text: 'Failed to update session.' });
+                                                } finally {
+                                                    setSaving(false);
+                                                }
+                                            }}
+                                            className="bg-[#5A2A45] text-white px-6 py-2 rounded-full text-xs font-bold uppercase shadow-md active:scale-95 transition-all"
+                                        >
+                                            {saving ? 'Saving...' : `SAVE ${session.type.toUpperCase()} SESSION`}
+                                        </button>
+                                    </div>
+
+                                    <div className="grid md:grid-cols-3 gap-8">
+                                        <div className="space-y-4">
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Display Title</label>
+                                            <input
+                                                defaultValue={session.hero?.title || session.type}
+                                                className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-lg"
+                                                onChange={(e) => {
+                                                    const newSessions = [...pageData.sessions];
+                                                    newSessions[sIndex].hero = { ...newSessions[sIndex].hero, title: e.target.value };
+                                                    setPageData({ ...pageData, sessions: newSessions });
+                                                }}
+                                            />
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mt-4">Meta Text</label>
+                                            <textarea
+                                                defaultValue={session.hero?.text}
+                                                rows={4}
+                                                className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none text-sm text-gray-600"
+                                                onChange={(e) => {
+                                                    const newSessions = [...pageData.sessions];
+                                                    newSessions[sIndex].hero = { ...newSessions[sIndex].hero, text: e.target.value };
+                                                    setPageData({ ...pageData, sessions: newSessions });
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="md:col-span-2">
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4">Gallery Images (Puzzle Grid)</label>
+                                            <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+                                                {Array.from({ length: 12 }).map((_, i) => {
+                                                    const url = session.puzzleImages?.[i] || '';
+                                                    return (
+                                                        <div key={i} className="aspect-square bg-[#F9F7F2] rounded-lg relative group overflow-hidden border border-[#5A2A45]/5">
+                                                            <img src={url} className="w-full h-full object-cover" />
+                                                            <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">
+                                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                                    const uploadedUrl = await handleUploadImage(e.target.files[0]);
+                                                                    if (uploadedUrl) {
+                                                                        const newSessions = [...pageData.sessions];
+                                                                        const newImgs = [...(newSessions[sIndex].puzzleImages || [])];
+                                                                        while (newImgs.length <= i) newImgs.push('');
+                                                                        newImgs[i] = uploadedUrl;
+                                                                        newSessions[sIndex].puzzleImages = newImgs;
+                                                                        setPageData({ ...pageData, sessions: newSessions });
+                                                                    }
+                                                                }} />
+                                                                <Upload size={14} className="text-white" />
+                                                            </label>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 )}
 
                 {/* 4. EDITORIAL TAB (Maternity Only) */}
@@ -803,6 +1252,8 @@ const ManageCategory = () => {
                         </div>
                     </form>
                 )}
+
+
 
                 {activeTab === 'philosophy' && isFamily && (
                     <form onSubmit={async (e) => {
@@ -1178,6 +1629,230 @@ const ManageCategory = () => {
                             </div>
                         </div>
                     </div>
+                )}
+
+                {/* --- CAKE SMASH SPECIFIC TABS --- */}
+
+                {activeTab === 'hero' && isCakeSmash && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        let bg = pageData.hero.backgroundImage;
+                        if (fd.get('newBg')?.size > 0) bg = await handleUploadImage(fd.get('newBg'));
+                        updateAll({
+                            ...pageData,
+                            hero: {
+                                ...pageData.hero,
+                                tagline: fd.get('tagline'),
+                                title: fd.get('title'),
+                                subtitle: fd.get('subtitle'),
+                                backgroundImage: bg
+                            }
+                        });
+                    }} className="max-w-4xl space-y-8">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Hero Background</label>
+                                <div className="aspect-video bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10">
+                                    <img src={pageData.hero.backgroundImage} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity">
+                                        Change Background
+                                        <input type="file" name="newBg" className="hidden" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Display Tagline</label>
+                                    <input name="tagline" defaultValue={pageData.hero.tagline || 'The Birthday Collection'} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" placeholder="e.g. The Birthday Collection" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Service Title</label>
+                                    <input name="title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-2xl" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
+                                    <input name="subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                </div>
+                                <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl active:scale-[0.98]">
+                                    {saving ? 'Saving...' : 'SAVE HERO'}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                )}
+
+                {activeTab === 'intro' && isCakeSmash && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        updateAll({
+                            ...pageData,
+                            celebrationText: {
+                                title: fd.get('title'),
+                                description: fd.get('description')
+                            }
+                        });
+                    }} className="max-w-2xl space-y-6">
+                        <h2 className="font-display text-2xl text-[#5A2A45] mb-4">Intro Celebration Text</h2>
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Title</label>
+                            <input name="title" defaultValue={pageData.celebrationText?.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-xl" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description</label>
+                            <textarea name="description" defaultValue={pageData.celebrationText?.description} rows={6} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none resize-none" />
+                        </div>
+                        <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl">
+                            {saving ? 'Saving...' : 'SAVE INTRO'}
+                        </button>
+                    </form>
+                )}
+
+                {activeTab === 'giftGrid' && isCakeSmash && (
+                    <div className="space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Sweet Celebration Gift Tray (4 Images)</h3>
+                            <button onClick={() => updateAll({
+                                ...pageData,
+                                giftGrid: {
+                                    ...pageData.giftGrid,
+                                    title: document.getElementById('cake-gift-title').value,
+                                    tagline: document.getElementById('cake-gift-tagline').value
+                                }
+                            })}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs uppercase font-bold shadow-lg hover:brightness-110 transition-all">
+                                {saving ? 'Saving...' : 'SAVE TRAY CHANGES'}
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            {[0, 1, 2, 3].map((i) => {
+                                const images = pageData.giftGrid?.images || ['', '', '', ''];
+                                const img = images[i] || '';
+                                return (
+                                    <div key={i} className="space-y-2 group">
+                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] text-center">Slot {i + 1}</label>
+                                        <div className="aspect-square bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-md">
+                                            <img src={img} className="w-full h-full object-cover" />
+                                            <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center px-4">
+                                                Update Slot {i + 1}
+                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                    const url = await handleUploadImage(e.target.files[0]);
+                                                    if (url) {
+                                                        const newImgs = [...(pageData.giftGrid?.images || ['', '', '', ''])];
+                                                        newImgs[i] = url;
+                                                        updateAll({ ...pageData, giftGrid: { ...pageData.giftGrid, images: newImgs } });
+                                                    }
+                                                }} />
+                                            </label>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Tray Title</label>
+                                <input id="cake-gift-title" defaultValue={pageData.giftGrid?.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-xl" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Artistic Tagline (Hand-written style)</label>
+                                <input id="cake-gift-tagline" defaultValue={pageData.giftGrid?.tagline} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display italic" placeholder="e.g. Hand-crafted moments" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'hanging' && isCakeSmash && (
+                    <div className="space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Hanging Gallery (3 Circular Images)</h3>
+                            <button onClick={() => updateAll({
+                                ...pageData,
+                                hangingGrid: {
+                                    ...pageData.hangingGrid,
+                                    title: document.getElementById('cake-hang-title').value,
+                                    tagline: document.getElementById('cake-hang-tagline').value
+                                }
+                            })}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs uppercase font-bold shadow-lg hover:brightness-110 transition-all">
+                                {saving ? 'Saving...' : 'SAVE GALLERY CHANGES'}
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                            {[0, 1, 2].map((i) => {
+                                const images = pageData.hangingGrid?.images || ['', '', ''];
+                                const img = images[i] || '';
+                                return (
+                                    <div key={i} className="flex flex-col items-center gap-4">
+                                        <label className="text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Slot {i + 1}</label>
+                                        <div className="w-48 h-48 rounded-full bg-[#F9F7F2] relative group overflow-hidden border-4 border-white shadow-xl">
+                                            <img src={img} className="w-full h-full object-cover" />
+                                            <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center px-4">
+                                                Update Image
+                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                    const url = await handleUploadImage(e.target.files[0]);
+                                                    if (url) {
+                                                        const newImgs = [...(pageData.hangingGrid?.images || ['', '', ''])];
+                                                        newImgs[i] = url;
+                                                        updateAll({ ...pageData, hangingGrid: { ...pageData.hangingGrid, images: newImgs } });
+                                                    }
+                                                }} />
+                                            </label>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Gallery Title</label>
+                                <input id="cake-hang-title" defaultValue={pageData.hangingGrid?.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-xl" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Tagline (e.g. The Gallery)</label>
+                                <input id="cake-hang-tagline" defaultValue={pageData.hangingGrid?.tagline} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'cta' && isCakeSmash && (
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const fd = new FormData(e.target);
+                        updateAll({
+                            ...pageData,
+                            cta: {
+                                title: fd.get('title'),
+                                buttonText: fd.get('buttonText'),
+                                buttonLink: fd.get('buttonLink')
+                            }
+                        });
+                    }} className="max-w-2xl space-y-6">
+                        <h2 className="font-display text-2xl text-[#5A2A45] mb-4">Footer Call to Action</h2>
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">CTA Title</label>
+                            <input name="title" defaultValue={pageData.cta?.title || "Let's Plan the Party!"} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-xl" />
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Text</label>
+                                <input name="buttonText" defaultValue={pageData.cta?.buttonText || "Book A Session"} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Link</label>
+                                <input name="buttonLink" defaultValue={pageData.cta?.buttonLink || "/contact"} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" placeholder="/contact" />
+                            </div>
+                        </div>
+                        <button type="submit" disabled={saving} className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl hover:brightness-110 transition-all">
+                            {saving ? 'Saving...' : 'SAVE CTA SECTION'}
+                        </button>
+                    </form>
                 )}
 
             </div>

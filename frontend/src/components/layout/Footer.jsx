@@ -56,7 +56,7 @@ const Footer = () => {
                     {/* 2. Explore Links */}
                     <div className="col-span-1 flex flex-col items-center">
                         <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Explore</h4>
-                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 w-full flex flex-col items-center">
+                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 w-fit flex flex-col items-start">
                             {['Home', 'About Anamika', 'Portfolio', 'Journal'].map((item, i) => (
                                 <li key={i} className="group w-max">
                                     <Link to={item === 'Home' ? '/' : item === 'Journal' ? '/blog' : `/${item.split(' ')[0].toLowerCase()}`} className="group-hover:text-white transition-all flex items-center gap-3">
@@ -71,7 +71,7 @@ const Footer = () => {
                     {/* 3. Services Links */}
                     <div className="col-span-1 flex flex-col items-center">
                         <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Services</h4>
-                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 w-full flex flex-col items-center">
+                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 w-fit flex flex-col items-start">
                             {['Maternity', 'Newborn', 'Baby', 'Family'].map((item, i) => (
                                 <li key={i} className="group w-max">
                                     <Link to="/services" className="group-hover:text-white transition-all flex items-center gap-3">

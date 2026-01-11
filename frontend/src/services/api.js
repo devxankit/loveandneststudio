@@ -35,6 +35,20 @@ export const updateBabyPage = (data) => api.put('/baby', data);
 export const getFamilyPage = () => api.get('/family');
 export const updateFamilyPage = (data) => api.put('/family', data);
 
+// --- CAKE SMASH API ---
+export const getCakeSmashPage = () => api.get('/cakesmash');
+export const updateCakeSmashPage = (data) => api.put('/cakesmash', data);
+
+// --- TODDLER API ---
+export const getToddlerPage = () => api.get('/toddler');
+export const updateToddlerPage = (data) => api.put('/toddler', data);
+
+// --- HOSPITAL API ---
+export const getHospitalPage = () => api.get('/hospital/page');
+export const updateHospitalPage = (data) => api.put('/hospital/page', data);
+export const getHospitalSession = (type) => api.get(`/hospital/session/${type}`);
+export const updateHospitalSession = (type, data) => api.put(`/hospital/session/${type}`, data);
+
 // --- PORTFOLIO LANDING PAGE API ---
 export const getPortfolioPage = () => api.get('/portfolio-page');
 export const updatePortfolioPage = (data) => api.put('/portfolio-page', data);

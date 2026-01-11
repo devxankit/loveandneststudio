@@ -6,8 +6,6 @@ import defaultLogo from '../../assets/logo/Gemini_Generated_Image_adt2l4adt2l4ad
 
 const Navbar = React.memo(() => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isPortfolioHovered, setIsPortfolioHovered] = useState(false);
-    const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [navbarLogo, setNavbarLogo] = useState(null);
     const { scrollY } = useScroll();
@@ -41,10 +39,6 @@ const Navbar = React.memo(() => {
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
-    };
-
-    const togglePortfolio = () => {
-        setIsPortfolioOpen(!isPortfolioOpen);
     };
 
     const isDarkPage = ['/services', '/blog', '/testimonials', '/contact', '/portfolio', '/about'].some(path => location.pathname.startsWith(path));
@@ -81,64 +75,7 @@ const Navbar = React.memo(() => {
                         <li><NavLink to="/" className={navLinkClasses}>Home</NavLink></li>
                         <li><NavLink to="/about" className={navLinkClasses}>About</NavLink></li>
 
-                        {/* Portfolio Dropdown (Desktop) */}
-                        <li
-                            className="relative group h-full flex items-center"
-                            onMouseEnter={() => setIsPortfolioHovered(true)}
-                            onMouseLeave={() => setIsPortfolioHovered(false)}
-                        >
-                            <div className="flex items-center cursor-pointer gap-1 py-4">
-                                <span className={`font-medium transition-colors duration-300 ${(isScrolled || isDarkPage) ? 'text-gray-700 group-hover:text-primary' : 'text-white drop-shadow-md group-hover:text-primary'}`}>
-                                    Portfolio
-                                </span>
-                                <svg
-                                    className={`w-4 h-4 transition-transform duration-300 ${isPortfolioHovered ? 'rotate-180' : ''} ${(isScrolled || isDarkPage) ? 'text-gray-700' : 'text-white'}`}
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </div>
-
-                            <AnimatePresence>
-                                {isPortfolioHovered && (
-                                    <motion.div
-                                        initial={{ opacity: 0, scaleY: 0.8, y: 0 }}
-                                        animate={{ opacity: 1, scaleY: 1, y: 0 }}
-                                        exit={{ opacity: 0, scaleY: 0.8, y: -5 }}
-                                        transition={{ duration: 0.2, ease: "easeOut" }}
-                                        style={{ transformOrigin: "top center" }}
-                                        className="hidden md:block absolute top-[100%] left-1/2 -translate-x-1/2 min-w-full w-auto bg-white shadow-lg rounded-b-xl border-t-2 border-[#5A2A45] pt-2 pb-2 z-50"
-                                    >
-                                        {/* Invisible bridge to prevent mouse gap issues */}
-                                        <div className="absolute top-[-10px] left-0 w-full h-[10px] bg-transparent" />
-
-                                        <ul className="flex flex-col">
-                                            {[
-                                                { name: 'Newborn', path: '/portfolio/newborn' },
-                                                { name: 'Maternity', path: '/portfolio/maternity' },
-                                                { name: 'Baby', path: '/portfolio/baby' },
-                                                { name: 'Family', path: '/portfolio/family' }
-                                            ].map((item, index) => (
-                                                <motion.li
-                                                    key={item.name}
-                                                    initial={{ opacity: 0, x: -10 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ delay: index * 0.05 }}
-                                                >
-                                                    <NavLink
-                                                        to={item.path}
-                                                        className="block px-6 py-3 text-gray-600 hover:text-white hover:bg-[#5A2A45] hover:shadow-[0_0_15px_rgba(90,42,69,0.4)] hover:brightness-110 hover:tracking-wide transition-all duration-300 text-sm font-medium flex items-center justify-between group/item whitespace-nowrap"
-                                                    >
-                                                        {item.name}
-                                                    </NavLink>
-                                                </motion.li>
-                                            ))}
-                                        </ul>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </li>
-
+                        <li><NavLink to="/portfolio" className={navLinkClasses}>Portfolio</NavLink></li>
                         <li><NavLink to="/services" className={navLinkClasses}>Services</NavLink></li>
                         <li><NavLink to="/blog" className={navLinkClasses}>Blog</NavLink></li>
                         <li><NavLink to="/testimonials" className={navLinkClasses}>Testimonials</NavLink></li>
@@ -205,47 +142,11 @@ const Navbar = React.memo(() => {
                                             About
                                         </NavLink>
                                     </li>
-
-                                    {/* Mobile Portfolio Accordion */}
                                     <li>
-                                        <div
-                                            onClick={togglePortfolio}
-                                            className="flex items-center justify-between text-lg font-medium text-gray-900 cursor-pointer"
-                                        >
-                                            <span>Portfolio</span>
-                                            <svg className={`w-4 h-4 transition-transform ${isPortfolioOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </div>
-                                        <AnimatePresence>
-                                            {isPortfolioOpen && (
-                                                <motion.ul
-                                                    initial={{ height: 0, opacity: 0 }}
-                                                    animate={{ height: "auto", opacity: 1 }}
-                                                    exit={{ height: 0, opacity: 0 }}
-                                                    className="overflow-hidden pl-4 mt-2 space-y-3 border-l-2 border-[#e9cbb6]/30 ml-1"
-                                                >
-                                                    {[
-                                                        { name: 'Newborn', path: '/portfolio/newborn' },
-                                                        { name: 'Maternity', path: '/portfolio/maternity' },
-                                                        { name: 'Baby', path: '/portfolio/baby' },
-                                                        { name: 'Family', path: '/portfolio/family' }
-                                                    ].map((item) => (
-                                                        <li key={item.name}>
-                                                            <NavLink
-                                                                to={item.path}
-                                                                onClick={() => setIsMenuOpen(false)}
-                                                                className={({ isActive }) => `block text-base ${isActive ? 'text-[#e9cbb6]' : 'text-gray-600'}`}
-                                                            >
-                                                                {item.name}
-                                                            </NavLink>
-                                                        </li>
-                                                    ))}
-                                                </motion.ul>
-                                            )}
-                                        </AnimatePresence>
+                                        <NavLink to="/portfolio" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `block text-lg font-medium ${isActive ? 'text-[#e9cbb6]' : 'text-gray-900'}`}>
+                                            Portfolio
+                                        </NavLink>
                                     </li>
-
                                     <li>
                                         <NavLink to="/services" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `block text-lg font-medium ${isActive ? 'text-[#e9cbb6]' : 'text-gray-900'}`}>
                                             Services

@@ -141,6 +141,9 @@ const AdminLayout = () => {
                 { label: 'Maternity', path: '/admin/portfolio/maternity' },
                 { label: 'Baby', path: '/admin/portfolio/baby' },
                 { label: 'Family', path: '/admin/portfolio/family' },
+                { label: 'Cake Smash', path: '/admin/portfolio/cakesmash' },
+                { label: 'Hospital', path: '/admin/portfolio/hospital' },
+                { label: 'Toddler', path: '/admin/portfolio/toddler' },
             ]
         },
         { icon: Sparkles, label: 'Services', path: '/admin/services' },

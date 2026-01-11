@@ -187,7 +187,7 @@ const ManagePortfolio = () => {
                         {pageData.categories.map((cat, idx) => (
                             <motion.div layout key={cat.id || idx} className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-[#5A2A45]/5 hover:shadow-2xl transition-all group relative">
                                 <div className="aspect-[4/5] relative">
-                                    <img src={cat.image || (cat.id === 'newborn' ? newbornImg : cat.id === 'maternity' ? maternityImg : cat.id === 'baby' ? babyImg : familyImg)} alt={cat.title} className="w-full h-full object-cover" />
+                                    <img src={cat.image || (cat.id === 'newborn' ? newbornImg : cat.id === 'maternity' ? maternityImg : cat.id === 'baby' ? babyImg : cat.id === 'cakesmash' ? babyImg : cat.id === 'toddler' ? babyImg : familyImg)} alt={cat.title} className="w-full h-full object-cover" />
                                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors" />
                                     <button
                                         onClick={() => openEditCategory(cat)}
