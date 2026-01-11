@@ -275,8 +275,10 @@ const ManageCategory = () => {
                         { id: 'hero', label: 'Hero', icon: Layout },
                         { id: 'philosophy', label: 'Philosophy', icon: Sparkles },
                         { id: 'banner', label: 'Banner', icon: ImageIcon },
+                        { id: 'stories', label: 'Selected Stories', icon: Type },
                         { id: 'mosaic', label: 'Mosaic', icon: Layout },
-                        { id: 'arch', label: 'Arch Grid', icon: Plus }
+                        { id: 'arch', label: 'Arch Grid', icon: Plus },
+                        { id: 'collage', label: 'Holiday Collage', icon: ImageIcon }
                     ] : [])
                 ].map((tab) => (
                     <button
@@ -600,29 +602,39 @@ const ManageCategory = () => {
                         <div className="grid md:grid-cols-2 gap-8">
                             <div className="space-y-4">
                                 <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Text Content</label>
+                                <input id="j-toptext" defaultValue={pageData.journey.topText} placeholder="Small Top Text (e.g. Every Kick...)" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none mb-2" />
                                 <input id="j-title" defaultValue={pageData.journey.title} placeholder="Title" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none mb-2" />
-                                <input id="j-subtitle" defaultValue={pageData.journey.subtitle} placeholder="Subtitle" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
-                                <button onClick={() => updateAll({ ...pageData, journey: { ...pageData.journey, title: document.getElementById('j-title').value, subtitle: document.getElementById('j-subtitle').value } })}
+                                <input id="j-subtitle" defaultValue={pageData.journey.subtitle} placeholder="Subtitle" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none mb-2" />
+                                <input id="j-midtext" defaultValue={pageData.journey.midGalleryText} placeholder="Mid-Gallery Text (e.g. Visual Poetry)" className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none" />
+                                <button onClick={() => updateAll({
+                                    ...pageData,
+                                    journey: {
+                                        ...pageData.journey,
+                                        topText: document.getElementById('j-toptext').value,
+                                        title: document.getElementById('j-title').value,
+                                        subtitle: document.getElementById('j-subtitle').value,
+                                        midGalleryText: document.getElementById('j-midtext').value
+                                    }
+                                })}
                                     className="w-full bg-[#5A2A45] text-white py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl active:scale-[0.98]">
                                     {saving ? 'Saving...' : 'SAVE TEXT'}
                                 </button>
                             </div>
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between mb-4">
-                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Timeline Images (Fixed 5 Slots)</label>
-                                    <span className="text-[10px] text-[#B77A8C] font-bold uppercase">Showing 5 months of growth</span>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Timeline Images (Fixed 10 Slots)</label>
+                                    <span className="text-[10px] text-[#B77A8C] font-bold uppercase">5 images - Text - 5 images</span>
                                 </div>
-                                <div className="grid grid-cols-1 gap-4">
-                                    {[0, 1, 2, 3, 4].map((i) => {
+                                <div className="grid grid-cols-1 gap-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                                    {Array.from({ length: 10 }).map((_, i) => {
                                         const img = pageData.journey.images[i] || '';
                                         return (
                                             <div key={i} className="flex items-center gap-4 bg-[#F9F7F2] p-4 rounded-2xl border border-[#5A2A45]/5 group">
                                                 <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm flex-shrink-0 bg-white flex items-center justify-center">
-                                                    <img src={img || (i === 0 ? mImg5 : i === 1 ? mImg6 : i === 2 ? mImg7 : i === 3 ? mImg8 : mImg9)} className="w-full h-full object-cover" />
+                                                    <img src={img || mImg5} className="w-full h-full object-cover" />
                                                 </div>
                                                 <div className="flex-grow">
-                                                    <p className="text-[#5A2A45] font-bold text-xs uppercase mb-1">Journey Item {i}</p>
-                                                    <p className="text-[#8F8A86] text-[10px] uppercase tracking-widest mb-2">Month {(i * 2) + 3}</p>
+                                                    <p className="text-[#5A2A45] font-bold text-xs uppercase mb-1">Image Slot {i + 1}</p>
                                                     <div className="flex gap-2">
                                                         <label className="bg-white border border-[#5A2A45]/20 text-[#5A2A45] px-3 py-1 rounded-full text-[10px] uppercase font-bold cursor-pointer hover:bg-[#5A2A45] hover:text-white transition-colors">
                                                             {img ? 'Change Image' : 'Upload Image'}
@@ -633,7 +645,7 @@ const ManageCategory = () => {
                                                                     // Pad array if needed
                                                                     while (newImages.length <= i) newImages.push('');
                                                                     newImages[i] = url;
-                                                                    updateAll({ ...pageData, journey: { ...pageData.journey, images: newImages.slice(0, 5) } });
+                                                                    updateAll({ ...pageData, journey: { ...pageData.journey, images: newImages.slice(0, 10) } });
                                                                 }
                                                             }} />
                                                         </label>
@@ -890,6 +902,103 @@ const ManageCategory = () => {
 
 
 
+                {activeTab === 'stories' && isFamily && (
+                    <div className="space-y-8">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Selected Stories</h3>
+                            <div className="flex gap-4">
+                                <button onClick={() => {
+                                    // Scrape current text values first to avoid losing unsaved edits when adding
+                                    const cards = document.querySelectorAll('.story-card');
+                                    const currentWorks = Array.from(cards).map((card, index) => ({
+                                        image: pageData.selectedWorks[index]?.image || '',
+                                        title: card.querySelector('.story-title-input').value,
+                                        subtitle: card.querySelector('.story-subtitle-input').value
+                                    }));
+                                    // Add new item
+                                    updateAll({ ...pageData, selectedWorks: [...currentWorks, { title: 'New Story', subtitle: 'Subtitle', image: '' }] });
+                                }} className="bg-[#5A2A45] text-white px-4 py-2 rounded-full text-xs uppercase font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
+                                    <Plus size={14} /> Add Pattern
+                                </button>
+                                <button onClick={() => {
+                                    const cards = document.querySelectorAll('.story-card');
+                                    const newWorks = Array.from(cards).map((card, index) => ({
+                                        image: pageData.selectedWorks[index]?.image || '', // Preserve image from state
+                                        title: card.querySelector('.story-title-input').value,
+                                        subtitle: card.querySelector('.story-subtitle-input').value
+                                    }));
+                                    updateAll({ ...pageData, selectedWorks: newWorks });
+                                }} className="bg-green-600 text-white px-6 py-2 rounded-full text-xs uppercase font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                                    {saving ? 'Saving...' : 'Save All Changes'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            {(pageData.selectedWorks || []).map((work, index) => (
+                                <div key={index} className="story-card bg-[#F9F7F2] p-4 md:p-6 rounded-2xl border border-[#5A2A45]/10 shadow-sm relative flex flex-col md:flex-row gap-6 items-start">
+                                    <button
+                                        onClick={() => {
+                                            const newWorks = pageData.selectedWorks.filter((_, i) => i !== index);
+                                            updateAll({ ...pageData, selectedWorks: newWorks });
+                                        }}
+                                        className="absolute top-2 right-2 text-red-300 hover:text-red-500 p-2"
+                                        title="Remove"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+
+                                    <div className="w-full md:w-32 aspect-[4/5] bg-white rounded-xl overflow-hidden shadow-sm relative group/img flex-shrink-0">
+                                        <img src={work.image || familyPortrait2Default} className="w-full h-full object-cover" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center px-1">
+                                            Change
+                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                const url = await handleUploadImage(e.target.files[0]);
+                                                if (url) {
+                                                    const newWorks = [...pageData.selectedWorks];
+                                                    // We must also preserve current text inputs from DOM to avoid overwriting with stale state
+                                                    const cards = document.querySelectorAll('.story-card');
+                                                    cards.forEach((card, i) => {
+                                                        if (newWorks[i]) {
+                                                            newWorks[i].title = card.querySelector('.story-title-input').value;
+                                                            newWorks[i].subtitle = card.querySelector('.story-subtitle-input').value;
+                                                        }
+                                                    });
+
+                                                    newWorks[index].image = url;
+                                                    updateAll({ ...pageData, selectedWorks: newWorks });
+                                                }
+                                            }} />
+                                        </label>
+                                    </div>
+
+                                    <div className="flex-grow w-full space-y-4">
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] mb-1">Title</label>
+                                            <input
+                                                className="story-title-input w-full p-3 bg-white rounded-lg outline-none font-display text-lg text-[#5A2A45]"
+                                                defaultValue={work.title}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] mb-1">Subtitle</label>
+                                            <input
+                                                className="story-subtitle-input w-full p-3 bg-white rounded-lg outline-none font-outfit text-sm text-[#8F8A86]"
+                                                defaultValue={work.subtitle}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {(pageData.selectedWorks?.length === 0) && (
+                                <div className="text-center py-12 text-[#8F8A86]">
+                                    <p>No stories added yet. Click "Add Pattern" to start.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 {activeTab === 'mosaic' && isFamily && (
                     <form onSubmit={async (e) => {
                         e.preventDefault();
@@ -944,7 +1053,7 @@ const ManageCategory = () => {
                             <h3 className="font-display text-2xl text-[#5A2A45]">Animated Arch Grid (5 Slots)</h3>
                             <button onClick={() => updateAll({ ...pageData, archGrid: { ...pageData.archGrid, title: document.getElementById('arch-title').value } })}
                                 className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs uppercase font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all">
-                                {saving ? 'Saving...' : 'SAVE ALL ARCH CHANGES'}
+                                {saving ? 'Saving...' : 'SAVE ARCH GRID'}
                             </button>
                         </div>
 
@@ -996,6 +1105,76 @@ const ManageCategory = () => {
                                 <p className="text-xs text-[#8F8A86] leading-relaxed">
                                     The Arch Grid uses Slot 3 (Center) as the main focus. Tip: Use Slot 3 for your favorite family portrait. The Line Art overlay will sit right on top of it.
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'collage' && isFamily && (
+                    <div className="space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-display text-2xl text-[#5A2A45]">Holiday Collage Grid (5 Images)</h3>
+                            <button onClick={() => updateAll({
+                                ...pageData,
+                                collage: {
+                                    ...pageData.collage,
+                                    title: document.getElementById('collage-title').value,
+                                    subtitle: document.getElementById('collage-subtitle').value
+                                }
+                            })}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs uppercase font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                                {saving ? 'Saving...' : 'SAVE COLLAGE'}
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                            {[
+                                { label: 'Top Left', desc: 'Landscape' },
+                                { label: 'Bottom Left', desc: 'Portrait' },
+                                { label: 'Center Arch', desc: 'Main Focus' },
+                                { label: 'Top Right', desc: 'Landscape' },
+                                { label: 'Bottom Right', desc: 'Portrait' }
+                            ].map((slot, i) => {
+                                const images = pageData.collage?.images || [];
+                                const img = images[i] || '';
+                                return (
+                                    <div key={i} className="space-y-2 group">
+                                        <div className="flex flex-col items-center">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">{slot.label}</label>
+                                            <span className="text-[8px] uppercase text-[#8F8A86]">{slot.desc}</span>
+                                        </div>
+                                        <div className="aspect-[4/5] bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10 shadow-md">
+                                            <img src={img || (i === 2 ? familyStoryDefault : familyDetail1Default)} className="w-full h-full object-cover" />
+                                            <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center px-4">
+                                                Change {slot.label}
+                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                    const url = await handleUploadImage(e.target.files[0]);
+                                                    if (url) {
+                                                        const newImgs = [...(pageData.collage?.images || [])];
+                                                        while (newImgs.length <= i) newImgs.push('');
+                                                        newImgs[i] = url;
+                                                        updateAll({ ...pageData, collage: { ...pageData.collage, images: newImgs.slice(0, 5) } });
+                                                    }
+                                                }} />
+                                            </label>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-12 pt-8 border-t border-[#5A2A45]/10">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Title</label>
+                                    <input id="collage-title" defaultValue={pageData.collage?.title} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-2xl" placeholder="HAPPIEST HOLIDAYS" />
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle / Caption</label>
+                                    <input id="collage-subtitle" defaultValue={pageData.collage?.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-outfit" placeholder="warm wishes from the arlington family" />
+                                </div>
                             </div>
                         </div>
                     </div>

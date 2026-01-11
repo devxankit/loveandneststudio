@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import Lenis from 'lenis'; // Import Lenis for smooth scroll
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/layout/ScrollToTop';
@@ -29,6 +31,31 @@ const Layout = ({ children }) => {
 };
 
 function App() {
+  // Initialize Lenis Smooth Scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   return (
     <HelmetProvider>
       <Router>

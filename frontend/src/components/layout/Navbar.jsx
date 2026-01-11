@@ -47,10 +47,12 @@ const Navbar = React.memo(() => {
         setIsPortfolioOpen(!isPortfolioOpen);
     };
 
+    const isDarkPage = ['/services', '/blog', '/testimonials', '/contact', '/portfolio', '/about'].some(path => location.pathname.startsWith(path));
+
     const navLinkClasses = ({ isActive }) =>
-        `relative py-2 font-medium transition-all duration-500 hover:text-primary ${isActive ? 'text-primary' : (isScrolled ? 'text-gray-700' : 'text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]')
+        `relative py-2 font-medium transition-all duration-500 hover:text-primary ${isActive ? 'text-primary' : ((isScrolled || isDarkPage) ? 'text-gray-700' : 'text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]')
         } after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'
-        } ${!isScrolled ? 'hover:brightness-110 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : ''}`;
+        } ${(!isScrolled && !isDarkPage) ? 'hover:brightness-110 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : ''}`;
 
     const displayLogo = navbarLogo || defaultLogo;
 
@@ -70,7 +72,7 @@ const Navbar = React.memo(() => {
                         <img
                             src={displayLogo}
                             alt="Love & Nest Studio"
-                            className={`transition-all duration-500 w-auto object-contain ${isScrolled ? 'h-10 md:h-12 lg:h-14' : 'h-12 md:h-16 lg:h-20'}`}
+                            className={`transition-all duration-500 w-auto object-contain ${(isScrolled || isDarkPage) ? 'h-10 md:h-12 lg:h-14' : 'h-12 md:h-16 lg:h-20'}`}
                         />
                     </Link>
 
@@ -86,11 +88,11 @@ const Navbar = React.memo(() => {
                             onMouseLeave={() => setIsPortfolioHovered(false)}
                         >
                             <div className="flex items-center cursor-pointer gap-1 py-4">
-                                <span className={`font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-700 group-hover:text-primary' : 'text-white drop-shadow-md group-hover:text-primary'}`}>
+                                <span className={`font-medium transition-colors duration-300 ${(isScrolled || isDarkPage) ? 'text-gray-700 group-hover:text-primary' : 'text-white drop-shadow-md group-hover:text-primary'}`}>
                                     Portfolio
                                 </span>
                                 <svg
-                                    className={`w-4 h-4 transition-transform duration-300 ${isPortfolioHovered ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-700' : 'text-white'}`}
+                                    className={`w-4 h-4 transition-transform duration-300 ${isPortfolioHovered ? 'rotate-180' : ''} ${(isScrolled || isDarkPage) ? 'text-gray-700' : 'text-white'}`}
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 >
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
@@ -145,7 +147,7 @@ const Navbar = React.memo(() => {
 
                     {/* Mobile Toggle Button */}
                     <button
-                        className={`md:hidden relative z-[1001] p-2 -mr-2 transition-colors duration-300 ${isScrolled ? 'text-gray-800' : 'text-white drop-shadow-md'}`}
+                        className={`md:hidden relative z-[1001] p-2 -mr-2 transition-colors duration-300 ${(isScrolled || isDarkPage) ? 'text-gray-800' : 'text-white drop-shadow-md'}`}
                         onClick={toggleMenu}
                         aria-label="Toggle menu"
                     >

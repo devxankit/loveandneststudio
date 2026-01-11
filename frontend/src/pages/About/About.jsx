@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { getAboutPage } from '../../services/api';
 import SEO from '../../components/seo/SEO';
@@ -213,12 +214,59 @@ const About = () => {
                         </div>
                     </div>
 
-                    <div className="mt-32 mb-12 flex flex-col items-center gap-6 text-center select-none">
-                        <span className="font-display text-[clamp(3rem,7vw,5rem)] font-normal italic text-[#B77A8C] tracking-wide opacity-90 drop-shadow-[0_10px_30px_rgba(183,122,140,0.1)]">
-                            {bio.thankYouText || "Thank You"}
-                        </span>
-                        <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B77A8C] to-transparent opacity-50"></div>
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, ease: "easeOut" }}
+                        className="mt-40 mb-24 flex flex-col items-center gap-6 text-center select-none relative"
+                    >
+                        {/* Decorative Top Line */}
+                        <motion.div
+                            initial={{ scaleX: 0, opacity: 0 }}
+                            whileInView={{ scaleX: 1, opacity: 0.6 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3, duration: 1.2, ease: "circOut" }}
+                            className="w-32 h-[1px] bg-gradient-to-r from-transparent via-[#B77A8C] to-transparent mb-2"
+                        ></motion.div>
+
+                        <div className="relative">
+                            <motion.span
+                                initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+                                whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1.5, ease: "easeOut" }}
+                                className="font-display text-[clamp(3.5rem,10vw,6rem)] leading-tight text-transparent bg-clip-text bg-gradient-to-b from-[#B77A8C] to-[#8F5A6C] italic tracking-wide drop-shadow-sm"
+                            >
+                                {bio.thankYouText || "Thank You"}
+                            </motion.span>
+
+                            {/* Hand-drawn element visual cue (faint svg underline or sparkle) */}
+                            <motion.svg
+                                initial={{ pathLength: 0, opacity: 0 }}
+                                whileInView={{ pathLength: 1, opacity: 0.4 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 1, duration: 1.5, ease: "easeInOut" }}
+                                viewBox="0 0 100 20"
+                                className="absolute -bottom-2 md:-bottom-4 left-1/2 -translate-x-1/2 w-32 md:w-48 text-[#B77A8C] pointer-events-none"
+                            >
+                                <path d="M5 15 Q 50 25 95 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            </motion.svg>
+                        </div>
+
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 0.5 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.8, duration: 1 }}
+                            className="font-outfit text-[#6E5A52] tracking-[0.4em] text-[10px] md:text-xs uppercase mt-4"
+                        >
+                            For being part of our journey
+                        </motion.p>
+
+                        {/* Ambient Glow */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[120px] bg-[#B77A8C] blur-[90px] opacity-10 rounded-full -z-10 pointer-events-none"></div>
+                    </motion.div>
                 </section>
             </div>
         </>

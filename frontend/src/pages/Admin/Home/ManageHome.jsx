@@ -315,27 +315,7 @@ const ManageHome = () => {
                         {/* Intro & Artist */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div className="bg-white rounded-[2.5rem] p-10 border border-[#5A2A45]/5 shadow-sm space-y-6">
-                                <h4 className="font-display text-2xl text-[#5A2A45] border-b pb-4">01. Intro: Anamika's Passport</h4>
-                                <div className="space-y-4">
-                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86]">Introduction Text (Under Passport)</label>
-                                    <textarea value={pageData.splitScreen.intro.text} onChange={(e) => handleUpdateField('splitScreen.intro.text', e.target.value)} rows="4" className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none text-sm" />
-
-                                    <div className="grid grid-cols-2 gap-6 items-start">
-                                        <div>
-                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] mb-3">Passport Image</label>
-                                            <div className="w-[140px] h-[180px] bg-white p-2 shadow-lg border border-black/5 relative group">
-                                                <div className="w-full h-full overflow-hidden bg-[#FAF9F6]">
-                                                    {pageData.splitScreen.intro.image ? <img src={pageData.splitScreen.intro.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center opacity-20"><ImageIcon /></div>}
-                                                </div>
-                                                <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white"><Upload /><input type="file" className="hidden" onChange={(e) => handleUploadImage(e.target.files[0], 'splitScreen.intro.image')} /></label>
-                                            </div>
-                                            <p className="text-[10px] text-[#8F8A86] mt-2 italic">This image appears as a small passport photo.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-white rounded-[2.5rem] p-10 border border-[#5A2A45]/5 shadow-sm space-y-6">
-                                <h4 className="font-display text-2xl text-[#5A2A45] border-b pb-4">02. Artist Profile</h4>
+                                <h4 className="font-display text-2xl text-[#5A2A45] border-b pb-4">01. Artist Profile</h4>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-4 col-span-1">
                                         <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86]">Section Title</label>
@@ -358,12 +338,12 @@ const ManageHome = () => {
                         {/* Philosophy & Contact */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div className="bg-white rounded-[2.5rem] p-10 border border-[#5A2A45]/5 shadow-sm space-y-6">
-                                <h4 className="font-display text-2xl text-[#5A2A45] border-b pb-4">03. Philosophy</h4>
+                                <h4 className="font-display text-2xl text-[#5A2A45] border-b pb-4">02. Philosophy</h4>
                                 <textarea value={pageData.splitScreen.philosophy.quote} onChange={(e) => handleUpdateField('splitScreen.philosophy.quote', e.target.value)} rows="2" className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none italic font-display text-xl" />
                                 <textarea value={pageData.splitScreen.philosophy.text} onChange={(e) => handleUpdateField('splitScreen.philosophy.text', e.target.value)} rows="4" className="w-full p-4 bg-[#FAF9F6] rounded-xl outline-none text-sm" />
                             </div>
                             <div className="bg-[#5A2A45] rounded-[2.5rem] p-10 shadow-sm space-y-6 text-white flex flex-col justify-center">
-                                <h4 className="font-display text-2xl border-b border-white/10 pb-4">04. Final CTA</h4>
+                                <h4 className="font-display text-2xl border-b border-white/10 pb-4">03. Final CTA</h4>
                                 <div>
                                     <label className="block text-[10px] font-bold uppercase tracking-widest opacity-40 mb-3 text-white">Main Heading</label>
                                     <input value={pageData.splitScreen.contact.heading} onChange={(e) => handleUpdateField('splitScreen.contact.heading', e.target.value)} className="w-full p-4 bg-white/5 rounded-xl outline-none font-display text-3xl text-[#F1EBDD]" />

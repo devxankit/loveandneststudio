@@ -79,6 +79,7 @@ app.use('/api/portfolio-page', require('./routes/portfolioPageRoutes'));
 app.use('/api/home-page', require('./routes/homePageRoutes'));
 app.use('/api/about-page', require('./routes/aboutPageRoutes'));
 app.use('/api/contact-page', require('./routes/contactPageRoutes'));
+app.use('/api/hospital', require('./routes/hospitalRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 
 

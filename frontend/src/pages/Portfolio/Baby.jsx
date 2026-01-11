@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
 import { getBabyPage } from '../../services/api';
+import AdventureModal from '../../components/popups/AdventureModal';
 
 // Fallback images from assets
 import babyHero1 from '../../assets/images/portfolio/baby/Screenshot 2025-12-31 153257.png';
@@ -13,6 +15,7 @@ import babyWelcome from '../../assets/images/portfolio/baby/Screenshot 2025-12-3
 const Baby = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +34,12 @@ const Baby = () => {
     if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7] text-[#5A2A45] font-display text-2xl">Loading...</div>;
 
     const hero = data?.hero || {};
+    const adventureData = {
+        topImage: data?.adventureModal?.topImage || babyHero1,
+        content: data?.adventureModal?.content || "Your adventure content goes here...",
+        sideImage: data?.adventureModal?.sideImage || babyHero2
+    };
+
     const welcome = data?.welcome || {};
     const puzzleImages = data?.puzzleImages || [];
     const bgImages = (hero.images && hero.images.length > 0) ? hero.images : [babyHero1, babyHero2, babyHero3];
@@ -139,7 +148,12 @@ const Baby = () => {
                             </motion.div>
                             <p className="font-outfit text-gray-600 text-lg leading-relaxed max-w-md mx-auto md:mx-0 whitespace-pre-wrap">{welcome.text}</p>
                             <div className="pt-4">
-                                <motion.button whileHover={{ scale: 1.05, x: 5 }} whileTap={{ scale: 0.95 }} className="px-8 py-4 bg-[#E8C547] text-[#1a1a1a] font-bold text-sm uppercase tracking-widest shadow-md flex items-center gap-2 mx-auto md:mx-0">
+                                <motion.button
+                                    onClick={() => setIsModalOpen(true)}
+                                    whileHover={{ scale: 1.05, x: 5 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="px-8 py-4 bg-[#E8C547] text-[#1a1a1a] font-bold text-sm uppercase tracking-widest shadow-md flex items-center gap-2 mx-auto md:mx-0"
+                                >
                                     {welcome.buttonText} <span className="text-lg">→</span>
                                 </motion.button>
                             </div>
@@ -171,6 +185,13 @@ const Baby = () => {
                         ))}
                     </div>
                 </section>
+
+                {/* Adventure Modal */}
+                <AdventureModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    data={adventureData}
+                />
 
                 <style>{`
                     .perspective-1000 { perspective: 1000px; }

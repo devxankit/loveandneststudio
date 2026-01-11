@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import ReactDOM from 'react-dom';
+import { Heart } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
 import SEO from '../../components/seo/SEO';
 import SectionTitle from '../../components/common/SectionTitle';
 import LazyImage from '../../components/common/LazyImage';
@@ -26,6 +28,7 @@ const img12 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937586/lov
 const Maternity = () => {
     const [pageData, setPageData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, {
@@ -84,16 +87,71 @@ const Maternity = () => {
                 <PosesGridSection data={poses} />
 
                 {/* 6. Masonry Gallery with Parallax */}
-                <GallerySection items={gallery} />
+                <GallerySection items={gallery} onImageClick={setSelectedImage} />
 
                 {/* 5. CTA Section */}
                 <CTASection data={cta} />
+
+                {/* Image Modal */}
+                <ImageModal
+                    selectedImage={selectedImage}
+                    onClose={() => setSelectedImage(null)}
+                />
             </div>
         </>
     );
 };
 
 // --- Sub-Components ---
+
+const ImageModal = ({ selectedImage, onClose }) => {
+    if (!selectedImage) return null;
+
+    return ReactDOM.createPortal(
+        <AnimatePresence>
+            {selectedImage && (
+                <div
+                    className="fixed inset-0 z-[2147483647] flex items-center justify-center p-4 md:p-8 cursor-zoom-out h-screen w-screen overflow-hidden left-0 top-0"
+                    onClick={onClose}
+                >
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-0 bg-[#333]/40 backdrop-blur-xl"
+                    />
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                        className="relative z-10 max-w-[95vw] max-h-[95vh] rounded-sm shadow-2xl group flex items-center justify-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <img
+                            src={selectedImage}
+                            alt="Full View"
+                            className="max-w-full max-h-[90vh] object-contain block select-none"
+                        />
+
+                        <button
+                            onClick={onClose}
+                            className="absolute z-20 top-4 right-4 md:-right-16 md:top-0 text-white hover:text-[#5A2A45] transition-colors p-2 bg-black/10 hover:bg-white rounded-full backdrop-blur-sm"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 md:w-8 md:h-8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>,
+        document.body
+    );
+};
+
+
 
 const HeroSection = ({ data }) => {
     const ref = useRef(null);
@@ -143,7 +201,7 @@ const HeroSection = ({ data }) => {
                         animate={{ y: 0 }}
                         transition={{ duration: 1, delay: 0.5, ease: [0.76, 0, 0.24, 1] }}
                     >
-                        <span className="font-display italic text-3xl md:text-5xl text-[#8F8A86] block mb-2">{subtitle}</span>
+                        <span className="font-display italic text-3xl md:text-5xl text-[#5A2A45] block mb-2 drop-shadow-sm">{subtitle}</span>
                     </motion.div>
                 </div>
 
@@ -164,7 +222,22 @@ const HeroSection = ({ data }) => {
                     transition={{ duration: 1, delay: 1.2 }}
                     className="mt-10 flex flex-col items-center gap-4"
                 >
-                    <div className="h-16 w-[1px] bg-[#5A2A45]/30"></div>
+                    <div className="relative h-10 w-16 flex items-center justify-center mb-2">
+                        <motion.div
+                            animate={{ scale: [1, 1.1, 1], rotate: -12 }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                            className="absolute left-1/2 -translate-x-[70%] text-[#5A2A45] z-10"
+                        >
+                            <Heart size={22} fill="currentColor" className="drop-shadow-sm" />
+                        </motion.div>
+                        <motion.div
+                            animate={{ scale: [1, 1.2, 1], rotate: 12 }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                            className="absolute left-1/2 -translate-x-[20%] translate-y-[15%] text-[#B77A8C] z-20"
+                        >
+                            <Heart size={16} fill="currentColor" className="drop-shadow-sm" />
+                        </motion.div>
+                    </div>
                     <p className="font-outfit text-sm md:text-base tracking-[0.4em] uppercase text-[#5A2A45]/80">
                         Love & Nest Studio
                     </p>
@@ -283,7 +356,7 @@ const ArtisticSilhouetteSection = ({ data }) => {
                         <p className="font-outfit text-[#8F8A86] text-lg leading-relaxed max-w-md mx-auto md:mx-0 mb-8">
                             {text}
                         </p>
-                        <Link to="/contact">
+                        <Link to="/portfolio">
                             <button className="group relative px-8 py-4 overflow-hidden rounded-full bg-white border border-[#5A2A45] text-[#5A2A45] shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                                 <span className="relative z-10 font-outfit tracking-widest text-sm uppercase group-hover:text-white transition-colors duration-300">View Gallery</span>
                                 <div className="absolute inset-0 bg-[#5A2A45] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
@@ -299,42 +372,55 @@ const ArtisticSilhouetteSection = ({ data }) => {
 const JourneySection = ({ data }) => {
     const title = data?.title || 'The Journey';
     const subtitle = data?.subtitle || 'Growing with love';
-    const images = data?.images?.length > 0 ? data.images : [img2, img4, img6, img8];
-    // Duplicate items for seamless infinite scroll
-    const marqueeItems = [...images, ...images, ...images];
+    const topText = data?.topText || 'Every Kick, Every Flutter';
+    const midText = data?.midGalleryText || 'Visual Poetry';
+
+    // Ensure we have a base set of images, defaults if empty
+    const baseImages = data?.images?.length > 0 ? data.images : [img2, img4, img6, img8, img1, img3, img5, img7, img9, img10];
+
+    // Create a repeating array for the infinite scroll. 
+    // We want enough items to scroll smoothly.
+    const marqueeItems = [...baseImages, ...baseImages, ...baseImages];
 
     return (
         <section className="py-20 md:py-32 bg-[#FAF5F0] overflow-hidden relative border-t border-[#E8CBB6]/30">
             <div className="text-center mb-16 px-4">
+                <span className="block font-outfit text-xs md:text-sm tracking-[0.2em] text-[#8F8A86] uppercase mb-4">{topText}</span>
                 <h2 className="font-display text-4xl md:text-5xl mb-4 text-[#5A2A45]">{title}</h2>
                 <p className="font-outfit text-[#B77A8C] uppercase tracking-widest">{subtitle}</p>
             </div>
 
             <div className="flex w-full overflow-hidden">
                 <motion.div
-                    animate={{ x: "-33.33%" }}
+                    animate={{ x: "-50%" }}
                     initial={{ x: "0%" }}
                     transition={{
-                        duration: 30,
+                        duration: 40,
                         ease: "linear",
                         repeat: Infinity
                     }}
-                    className="flex gap-6 md:gap-12 pl-6 md:pl-12 w-max"
+                    className="flex gap-8 md:gap-16 items-center pl-8 w-max"
                 >
                     {marqueeItems.map((img, index) => (
-                        <div
-                            key={`journey - ${index} `}
-                            className="relative group w-[250px] md:w-[400px] flex-shrink-0"
-                        >
-                            <div className="bg-white p-6 pb-20 shadow-lg rotate-1 group-hover:rotate-0 transition-transform duration-500 transform origin-top border border-[#E8CBB6]/40">
-                                <div className="aspect-[4/5] overflow-hidden bg-gray-100 mb-6 grayscale group-hover:grayscale-0 transition-all duration-700">
-                                    <LazyImage src={img} alt={`Journey ${index} `} className="w-full h-full object-cover" />
-                                </div>
-                                <div className="font-handwriting text-3xl text-center text-[#5A2A45] absolute bottom-6 left-0 right-0 font-display italic">
-                                    Month {(index % (images.length || 1)) * 2 + 3}
+                        <React.Fragment key={`journey-item-${index}`}>
+                            {/* Image Card */}
+                            <div className="relative group w-[220px] md:w-[320px] flex-shrink-0">
+                                <div className="bg-white p-3 md:p-6 md:pb-16 shadow-[0_10px_30px_rgba(90,42,69,0.08)] transform rotate-1 group-hover:rotate-0 transition-transform duration-500 origin-top border border-[#E8CBB6]/40">
+                                    <div className="aspect-[4/5] overflow-hidden bg-gray-100 mb-4 grayscale-[20%] group-hover:grayscale-0 transition-all duration-700">
+                                        <LazyImage src={img} alt={`Journey ${index}`} className="w-full h-full object-cover" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+
+                            {/* "Visual Poetry" Text inserted after every 5 images */}
+                            {(index + 1) % 5 === 0 && (
+                                <div className="shrink-0 flex items-center justify-center px-4 md:px-8">
+                                    <span className="font-display text-4xl md:text-6xl text-[#5A2A45]/10 italic whitespace-nowrap select-none">
+                                        {midText}
+                                    </span>
+                                </div>
+                            )}
+                        </React.Fragment>
                     ))}
                 </motion.div>
             </div>
@@ -402,7 +488,7 @@ const PosesGridSection = ({ data }) => {
     );
 };
 
-const GallerySection = ({ items }) => {
+const GallerySection = ({ items, onImageClick }) => {
     const galleryItems = items?.length > 0 ? items.map((src, i) => ({ id: i, src })) : [
         { id: 1, src: img1 }, { id: 2, src: img2 }, { id: 3, src: img3 }, { id: 4, src: img4 },
         { id: 5, src: img5 }, { id: 6, src: img6 }, { id: 7, src: img7 }, { id: 8, src: img8 }
@@ -416,7 +502,7 @@ const GallerySection = ({ items }) => {
                 <div className="mt-10 md:mt-16 columns-2 md:columns-3 gap-4 space-y-4">
                     {galleryItems.map((item) => (
                         <div key={item.id} className="break-inside-avoid mb-4">
-                            <GalleryItem item={item} />
+                            <GalleryItem item={item} onClick={() => onImageClick && onImageClick(item.src)} />
                         </div>
                     ))}
                 </div>
@@ -425,27 +511,31 @@ const GallerySection = ({ items }) => {
     );
 };
 
-const GalleryItem = ({ item }) => {
+const GalleryItem = ({ item, onClick }) => {
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ margin: "-50px" }}
             transition={{ duration: 0.6 }}
-            className="relative group overflow-hidden cursor-pointer w-full"
+            className="relative group overflow-hidden cursor-pointer w-full rounded-sm"
+            onClick={onClick}
         >
-            <div className="w-full h-auto overflow-hidden">
+            <div className="w-full h-auto overflow-hidden relative">
                 <LazyImage
                     src={item.src}
                     alt={`Maternity Portrait ${item.id} `}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-            </div>
 
-            {/* Hover Overlay */}
-            <div className="absolute inset-0 bg-[#5A2A45]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <div className="w-12 h-12 border border-white rounded-full flex items-center justify-center text-white transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-100">
-                    +
+                {/* Shine/Sheen Effect - Same as About Page */}
+                <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_30%,rgba(255,255,255,0.6)_50%,transparent_70%)] skew-x-[-20deg] -left-[150%] pointer-events-none group-hover:animate-[sheen-hover_1.5s_cubic-bezier(0.4,0,0.2,1)_forwards]"></div>
+
+                {/* Hover Overlay with + Sign */}
+                <div className="absolute inset-0 bg-[#5A2A45]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="w-12 h-12 border border-white rounded-full flex items-center justify-center text-white transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-100">
+                        +
+                    </div>
                 </div>
             </div>
         </motion.div>
@@ -455,6 +545,10 @@ const GalleryItem = ({ item }) => {
 const CTASection = ({ data }) => {
     const title = data?.title || 'Ready to capture your glow?';
     const text = data?.text || "Let's create timeless art that celebrates this beautiful chapter of your life. Book your session today.";
+
+    const handleConnect = () => {
+        window.open('https://wa.me/918679076776', '_blank');
+    };
 
     return (
         <section className="py-20 md:py-32 px-6 bg-[#5A2A45] text-white text-center relative overflow-hidden">
@@ -467,22 +561,21 @@ const CTASection = ({ data }) => {
                 <p className="font-outfit text-[#E8CBB6] text-lg mb-12 max-w-xl mx-auto">
                     {text}
                 </p>
-                <Link to="/contact" className="inline-block">
-                    <button className="group relative px-10 py-5 overflow-hidden rounded-full bg-white text-[#5A2A45] shadow-2xl transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(232,203,182,0.4)] hover:-translate-y-1">
-                        <span className="relative z-10 font-outfit text-lg tracking-widest uppercase font-medium flex items-center gap-3">
-                            Book Your Session
-                            <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </span>
+                <button onClick={handleConnect} className="group relative px-10 py-5 overflow-hidden rounded-full bg-white text-[#5A2A45] shadow-2xl transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(232,203,182,0.4)] hover:-translate-y-1 cursor-pointer inline-block">
+                    <span className="relative z-10 font-outfit text-lg tracking-widest uppercase font-medium flex items-center gap-3">
+                        Connect With Our Studio
+                        <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </span>
 
-                        {/* Cloud hover effect */}
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%] bg-gradient-to-r from-[#B77A8C]/30 via-[#E8CBB6]/30 to-[#B77A8C]/30 animate-[spin_4s_linear_infinite] rounded-full blur-xl"></div>
-                        </div>
-                    </button>
-                </Link>
+                    {/* Cloud hover effect */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%] bg-gradient-to-r from-[#B77A8C]/30 via-[#E8CBB6]/30 to-[#B77A8C]/30 animate-[spin_4s_linear_infinite] rounded-full blur-xl"></div>
+                    </div>
+                </button>
             </div>
         </section>
     );
 };
+
 
 export default Maternity;

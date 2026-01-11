@@ -14,6 +14,11 @@ const babySchema = new mongoose.Schema({
         image: { type: String },
         buttonText: { type: String, default: 'My Full Adventure' }
     },
+    adventureModal: {
+        topImage: { type: String },
+        content: { type: String, default: "Your adventure content goes here..." },
+        sideImage: { type: String }
+    },
     puzzleImages: [{ type: String }] // For the puzzle grid (Sneak Peek)
 }, { timestamps: true });
 

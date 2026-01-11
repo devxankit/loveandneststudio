@@ -20,7 +20,9 @@ const maternitySchema = new mongoose.Schema({
     journey: {
         title: { type: String, default: 'The Journey' },
         subtitle: { type: String, default: 'Growing with love' },
-        images: [{ type: String }]
+        topText: { type: String, default: 'Every Kick, Every Flutter' },
+        images: [{ type: String }],
+        midGalleryText: { type: String, default: 'Visual Poetry' }
     },
     poses: {
         title: { type: String, default: 'Studio Maternity Poses' },

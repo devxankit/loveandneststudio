@@ -86,7 +86,7 @@ const Contact = () => {
                 keywords={pageData?.meta?.keywords || "contact photographer, love and nest studio, maternity photography pune"}
             />
 
-            <div className="w-full bg-[#F1EBDD] pt-32 pb-20 px-4 md:px-8 lg:px-12 relative overflow-hidden">
+            <div className="w-full bg-[#F1EBDD] pt-32 pb-40 md:pb-20 px-4 md:px-8 lg:px-12 relative overflow-hidden">
                 {/* Decorative Elements */}
                 <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] bg-[#E6D1CB]/30 rounded-full blur-[120px] pointer-events-none"></div>
                 <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] bg-[#C9D0C3]/20 rounded-full blur-[150px] pointer-events-none"></div>
@@ -165,12 +165,23 @@ const Contact = () => {
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     transition={{ duration: 1.2 }}
-                                    className="mt-16 w-full md:w-auto"
+                                    className="mt-16 w-full flex flex-col md:flex-row items-center md:items-center gap-12"
                                 >
-                                    <div className="w-full md:w-64 aspect-[4/5] rounded-[24px] overflow-hidden border-[8px] border-white shadow-2xl rotate-2 hover:rotate-0 transition-all duration-700">
-                                        <img src={entranceImage} alt="Studio Details" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" />
+                                    <div className="flex flex-col gap-4">
+                                        <div className="w-full md:w-64 aspect-[4/5] rounded-[24px] overflow-hidden border-[8px] border-white shadow-2xl rotate-2 hover:rotate-0 transition-all duration-700">
+                                            <img src={entranceImage} alt="Studio Details" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" />
+                                        </div>
+                                        <span className="block text-[10px] font-bold uppercase tracking-[0.4em] text-[#5A2A45]/30 pl-2">{visuals.entranceLabel || "Studio Entrance — Dehradun"}</span>
                                     </div>
-                                    <span className="block mt-4 text-[10px] font-bold uppercase tracking-[0.4em] text-[#5A2A45]/30">{visuals.entranceLabel || "Studio Entrance — Dehradun"}</span>
+
+                                    <button
+                                        onClick={() => window.open(`https://wa.me/${info.whatsapp ? info.whatsapp.replace(/[^0-9]/g, '') : "918679076776"}`, '_blank')}
+                                        className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#5A2A45] text-[#F1EBDD] font-outfit text-sm font-bold uppercase tracking-widest rounded-full shadow-[0_20px_50px_-10px_rgba(90,42,69,0.3)] hover:shadow-[0_10px_30px_-5px_rgba(90,42,69,0.4)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                                    >
+                                        <span className="relative z-10">Connect With Us</span>
+                                        <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                                        <div className="absolute inset-0 bg-[#6E3554] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+                                    </button>
                                 </motion.div>
                             </div>
                         </div>
@@ -233,22 +244,22 @@ const Contact = () => {
                         </div>
 
                         {/* Dynamic Collage */}
-                        <div className="flex-1 relative h-[400px] w-full max-w-xl">
+                        <div className="flex-1 relative w-full max-w-md mx-auto h-[450px] md:h-[400px] mt-12 md:mt-0">
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
                                 whileInView={{ opacity: 1, scale: 1, rotate: -6 }}
                                 transition={{ duration: 1 }}
-                                className="absolute top-0 left-0 w-48 aspect-[3/4] bg-white p-3 shadow-2xl rounded-2xl z-20"
+                                className="absolute top-0 left-[5%] md:left-0 w-[45%] md:w-48 aspect-[3/4] bg-white p-2 md:p-3 shadow-2xl rounded-xl md:rounded-2xl z-20"
                             >
-                                <img src={collageImages[0]} className="w-full h-full object-cover rounded-xl" alt="Preview 1" />
+                                <img src={collageImages[0]} className="w-full h-full object-cover rounded-lg md:rounded-xl" alt="Preview 1" />
                             </motion.div>
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
                                 whileInView={{ opacity: 1, scale: 1, rotate: 6 }}
                                 transition={{ duration: 1, delay: 0.2 }}
-                                className="absolute top-10 right-0 w-56 aspect-[3/4] bg-white p-3 shadow-2xl rounded-2xl z-10"
+                                className="absolute top-8 md:top-10 right-[5%] md:right-0 w-[50%] md:w-56 aspect-[3/4] bg-white p-2 md:p-3 shadow-2xl rounded-xl md:rounded-2xl z-10"
                             >
-                                <img src={collageImages[1] || collageImages[0]} className="w-full h-full object-cover rounded-xl" alt="Preview 2" />
+                                <img src={collageImages[1] || collageImages[0]} className="w-full h-full object-cover rounded-lg md:rounded-xl" alt="Preview 2" />
                             </motion.div>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
@@ -45,6 +46,7 @@ const Family = () => {
     const selectedWorks = data?.selectedWorks || [];
     const mosaic = data?.mosaic || {};
     const archGrid = data?.archGrid || { images: [] };
+    const collage = data?.collage || { images: [] };
 
     return (
         <>
@@ -191,7 +193,7 @@ const Family = () => {
                             <h2 className="font-display text-4xl md:text-5xl text-[#1a1a1a]">Selected Stories</h2>
                         </div>
                         <div className="hidden md:block">
-                            <a href="/contact" className="font-outfit text-xs uppercase tracking-[2px] border border-[#2a2a2a]/30 rounded-full px-6 py-3 hover:bg-[#1a1a1a] hover:text-white transition-all">View All Archives</a>
+                            <Link to="/portfolio" className="font-outfit text-xs uppercase tracking-[2px] border border-[#2a2a2a]/30 rounded-full px-6 py-3 hover:bg-[#1a1a1a] hover:text-white transition-all">View All Archives</Link>
                         </div>
                     </div>
 
@@ -312,6 +314,82 @@ const Family = () => {
                             Get in Touch
                         </a>
                     </div>
+                </section>
+
+                {/* 7. HOLIDAY COLLAGE GRID */}
+                <section className="py-20 md:py-32 px-6 max-w-[1400px] mx-auto bg-white/50">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 items-stretch">
+
+                        {/* Left Column (Stack) */}
+                        <div className="flex flex-col gap-4 md:gap-6 order-2 md:order-1">
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8 }}
+                                className="aspect-[4/3] rounded-sm overflow-hidden shadow-sm"
+                            >
+                                <LazyImage src={collage.images?.[0] || detailImg1Default} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                            </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="aspect-[3/4] rounded-sm overflow-hidden shadow-sm flex-grow"
+                            >
+                                <LazyImage src={collage.images?.[1] || portraitImg1Default} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                            </motion.div>
+                        </div>
+
+                        {/* Center Column (Arch) - Spans 2 cols on md */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            className="md:col-span-2 h-full min-h-[400px] md:min-h-[600px] rounded-t-[1000px] rounded-b-sm overflow-hidden shadow-xl relative order-1 md:order-2 group"
+                        >
+                            <LazyImage src={collage.images?.[2] || storyImgDefault} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                            <div className="absolute inset-0 border-[1px] border-white/20 rounded-t-[1000px] rounded-b-sm m-3 md:m-4 pointer-events-none"></div>
+                        </motion.div>
+
+                        {/* Right Column (Stack) */}
+                        <div className="flex flex-col gap-4 md:gap-6 order-3 md:order-3">
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8 }}
+                                className="aspect-[4/3] rounded-sm overflow-hidden shadow-sm"
+                            >
+                                <LazyImage src={collage.images?.[3] || wideImgDefault} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                            </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="aspect-[3/4] rounded-sm overflow-hidden shadow-sm flex-grow"
+                            >
+                                <LazyImage src={collage.images?.[4] || detailImg2Default} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                            </motion.div>
+                        </div>
+                    </div>
+
+                    {/* Text Section for Collage */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="text-center mt-16 md:mt-24 space-y-4 md:space-y-6"
+                    >
+                        <h2 className="font-display text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] md:tracking-[0.2em] text-[#5A2A45] leading-none">
+                            {collage.title || "Happiest Holidays"}
+                        </h2>
+                        <div className="flex items-center justify-center gap-4">
+                            <div className="h-[1px] w-8 md:w-16 bg-[#8F8A86]/40"></div>
+                            <p className="font-display italic text-base md:text-xl text-[#8F8A86]">
+                                {collage.subtitle || "warm wishes from our family to yours"}
+                            </p>
+                            <div className="h-[1px] w-8 md:w-16 bg-[#8F8A86]/40"></div>
+                        </div>
+                    </motion.div>
                 </section>
                 {/* Footer simple link */}
                 <div className="py-8 text-center bg-transparent mt-10">

@@ -89,7 +89,7 @@ const Blog = () => {
                             custom={1}
                             variants={floatingImageVariants}
                             animate="animate"
-                            className="absolute top-[12%] left-[4%] md:top-[10%] md:left-[15%] w-[28vw] md:w-48 aspect-[3/4] p-1 md:p-2 bg-white shadow-xl rotate-[-6deg] z-0 opacity-80"
+                            className="absolute top-16 left-2 md:top-[12%] md:left-[15%] w-28 md:w-48 aspect-[3/4] p-1 md:p-2 bg-white shadow-xl rotate-[-6deg] z-0 opacity-80"
                         >
                             <div className="w-full h-full bg-gray-100 overflow-hidden">
                                 <LazyImage src={decoImg1} alt="" className="w-full h-full object-cover grayscale opacity-80" />
@@ -101,7 +101,7 @@ const Blog = () => {
                             custom={2}
                             variants={floatingImageVariants}
                             animate="animate"
-                            className="absolute bottom-[15%] right-[4%] md:bottom-[20%] md:right-[15%] w-[35vw] md:w-56 aspect-[4/5] p-1 md:p-2 bg-white shadow-xl rotate-[6deg] z-0 opacity-80"
+                            className="absolute bottom-20 -right-4 md:bottom-[20%] md:right-[15%] w-36 md:w-56 aspect-[4/5] p-1 md:p-2 bg-white shadow-xl rotate-[6deg] z-0 opacity-80"
                         >
                             <div className="w-full h-full bg-gray-100 overflow-hidden">
                                 <LazyImage src={decoImg2} alt="" className="w-full h-full object-cover grayscale opacity-80" />
@@ -113,7 +113,7 @@ const Blog = () => {
                             custom={3}
                             variants={floatingImageVariants}
                             animate="animate"
-                            className="absolute top-[8%] right-[6%] md:top-[15%] md:right-[10%] w-[22vw] md:w-36 aspect-square p-1 md:p-2 bg-white shadow-lg rotate-[12deg] z-0 opacity-50 md:opacity-60 blur-[1px]"
+                            className="absolute top-12 -right-2 md:top-[15%] md:right-[10%] w-24 md:w-36 aspect-square p-1 md:p-2 bg-white shadow-lg rotate-[12deg] z-0 opacity-50 md:opacity-60 blur-[1px]"
                         >
                             <div className="w-full h-full bg-gray-100 overflow-hidden">
                                 <LazyImage src={decoImg3} alt="" className="w-full h-full object-cover grayscale opacity-80" />
@@ -138,7 +138,7 @@ const Blog = () => {
                             variants={titleVariants}
                             initial="hidden"
                             animate="visible"
-                            className="font-display text-[15vw] md:text-[7rem] leading-[0.9] text-[#5A2A45] tracking-tight flex justify-center px-4 w-full"
+                            className="font-display text-6xl sm:text-7xl md:text-[7rem] leading-[0.9] text-[#5A2A45] tracking-tight flex justify-center px-4 w-full"
                         >
                             {Array.from("JOURNAL").map((letter, i) => (
                                 <motion.span key={i} variants={letterVariants} className="inline-block transform">

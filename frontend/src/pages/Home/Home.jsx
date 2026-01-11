@@ -455,7 +455,7 @@ const Home = () => {
                             <div className="relative py-10">
                                 <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[1px] h-full bg-[#6E5A52]/10"></div>
                                 <div className="space-y-12 relative z-10">
-                                    {[{ id: "01", label: "Info", ref: introRef }, { id: "02", label: "Artist", ref: artistRef }, { id: "03", label: "Philosophy", ref: philosophyRef }, { id: "04", label: "Contact", ref: contactRef }].map((item, i) => (
+                                    {[{ id: "01", label: "Artist", ref: artistRef }, { id: "02", label: "Philosophy", ref: philosophyRef }, { id: "03", label: "Contact", ref: contactRef }].map((item, i) => (
                                         <motion.div key={i} onClick={() => scrollToRef(item.ref, item.id)} whileHover={{ x: 10 }} className="flex items-center justify-center gap-6 cursor-pointer group">
                                             <span className={`text-[9px] font-bold transition-opacity uppercase tracking-[0.3em] ${activeSection === item.id ? 'opacity-100 text-[#B77A8C]' : 'opacity-20'}`}>{item.id}</span>
                                             <div className={`h-[1px] transition-all duration-500 ${activeSection === item.id ? 'w-20 bg-[#B77A8C]' : 'w-12 bg-[#6E5A52]/10 group-hover:bg-[#B77A8C] group-hover:w-20'}`}></div>
@@ -468,72 +468,12 @@ const Home = () => {
                     </div>
 
                     <div className="w-full lg:w-1/2 z-10 relative bg-[#F9F7F2]">
-                        <div ref={introRef} onMouseEnter={() => setActiveSection("01")}>
-                            <HomeSection index={20} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-24 min-h-[50vh] lg:min-h-screen border-none shadow-none flex flex-col justify-center items-center" isSticky={true}>
-                                <div className="flex flex-col items-center text-center space-y-10 max-w-lg mx-auto">
-                                    {/* Passport Style Image */}
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        whileInView={{ opacity: 1, scale: 1 }}
-                                        transition={{ duration: 1.2 }}
-                                        className="w-[180px] h-[220px] md:w-[220px] md:h-[280px] bg-white p-3 shadow-lg transition-transform duration-500 relative z-10"
-                                    >
-                                        <div className="w-full h-full overflow-hidden border border-black/5">
-                                            <LazyImage src={split.intro.image || hero1} alt="Anamika" className="w-full h-full object-cover grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-700" />
-                                        </div>
-                                    </motion.div>
-
-                                    {/* Anamika's Introduction */}
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 1, delay: 0.2 }}
-                                        className="space-y-6"
-                                    >
-                                        <h3 className="font-display text-3xl md:text-4xl text-[#5A2A45]">Anamika Singh</h3>
-                                        <p className="font-outfit text-[#6E5A52] text-sm md:text-base leading-relaxed max-w-md mx-auto italic opacity-80">
-                                            "{split.intro.text || "Capturing the fleeting magic of childhood, because every tiny moment is a story waiting to be told."}"
-                                        </p>
-                                        <div className="w-12 h-[1px] bg-[#5A2A45]/20 mx-auto"></div>
-                                    </motion.div>
-                                </div>
-                            </HomeSection>
-                        </div>
-
-                        <HomeSection index={21} isSticky={false} className="bg-[#F1EBDD] text-[#5A2A45] p-6 lg:p-16 min-h-[70vh] lg:min-h-screen border-t border-black/5 flex flex-col justify-center items-center">
-                            <div className="w-full h-full flex flex-col items-center justify-center max-w-4xl mx-auto">
-                                <div className="w-full flex justify-between items-end mb-8 md:mb-12 border-b border-black/10 pb-4 md:pb-6">
-                                    <h2 className="font-display text-3xl md:text-5xl uppercase text-center md:text-left w-full" dangerouslySetInnerHTML={{ __html: split.intro.heading || "Hello and <br /> Welcome" }} />
-                                    <span className="text-2xl md:text-4xl font-display opacity-30 hidden md:block">0.1</span>
-                                </div>
-
-                                <div className="flex flex-col gap-8 md:gap-12 items-center w-full">
-                                    {/* Compact Image Container */}
-                                    <div className="aspect-[4/5] bg-white/5 p-3 md:p-4 relative grayscale hover:grayscale-0 transition-all duration-700 w-full max-w-[320px] md:max-w-[380px] shadow-lg hover:shadow-2xl">
-                                        <LazyImage src={split.intro.image || familyImg} alt="Welcome" className="w-full h-full object-cover opacity-90" />
-                                    </div>
-
-                                    {/* Text & Button Stack - Centered on ALL screens */}
-                                    <div className="space-y-6 md:space-y-8 text-center flex flex-col items-center max-w-lg">
-                                        <p className="font-display text-2xl md:text-4xl italic text-[#6E5A52] leading-tight">
-                                            "{split.intro.text || "Love you can feel forever."}"
-                                        </p>
-                                        <Link to="/about">
-                                            <button className="px-10 py-3 md:px-14 md:py-4 border border-[#5A2A45] hover:bg-[#5A2A45] hover:text-[#FAF9F6] transition-all duration-300 text-xs md:text-sm font-bold uppercase tracking-[0.25em] cursor-pointer rounded-sm hover:shadow-xl bg-transparent text-[#5A2A45]">
-                                                More About Us
-                                            </button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </HomeSection>
-
-                        <div ref={artistRef} onMouseEnter={() => setActiveSection("02")}>
+                        <div ref={artistRef} onMouseEnter={() => setActiveSection("01")}>
                             <HomeSection index={30} className="bg-[#C9D0C3] text-[#1a1a1a] p-6 lg:p-16 min-h-[70vh] lg:min-h-screen">
                                 <div className="w-full h-full flex flex-col justify-center">
                                     <div className="flex justify-between items-end mb-8 md:mb-12 border-b border-black/10 pb-4 md:pb-6">
                                         <h2 className="font-display text-3xl md:text-5xl uppercase text-[#1a1a1a]">{split.artist.title || "The Artist"}</h2>
-                                        <span className="text-2xl md:text-4xl font-display opacity-30">0.2</span>
+                                        <span className="text-2xl md:text-4xl font-display opacity-30">0.1</span>
                                     </div>
                                     <div className="flex flex-col gap-6 md:gap-8 h-full">
                                         <div className="h-[30vh] md:h-[40vh] w-full overflow-hidden relative">
@@ -552,12 +492,12 @@ const Home = () => {
                             </HomeSection>
                         </div>
 
-                        <div ref={philosophyRef} onMouseEnter={() => setActiveSection("03")}>
+                        <div ref={philosophyRef} onMouseEnter={() => setActiveSection("02")}>
                             <HomeSection index={40} className="bg-[#E6D1CB] text-[#5A2A45] p-6 lg:p-16 min-h-[70vh] lg:min-h-screen">
                                 <div className="w-full h-full flex flex-col justify-center">
                                     <div className="flex justify-between items-end mb-8 md:mb-12 border-b border-[#5A2A45]/20 pb-4 md:pb-6">
                                         <h2 className="font-display text-3xl md:text-5xl uppercase">{split.philosophy.heading || "Our Philosophy"}</h2>
-                                        <span className="text-2xl md:text-4xl font-display opacity-30">0.3</span>
+                                        <span className="text-2xl md:text-4xl font-display opacity-30">0.2</span>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                                         <div className="space-y-4 md:space-y-6">

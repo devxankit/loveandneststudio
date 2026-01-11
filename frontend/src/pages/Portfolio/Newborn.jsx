@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import ReactDOM from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../../components/seo/SEO';
 import LazyImage from '../../components/common/LazyImage';
 import { getNewbornPage } from '../../services/api';
@@ -18,6 +19,7 @@ import icon5 from '../../assets/images/portfolio/baby/line art/Screenshot_2025-1
 const Newborn = () => {
     const [pageData, setPageData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         const fetchContent = async () => {
@@ -222,7 +224,8 @@ const Newborn = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.1, duration: 0.8 }}
-                                className="aspect-square relative group overflow-hidden bg-gray-200"
+                                className="aspect-square relative group overflow-hidden bg-gray-200 cursor-pointer"
+                                onClick={() => setSelectedImage(img)}
                             >
                                 <LazyImage src={img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 
@@ -241,8 +244,61 @@ const Newborn = () => {
                 <div className="py-8 text-center bg-white">
                     <p className="text-[10px] uppercase text-gray-400 tracking-[0.2em]">Designed with love for little ones</p>
                 </div>
+
+                {/* Image Modal */}
+                <ImageModal
+                    selectedImage={selectedImage}
+                    onClose={() => setSelectedImage(null)}
+                />
             </div>
         </>
+    );
+};
+
+const ImageModal = ({ selectedImage, onClose }) => {
+    if (!selectedImage) return null;
+
+    return ReactDOM.createPortal(
+        <AnimatePresence>
+            {selectedImage && (
+                <div
+                    className="fixed inset-0 z-[2147483647] flex items-center justify-center p-4 md:p-8 cursor-zoom-out h-screen w-screen overflow-hidden left-0 top-0"
+                    onClick={onClose}
+                >
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-0 bg-[#333]/40 backdrop-blur-xl"
+                    />
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                        className="relative z-10 max-w-[95vw] max-h-[95vh] rounded-sm shadow-2xl group flex items-center justify-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <img
+                            src={selectedImage}
+                            alt="Full View"
+                            className="max-w-full max-h-[90vh] object-contain block select-none"
+                        />
+
+                        <button
+                            onClick={onClose}
+                            className="absolute z-20 top-4 right-4 md:-right-16 md:top-0 text-white hover:text-[#5A2A45] transition-colors p-2 bg-black/10 hover:bg-white rounded-full backdrop-blur-sm"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 md:w-8 md:h-8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>,
+        document.body
     );
 };
 

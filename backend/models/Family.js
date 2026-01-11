@@ -34,6 +34,11 @@ const familySchema = new mongoose.Schema({
         images: [String], // Array of 5 images
         lineArtImage: String,
         title: String,
+    },
+    collage: {
+        images: [String], // Array of 5 images for the holiday grid
+        title: String,
+        subtitle: String
     }
 }, { timestamps: true });
 
