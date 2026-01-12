@@ -278,6 +278,52 @@ const Testimonials = () => {
                     </div>
                 </section>
 
+                {ctaSection.videos && ctaSection.videos.some(v => v) && (
+                    <section className="py-24 bg-white border-t border-[#F1EBDD]">
+                        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+                            <div className="text-center mb-16">
+                                <span className="text-[#B77A8C] font-outfit uppercase tracking-[0.3em] text-xs font-bold block mb-4">In Motion</span>
+                                <h2 className="font-display text-4xl md:text-5xl text-[#5A2A45]">Latest from YouTube</h2>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+                                {ctaSection.videos.map((link, i) => {
+                                    if (!link) return null;
+                                    // Robust ID extraction
+                                    let videoId = '';
+                                    if (link.includes('v=')) videoId = link.split('v=')[1]?.split('&')[0];
+                                    else if (link.includes('youtu.be/')) videoId = link.split('youtu.be/')[1]?.split('?')[0];
+                                    else videoId = link; // Fallback
+
+                                    if (!videoId) return null;
+
+                                    return (
+                                        <motion.div
+                                            key={i}
+                                            initial={{ opacity: 0, y: 30 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ delay: i * 0.2 }}
+                                            className="aspect-video rounded-2xl overflow-hidden shadow-lg bg-black relative group"
+                                        >
+                                            <iframe
+                                                width="100%"
+                                                height="100%"
+                                                src={`https://www.youtube.com/embed/${videoId}`}
+                                                title="YouTube video player"
+                                                frameBorder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                                className="absolute inset-0 w-full h-full"
+                                            ></iframe>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </section>
+                )}
+
                 <div className="pb-24 text-center">
                     <p className="font-outfit text-[#8F8A86] mb-8">{ctaSection.text || "Ready to create your own memories?"}</p>
                 </div>

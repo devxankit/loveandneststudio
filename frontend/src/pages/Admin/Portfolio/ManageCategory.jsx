@@ -1426,56 +1426,92 @@ const ManageCategory = () => {
                                         </button>
                                     </div>
 
-                                    <div className="grid md:grid-cols-3 gap-8">
-                                        <div className="space-y-4">
-                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Display Title</label>
-                                            <input
-                                                defaultValue={session.hero?.title || session.type}
-                                                className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-lg"
-                                                onChange={(e) => {
-                                                    const newSessions = [...pageData.sessions];
-                                                    newSessions[sIndex].hero = { ...newSessions[sIndex].hero, title: e.target.value };
-                                                    setPageData({ ...pageData, sessions: newSessions });
-                                                }}
-                                            />
-                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mt-4">Meta Text</label>
-                                            <textarea
-                                                defaultValue={session.hero?.text}
-                                                rows={4}
-                                                className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none text-sm text-gray-600"
-                                                onChange={(e) => {
-                                                    const newSessions = [...pageData.sessions];
-                                                    newSessions[sIndex].hero = { ...newSessions[sIndex].hero, text: e.target.value };
-                                                    setPageData({ ...pageData, sessions: newSessions });
-                                                }}
-                                            />
+                                    <div className="space-y-8">
+                                        {/* Session Text Content */}
+                                        <div className="bg-[#F9F7F2] p-6 rounded-2xl border border-[#5A2A45]/10">
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4 border-b border-[#5A2A45]/10 pb-2">Session Header Details</label>
+                                            <div className="grid md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6E5A52] mb-2">Display Title</label>
+                                                    <input
+                                                        defaultValue={session.hero?.title || session.type}
+                                                        className="w-full p-3 bg-white rounded-lg outline-none font-display text-lg text-[#5A2A45] border border-transparent focus:border-[#5A2A45]/20 transition-colors"
+                                                        onChange={(e) => {
+                                                            const newSessions = [...pageData.sessions];
+                                                            newSessions[sIndex].hero = { ...newSessions[sIndex].hero, title: e.target.value };
+                                                            setPageData({ ...pageData, sessions: newSessions });
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6E5A52] mb-2">Meta Description</label>
+                                                    <textarea
+                                                        defaultValue={session.hero?.text}
+                                                        rows={2}
+                                                        className="w-full p-3 bg-white rounded-lg outline-none text-sm text-gray-600 border border-transparent focus:border-[#5A2A45]/20 transition-colors resize-none"
+                                                        onChange={(e) => {
+                                                            const newSessions = [...pageData.sessions];
+                                                            newSessions[sIndex].hero = { ...newSessions[sIndex].hero, text: e.target.value };
+                                                            setPageData({ ...pageData, sessions: newSessions });
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <div className="md:col-span-2">
-                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4">Gallery Images (Puzzle Grid)</label>
+                                        <div className="w-full">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Gallery Images</label>
+                                                <span className="text-xs bg-[#F9F7F2] px-2 py-1 rounded-full text-[#6E5A52] font-bold">{(session.puzzleImages?.length || 0)} items</span>
+                                            </div>
+
                                             <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
-                                                {Array.from({ length: 12 }).map((_, i) => {
-                                                    const url = session.puzzleImages?.[i] || '';
-                                                    return (
-                                                        <div key={i} className="aspect-square bg-[#F9F7F2] rounded-lg relative group overflow-hidden border border-[#5A2A45]/5">
+                                                {/* Add Button */}
+                                                <label className="aspect-square bg-[#F9F7F2] rounded-lg flex flex-col items-center justify-center border-2 border-dashed border-[#5A2A45]/20 cursor-pointer hover:bg-[#5A2A45]/5 hover:border-[#5A2A45]/40 transition-all group">
+                                                    <Plus className="text-[#5A2A45] mb-1" size={20} />
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Add</span>
+                                                    <input type="file" className="hidden" multiple accept="image/*" onChange={async (e) => {
+                                                        if (e.target.files?.[0]) {
+                                                            const uploadedUrl = await handleUploadImage(e.target.files[0]);
+                                                            if (uploadedUrl) {
+                                                                const newSessions = [...pageData.sessions];
+                                                                const newImgs = [...(newSessions[sIndex].puzzleImages || [])];
+                                                                newImgs.push(uploadedUrl);
+                                                                newSessions[sIndex].puzzleImages = newImgs;
+                                                                setPageData({ ...pageData, sessions: newSessions });
+                                                            }
+                                                        }
+                                                    }} />
+                                                </label>
+
+                                                {/* Image List */}
+                                                <AnimatePresence>
+                                                    {(session.puzzleImages || []).map((url, i) => (
+                                                        <motion.div
+                                                            layout
+                                                            initial={{ opacity: 0, scale: 0.8 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            exit={{ opacity: 0, scale: 0.5 }}
+                                                            key={`${i}-${url}`}
+                                                            className="aspect-square relative group rounded-lg overflow-hidden border border-[#5A2A45]/5 shadow-sm"
+                                                        >
                                                             <img src={url} className="w-full h-full object-cover" />
-                                                            <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">
-                                                                <input type="file" className="hidden" onChange={async (e) => {
-                                                                    const uploadedUrl = await handleUploadImage(e.target.files[0]);
-                                                                    if (uploadedUrl) {
+                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                                                <button
+                                                                    onClick={() => {
                                                                         const newSessions = [...pageData.sessions];
-                                                                        const newImgs = [...(newSessions[sIndex].puzzleImages || [])];
-                                                                        while (newImgs.length <= i) newImgs.push('');
-                                                                        newImgs[i] = uploadedUrl;
+                                                                        const newImgs = newSessions[sIndex].puzzleImages.filter((_, idx) => idx !== i);
                                                                         newSessions[sIndex].puzzleImages = newImgs;
                                                                         setPageData({ ...pageData, sessions: newSessions });
-                                                                    }
-                                                                }} />
-                                                                <Upload size={14} className="text-white" />
-                                                            </label>
-                                                        </div>
-                                                    );
-                                                })}
+                                                                    }}
+                                                                    className="p-1.5 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors shadow-lg"
+                                                                >
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                            </div>
+                                                        </motion.div>
+                                                    ))}
+                                                </AnimatePresence>
                                             </div>
                                         </div>
                                     </div>

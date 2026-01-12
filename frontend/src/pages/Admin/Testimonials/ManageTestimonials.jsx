@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Star, Trash2, Check, X, Plus, Upload, Loader, Image as ImageIcon, Save } from 'lucide-react';
+import { MessageSquare, Star, Trash2, Check, X, Plus, Upload, Loader, Image as ImageIcon, Save, Play } from 'lucide-react';
 import {
     getTestimonials, createTestimonial, deleteTestimonial, updateTestimonial,
     getPage, updatePageSectionJSON, uploadImage
@@ -268,6 +268,8 @@ const ManageTestimonials = () => {
     const [heroImages, setHeroImages] = useState([]);
     const [pageContent, setPageContent] = useState(null);
     const [savingGallery, setSavingGallery] = useState(false);
+    const [youtubeLinks, setYoutubeLinks] = useState(['', '', '']);
+    const [savingYoutube, setSavingYoutube] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -282,6 +284,16 @@ const ManageTestimonials = () => {
             const heroSection = pageRes.data.sections.find(s => s.id === 'hero');
             if (heroSection && heroSection.content && heroSection.content.images) {
                 setHeroImages(heroSection.content.images);
+            }
+
+            // Extract Youtube Links from CTA section
+            const ctaSection = pageRes.data.sections.find(s => s.id === 'cta');
+            if (ctaSection && ctaSection.content && ctaSection.content.videos) {
+                // Ensure we always have 3 slots
+                const loadedVideos = ctaSection.content.videos;
+                const paddedVideos = [...loadedVideos];
+                while (paddedVideos.length < 3) paddedVideos.push('');
+                setYoutubeLinks(paddedVideos.slice(0, 3));
             }
         } catch (error) {
             console.error(error);
@@ -373,6 +385,75 @@ const ManageTestimonials = () => {
                 onSave={handleSaveHeroGallery}
                 isSaving={savingGallery}
             />
+
+            {/* YouTube Videos Manager */}
+            <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-[#5A2A45]/5 mb-8">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                    <div>
+                        <h2 className="font-display text-2xl text-[#5A2A45]">YouTube Highlights</h2>
+                        <p className="text-[#6E5A52] text-sm font-outfit font-light">
+                            Add up to 3 YouTube video links to display above the footer.
+                        </p>
+                    </div>
+                    <button
+                        onClick={async () => {
+                            setSavingYoutube(true);
+                            try {
+                                const ctaContent = pageContent.sections.find(s => s.id === 'cta')?.content || {};
+                                await updatePageSectionJSON('testimonials', 'cta', { ...ctaContent, videos: youtubeLinks });
+                                alert("YouTube Links Saved Successfully!");
+                            } catch (error) {
+                                console.error("Failed to save youtube links", error);
+                                alert("Failed to save.");
+                            } finally {
+                                setSavingYoutube(false);
+                            }
+                        }}
+                        disabled={savingYoutube}
+                        className="bg-[#5A2A45] text-[#F1EBDD] px-8 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#4a2238] transition-all shadow-lg flex items-center gap-2 disabled:opacity-70 shrink-0"
+                    >
+                        {savingYoutube ? <Loader size={16} className="animate-spin" /> : <Save size={16} />}
+                        Save Links
+                    </button>
+                </div>
+                <div className="grid md:grid-cols-3 gap-6">
+                    {youtubeLinks.map((link, i) => (
+                        <div key={i} className="space-y-2">
+                            <label className="text-xs font-bold uppercase text-[#5A2A45]/50">Video {i + 1} URL</label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="https://www.youtube.com/watch?v=..."
+                                    value={link}
+                                    onChange={(e) => {
+                                        const newLinks = [...youtubeLinks];
+                                        newLinks[i] = e.target.value;
+                                        setYoutubeLinks(newLinks);
+                                    }}
+                                    className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-outfit text-sm text-[#5A2A45] border border-transparent focus:border-[#5A2A45]/20"
+                                />
+                                <div className="absolute top-1/2 right-4 -translate-y-1/2 text-[#5A2A45]/40">
+                                    <Play size={16} />
+                                </div>
+                            </div>
+                            {link && (
+                                <div className="aspect-video bg-black/5 rounded-lg overflow-hidden relative">
+                                    {/* Simple preview logic */}
+                                    <iframe
+                                        width="100%"
+                                        height="100%"
+                                        src={`https://www.youtube.com/embed/${link.split('v=')[1]?.split('&')[0] || link.split('/').pop()}`}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        className="absolute inset-0 w-full h-full"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             {/* Reviews Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

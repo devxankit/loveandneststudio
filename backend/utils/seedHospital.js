@@ -62,16 +62,34 @@ const seedHospital = async () => {
             console.log('Created Main Hospital Page.');
         }
 
-        // 3. Seed Sub-Sessions
+        // 3. Seed Sub-Sessions with Images
         const types = ['birth', 'newborn', 'family'];
+        const sampleImages = [
+            'https://res.cloudinary.com/djuyp9lut/image/upload/v1767937541/loveandnest/assets/hero/Screenshot%202025-12-30%20141652.png',
+            'https://res.cloudinary.com/djuyp9lut/image/upload/v1736615560/loveandnest/assets/portfolio/toddler/t5.jpg',
+            'https://res.cloudinary.com/djuyp9lut/image/upload/v1767937567/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20111323.png',
+            'https://res.cloudinary.com/djuyp9lut/image/upload/v1736615557/loveandnest/assets/portfolio/toddler/t1.jpg',
+            'https://res.cloudinary.com/djuyp9lut/image/upload/v1767937585/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%230114.png',
+            'https://res.cloudinary.com/djuyp9lut/image/upload/v1736615558/loveandnest/assets/portfolio/toddler/t3.jpg'
+        ];
+
         for (const type of types) {
             const session = await HospitalSession.findOne({ type });
             if (!session) {
                 await HospitalSession.create({
                     type,
-                    hero: { title: `${type.charAt(0).toUpperCase() + type.slice(1)} Session` }
+                    hero: {
+                        title: `${type.charAt(0).toUpperCase() + type.slice(1)} Session`,
+                        text: `Experience the raw beauty of your family's ${type} story.`
+                    },
+                    puzzleImages: sampleImages // Add images so they are not empty
                 });
                 console.log(`Created Hospital Session: ${type}`);
+            } else if (session.puzzleImages.length === 0) {
+                // Also update if they exist but are empty
+                session.puzzleImages = sampleImages;
+                await session.save();
+                console.log(`Updated Hospital Session with images: ${type}`);
             }
         }
 

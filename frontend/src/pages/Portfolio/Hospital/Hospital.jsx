@@ -104,7 +104,7 @@ const Hospital = () => {
 
                             // Link Birth category directly to the main Birth portfolio page
                             const isBirth = cat.title?.toLowerCase() === 'birth';
-                            const linkDestination = isBirth ? '/portfolio/birth' : cat.link;
+                            const linkDestination = isBirth ? '/portfolio/hospital/birth' : cat.link;
 
                             return (
                                 <Link to={linkDestination} key={index} className="group cursor-pointer">
