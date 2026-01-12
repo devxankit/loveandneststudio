@@ -169,6 +169,68 @@ const HospitalSession = () => {
                     </div>
                 </section>
 
+                {/* 1.5 WELCOME SECTION */}
+                {data?.welcome && (
+                    <section className="py-24 px-6 md:px-12 bg-white overflow-hidden">
+                        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 md:gap-24">
+                            {/* Text Side */}
+                            <div className="lg:w-1/2 space-y-10 order-2 lg:order-1">
+                                <motion.div
+                                    initial={{ opacity: 0, x: -30 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    className="space-y-6"
+                                >
+                                    <span className="font-handwriting text-4xl md:text-5xl text-[#B77A8C] block mb-2">
+                                        {data.welcome.handwriting || "The Beginning"}
+                                    </span>
+                                    <h2 className="font-display text-5xl md:text-7xl text-[#5A2A45] leading-tight capitalize">
+                                        {data.welcome.title || "First Breaths"}
+                                    </h2>
+                                    <div className="w-20 h-1 bg-[#B77A8C]/20 rounded-full" />
+                                    <p className="text-[#6E5A52] font-outfit text-lg md:text-xl leading-relaxed font-light">
+                                        {data.welcome.text || "There is nothing quite like those first few hours of life. The tiny details, the overwhelming love, and the magic of a new beginning."}
+                                    </p>
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className="bg-[#5A2A45] text-white px-10 py-5 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:bg-[#B77A8C] transition-colors"
+                                    >
+                                        {data.welcome.buttonText || "Book Your Session"}
+                                    </motion.button>
+                                </motion.div>
+                            </div>
+
+                            {/* Image Side */}
+                            <div className="lg:w-1/2 order-1 lg:order-2">
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
+                                    whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 1 }}
+                                    className="relative"
+                                >
+                                    <div className="absolute -inset-4 border border-[#B77A8C]/20 rounded-[3rem] translate-x-4 translate-y-4 -z-10" />
+                                    <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl">
+                                        <LazyImage
+                                            src={data.welcome.image || allImages[0] || defaultImg}
+                                            className="w-full h-full object-cover"
+                                            alt="Featured Hospital Moment"
+                                        />
+                                    </div>
+                                    {/* Decorative badge */}
+                                    <div className="absolute -bottom-10 -left-10 w-32 h-32 md:w-40 md:h-40 bg-[#FDFBF7] rounded-full shadow-lg border border-[#B77A8C]/10 flex items-center justify-center p-4">
+                                        <div className="text-center">
+                                            <span className="block font-display text-4xl text-[#B77A8C] leading-none italic">13</span>
+                                            <span className="block text-[8px] md:text-[10px] uppercase font-bold tracking-widest text-[#5A2A45] mt-1">Years experience</span>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
                 {/* 2. GALLERY GRID (Newborn Style - Same to Same) */}
                 <section className="py-20 px-4 md:px-8 bg-[#FAF9F6]">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-4 max-w-6xl mx-auto">

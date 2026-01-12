@@ -1572,6 +1572,68 @@ const ManageCategory = () => {
                                             </div>
                                         </div>
 
+                                        <div className="bg-[#FDFBF7] p-6 rounded-2xl border border-[#B77A8C]/10 shadow-sm">
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4 border-b border-[#B77A8C]/10 pb-2">Experience / Journey Section</label>
+                                            <div className="grid md:grid-cols-2 gap-8">
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6E5A52] mb-1">Hand-written Subtitle</label>
+                                                        <input
+                                                            defaultValue={session.welcome?.handwriting}
+                                                            className="w-full p-3 bg-white rounded-lg outline-none font-handwriting text-2xl text-[#B77A8C] border border-[#B77A8C]/10"
+                                                            onChange={(e) => {
+                                                                const newSessions = [...pageData.sessions];
+                                                                newSessions[sIndex].welcome = { ...newSessions[sIndex].welcome, handwriting: e.target.value };
+                                                                setPageData({ ...pageData, sessions: newSessions });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6E5A52] mb-1">Main Section Title</label>
+                                                        <input
+                                                            defaultValue={session.welcome?.title}
+                                                            className="w-full p-3 bg-white rounded-lg outline-none font-display text-xl text-[#5A2A45] border border-[#5A2A45]/10"
+                                                            onChange={(e) => {
+                                                                const newSessions = [...pageData.sessions];
+                                                                newSessions[sIndex].welcome = { ...newSessions[sIndex].welcome, title: e.target.value };
+                                                                setPageData({ ...pageData, sessions: newSessions });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6E5A52] mb-1">Welcome Text</label>
+                                                        <textarea
+                                                            defaultValue={session.welcome?.text}
+                                                            rows={4}
+                                                            className="w-full p-3 bg-white rounded-lg outline-none text-sm text-[#6E5A52] border border-[#5A2A45]/10 resize-none"
+                                                            onChange={(e) => {
+                                                                const newSessions = [...pageData.sessions];
+                                                                newSessions[sIndex].welcome = { ...newSessions[sIndex].welcome, text: e.target.value };
+                                                                setPageData({ ...pageData, sessions: newSessions });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col items-center">
+                                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6E5A52] mb-4">Featured Story Image</label>
+                                                    <div className="w-full aspect-[4/5] max-w-[200px] bg-white rounded-2xl relative group overflow-hidden border border-[#B77A8C]/10 shadow-md">
+                                                        <img src={session.welcome?.image || session.hero?.images?.[0]} className="w-full h-full object-cover" />
+                                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold transition-all">
+                                                            CHANGE PHOTO
+                                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                                const url = await handleUploadImage(e.target.files[0]);
+                                                                if (url) {
+                                                                    const newSessions = [...pageData.sessions];
+                                                                    newSessions[sIndex].welcome = { ...newSessions[sIndex].welcome, image: url };
+                                                                    setPageData({ ...pageData, sessions: newSessions });
+                                                                }
+                                                            }} />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div className="bg-white p-6 rounded-2xl border border-[#5A2A45]/10 shadow-sm">
                                             <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4 border-b border-[#5A2A45]/10 pb-2">Hero Floating Images (2 Circles)</label>
                                             <div className="grid grid-cols-2 gap-8">
