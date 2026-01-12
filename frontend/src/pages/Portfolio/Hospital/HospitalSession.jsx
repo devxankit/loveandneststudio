@@ -35,9 +35,36 @@ const HospitalSession = () => {
     if (!data && !loading) return <div className="min-h-screen flex items-center justify-center bg-white text-[#B77A8C]">Session not found.</div>;
 
     const hero = data?.hero || {};
-    // Combine both image arrays to ensure nothing is missed. 
-    // If hero.images is undefined, empty array. If puzzleImages is undefined, empty array.
-    const allImages = [...(hero.images || []), ...(data?.puzzleImages || [])];
+    const puzzleImages = data?.puzzleImages || [];
+    // If hero.images exists, use it for gallery, otherwise fallback to puzzleImages so gallery isn't empty
+    const allImages = (hero.images && hero.images.length > 0) ? hero.images : puzzleImages;
+
+    // Map uploaded images to the puzzle layout (same as Newborn/Baby page)
+    const puzzleLayout = [
+        { span: 1, rounded: 'rounded-tl-2xl' },
+        { span: 2, rounded: 'rounded-tr-lg' },
+        { span: 1, rounded: '' },
+        { span: 1, rounded: '' },
+        { span: 2, rounded: '' },
+        { span: 1, rounded: 'rounded-tr-3xl' },
+        { span: 1, rounded: 'rounded-bl-lg' },
+        { span: 2, rounded: '' },
+        { span: 2, rounded: '' },
+        { span: 1, rounded: '' },
+        { span: 1, rounded: 'rounded-br-xl' },
+        { span: 2, rounded: 'rounded-bl-3xl' },
+        { span: 1, rounded: '' },
+        { span: 2, rounded: 'rounded-br-2xl' },
+        { span: 1, rounded: '' },
+    ].map((slot, i) => {
+        let img = defaultImg;
+        if (puzzleImages && puzzleImages.length > 0) {
+            img = puzzleImages[i % puzzleImages.length];
+        } else if (allImages && allImages.length > 0) {
+            img = allImages[i % allImages.length];
+        }
+        return { ...slot, img };
+    });
 
     return (
         <>
@@ -60,7 +87,7 @@ const HospitalSession = () => {
                     />
 
                     {/* Floating Images - Left & Right */}
-                    {allImages.length > 0 && (
+                    {(allImages.length > 0 || hero.floatingImages?.length > 0) && (
                         <>
                             <motion.div
                                 initial={{ opacity: 0, x: -100, rotate: -10 }}
@@ -78,7 +105,7 @@ const HospitalSession = () => {
                                 }}
                                 className="hidden md:block absolute top-20 left-[5%] lg:left-[10%] w-56 h-56 md:w-64 md:h-64 bg-white p-2 rounded-full shadow-xl z-0 transform -rotate-6"
                             >
-                                <LazyImage src={allImages[0] || defaultImg} className="w-full h-full object-cover rounded-full filter sepia-[0.2]" />
+                                <LazyImage src={hero.floatingImages?.[0] || allImages[0] || defaultImg} className="w-full h-full object-cover rounded-full filter sepia-[0.2]" />
                             </motion.div>
 
                             <motion.div
@@ -97,7 +124,7 @@ const HospitalSession = () => {
                                 }}
                                 className="hidden md:block absolute bottom-10 right-[5%] lg:right-[10%] w-48 h-48 md:w-56 md:h-56 bg-white p-2 rounded-full shadow-xl z-0 transform rotate-6"
                             >
-                                <LazyImage src={allImages[1] || allImages[0] || defaultImg} className="w-full h-full object-cover rounded-full filter sepia-[0.2]" />
+                                <LazyImage src={hero.floatingImages?.[1] || allImages[1] || allImages[0] || defaultImg} className="w-full h-full object-cover rounded-full filter sepia-[0.2]" />
                             </motion.div>
                         </>
                     )}
@@ -187,7 +214,43 @@ const HospitalSession = () => {
                     </div>
                 </section>
 
-                {/* 3. EXPERIENCE LINK */}
+                {/* 3. PUZZLE GRID (Same as Newborn Page) */}
+                {puzzleImages.length > 0 && (
+                    <section className="relative z-10 px-4 md:px-8 mt-12 md:mt-24">
+                        <div className="text-center mb-12">
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                className="uppercase tracking-[0.3em] text-xs text-[#B77A8C]"
+                            >
+                                Swapping Memories
+                            </motion.p>
+                        </div>
+                        <div className="max-w-5xl mx-auto grid grid-cols-4 md:grid-cols-8 gap-2 pb-20">
+                            {puzzleLayout.map((item, index) => (
+                                <div key={index} className={`relative group perspective-1000 cursor-pointer aspect-square ${item.span === 2 ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1'}`}>
+                                    <div className="w-full h-full duration-700 preserve-3d group-hover:[transform:rotateX(180deg)] relative">
+                                        <div className={`absolute inset-0 backface-hidden w-full h-full overflow-hidden bg-white shadow-sm ${item.rounded}`}>
+                                            <LazyImage src={item.img} className="w-full h-full object-cover" />
+                                            <div className="absolute inset-0 bg-[#B77A8C]/0 group-hover:bg-[#B77A8C]/10 transition-colors" />
+                                        </div>
+                                        <div className={`absolute inset-0 backface-hidden w-full h-full [transform:rotateX(180deg)] bg-[#B77A8C] flex items-center justify-center text-white ${item.rounded}`}>
+                                            <div className="text-center p-2">
+                                                {item.span === 2 ? (
+                                                    <><span className="font-display text-2xl md:text-3xl block">Love</span><span className="font-display text-2xl md:text-3xl block">& Nest</span></>
+                                                ) : (
+                                                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mx-auto"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* 4. EXPERIENCE LINK */}
                 <div className="py-24 text-center">
                     <Link
                         to="/portfolio/hospital"
@@ -198,6 +261,12 @@ const HospitalSession = () => {
                         <span className="w-10 h-[1px] bg-[#B77A8C] group-hover:w-16 transition-all duration-500"></span>
                     </Link>
                 </div>
+
+                <style>{`
+                    .perspective-1000 { perspective: 1000px; }
+                    .preserve-3d { transform-style: preserve-3d; }
+                    .backface-hidden { backface-visibility: hidden; }
+                `}</style>
 
                 {/* Modal for Full-screen view */}
                 <ImageModal

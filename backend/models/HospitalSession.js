@@ -6,7 +6,8 @@ const hospitalSessionSchema = new mongoose.Schema({
         title: { type: String, default: 'Fresh 48' },
         subtitle: { type: String, default: 'The Beginning' },
         text: { type: String, default: 'Capturing the newness of life.' },
-        images: [{ type: String }] // Infinite scroll images
+        images: [{ type: String }], // Infinite scroll images
+        floatingImages: [{ type: String }] // Floating bubbles in hero
     },
     welcome: {
         handwriting: { type: String, default: 'hello world' },

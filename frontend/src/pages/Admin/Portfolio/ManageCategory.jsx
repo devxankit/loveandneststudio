@@ -1572,9 +1572,104 @@ const ManageCategory = () => {
                                             </div>
                                         </div>
 
-                                        <div className="w-full">
+                                        <div className="bg-white p-6 rounded-2xl border border-[#5A2A45]/10 shadow-sm">
+                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4 border-b border-[#5A2A45]/10 pb-2">Hero Floating Images (2 Circles)</label>
+                                            <div className="grid grid-cols-2 gap-8">
+                                                {[0, 1].map((i) => {
+                                                    const img = session.hero?.floatingImages?.[i] || '';
+                                                    return (
+                                                        <div key={i} className="flex flex-col items-center gap-4">
+                                                            <span className="text-[10px] font-bold uppercase tracking-widest text-[#6E5A52]">{i === 0 ? 'Left Side Orbit' : 'Right Side Orbit'}</span>
+                                                            <div className="w-32 h-32 rounded-full border-2 border-dashed border-[#5A2A45]/20 relative group overflow-hidden bg-[#F9F7F2]">
+                                                                {img && <img src={img} className="w-full h-full object-cover rounded-full" />}
+                                                                <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] font-bold uppercase transition-opacity">
+                                                                    {img ? 'Change' : 'Upload'}
+                                                                    <input type="file" className="hidden" onChange={async (e) => {
+                                                                        const url = await handleUploadImage(e.target.files[0]);
+                                                                        if (url) {
+                                                                            const newSessions = [...pageData.sessions];
+                                                                            const newFloat = [...(newSessions[sIndex].hero.floatingImages || ['', ''])];
+                                                                            newFloat[i] = url;
+                                                                            newSessions[sIndex].hero.floatingImages = newFloat.slice(0, 2);
+                                                                            setPageData({ ...pageData, sessions: newSessions });
+                                                                        }
+                                                                    }} />
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+
+                                        {/* Gallery Images */}
+                                        {/* Main Gallery Scrolling Grid */}
+                                        <div className="w-full pt-8 border-t border-[#5A2A45]/5">
                                             <div className="flex items-center justify-between mb-4">
-                                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Gallery Images</label>
+                                                <div className="flex flex-col">
+                                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Main Gallery (Scrolling Grid)</label>
+                                                    <p className="text-[10px] text-gray-400 mt-1">Images that appear in the standard scrolling gallery list.</p>
+                                                </div>
+                                                <span className="text-xs bg-[#F9F7F2] px-2 py-1 rounded-full text-[#6E5A52] font-bold">{(session.hero?.images?.length || 0)} items</span>
+                                            </div>
+
+                                            <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+                                                {/* Add Button */}
+                                                <label className="aspect-square bg-[#F9F7F2] rounded-lg flex flex-col items-center justify-center border-2 border-dashed border-[#5A2A45]/20 cursor-pointer hover:bg-[#5A2A45]/5 hover:border-[#5A2A45]/40 transition-all group">
+                                                    <Plus className="text-[#5A2A45] mb-1" size={20} />
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Add</span>
+                                                    <input type="file" className="hidden" multiple accept="image/*" onChange={async (e) => {
+                                                        if (e.target.files?.[0]) {
+                                                            const uploadedUrl = await handleUploadImage(e.target.files[0]);
+                                                            if (uploadedUrl) {
+                                                                const newSessions = [...pageData.sessions];
+                                                                const newImgs = [...(newSessions[sIndex].hero?.images || [])];
+                                                                newImgs.push(uploadedUrl);
+                                                                newSessions[sIndex].hero = { ...newSessions[sIndex].hero, images: newImgs };
+                                                                setPageData({ ...pageData, sessions: newSessions });
+                                                            }
+                                                        }
+                                                    }} />
+                                                </label>
+
+                                                {/* Image List */}
+                                                <AnimatePresence>
+                                                    {(session.hero?.images || []).map((url, i) => (
+                                                        <motion.div
+                                                            layout
+                                                            initial={{ opacity: 0, scale: 0.8 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            exit={{ opacity: 0, scale: 0.5 }}
+                                                            key={`${i}-${url}`}
+                                                            className="aspect-square relative group rounded-lg overflow-hidden border border-[#5A2A45]/5 shadow-sm"
+                                                        >
+                                                            <img src={url} className="w-full h-full object-cover" />
+                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        const newSessions = [...pageData.sessions];
+                                                                        const newImgs = newSessions[sIndex].hero.images.filter((_, idx) => idx !== i);
+                                                                        newSessions[sIndex].hero.images = newImgs;
+                                                                        setPageData({ ...pageData, sessions: newSessions });
+                                                                    }}
+                                                                    className="p-1.5 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors shadow-lg"
+                                                                >
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                            </div>
+                                                        </motion.div>
+                                                    ))}
+                                                </AnimatePresence>
+                                            </div>
+                                        </div>
+
+                                        {/* Sneak Peek Puzzle Grid */}
+                                        <div className="w-full pt-8 border-t border-[#5A2A45]/5">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="flex flex-col">
+                                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Sneak Peek Puzzle (Swapping Grid)</label>
+                                                    <p className="text-[10px] text-gray-400 mt-1">15 slots that appear in the flip-animation grid near the footer.</p>
+                                                </div>
                                                 <span className="text-xs bg-[#F9F7F2] px-2 py-1 rounded-full text-[#6E5A52] font-bold">{(session.puzzleImages?.length || 0)} items</span>
                                             </div>
 
@@ -1590,7 +1685,7 @@ const ManageCategory = () => {
                                                                 const newSessions = [...pageData.sessions];
                                                                 const newImgs = [...(newSessions[sIndex].puzzleImages || [])];
                                                                 newImgs.push(uploadedUrl);
-                                                                newSessions[sIndex].puzzleImages = newImgs;
+                                                                newSessions[sIndex].puzzleImages = newImgs.slice(0, 15);
                                                                 setPageData({ ...pageData, sessions: newSessions });
                                                             }
                                                         }
