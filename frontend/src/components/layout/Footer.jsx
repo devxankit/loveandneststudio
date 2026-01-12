@@ -56,13 +56,19 @@ const Footer = () => {
                     {/* 2. Explore Links */}
                     <div className="col-span-1 flex flex-col items-center">
                         <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Explore</h4>
-                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 w-fit flex flex-col items-start">
-                            {['Home', 'About Anamika', 'Portfolio', 'Journal'].map((item, i) => (
-                                <li key={i} className="group w-max">
-                                    <Link to={item === 'Home' ? '/' : item === 'Journal' ? '/blog' : `/${item.split(' ')[0].toLowerCase()}`} className="group-hover:text-white transition-all flex items-center gap-3">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                                        {item}
+                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 flex flex-col items-center">
+                            {[
+                                { name: 'Home', path: '/' },
+                                { name: 'About Anamika', path: '/about' },
+                                { name: 'Portfolio', path: '/portfolio' },
+                                { name: 'Journal', path: '/blog' }
+                            ].map((item, i) => (
+                                <li key={i} className="group flex items-center gap-3">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"></span>
+                                    <Link to={item.path} className="group-hover:text-white transition-all whitespace-nowrap">
+                                        {item.name}
                                     </Link>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 shrink-0"></span> {/* Mirror for centering */}
                                 </li>
                             ))}
                         </ul>
@@ -71,13 +77,19 @@ const Footer = () => {
                     {/* 3. Services Links */}
                     <div className="col-span-1 flex flex-col items-center">
                         <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Services</h4>
-                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 w-fit flex flex-col items-start">
-                            {['Maternity', 'Newborn', 'Baby', 'Family'].map((item, i) => (
-                                <li key={i} className="group w-max">
-                                    <Link to="/services" className="group-hover:text-white transition-all flex items-center gap-3">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                                        {item}
+                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 flex flex-col items-center">
+                            {[
+                                { name: 'Maternity', path: '/portfolio/maternity' },
+                                { name: 'Newborn', path: '/portfolio/newborn' },
+                                { name: 'Baby', path: '/portfolio/baby' },
+                                { name: 'Family', path: '/portfolio/family' }
+                            ].map((item, i) => (
+                                <li key={i} className="group flex items-center gap-3">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"></span>
+                                    <Link to={item.path} className="group-hover:text-white transition-all whitespace-nowrap">
+                                        {item.name}
                                     </Link>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 shrink-0"></span> {/* Mirror for centering */}
                                 </li>
                             ))}
                         </ul>
