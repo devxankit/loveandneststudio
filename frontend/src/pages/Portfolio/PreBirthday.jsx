@@ -68,18 +68,25 @@ const PreBirthday = () => {
                         <Star size={24} className="animate-spin-slow" />
                     </div>
                     <h2 className="font-display text-5xl md:text-7xl lg:text-8xl text-[#5A2A45] leading-tight">
-                        Let's Make Their <br />
-                        <span className="italic font-light text-[#B77A8C]">First Wish</span> Come True
+                        {pageData?.cta?.title?.split('<br />').map((line, i) => (
+                            <React.Fragment key={i}>
+                                {i > 0 && <br />}
+                                <span dangerouslySetInnerHTML={{ __html: line }} />
+                            </React.Fragment>
+                        )) || (
+                                <>Let's Make Their <br /> <span className="italic font-light text-[#B77A8C]">First Wish</span> Come True</>
+                            )}
                     </h2>
                     <p className="font-outfit text-gray-500 max-w-xl mx-auto text-lg md:text-xl leading-relaxed">
-                        Every big milestone starts with a tiny moment of wonder. Let's capture the magic before the candles are lit.
+                        {pageData?.cta?.description || "Every big milestone starts with a tiny moment of wonder. Let's capture the magic before the candles are lit."}
                     </p>
                     <motion.button
+                        onClick={() => window.location.href = pageData?.cta?.buttonLink || '/contact'}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="bg-[#5A2A45] text-white px-12 py-6 rounded-full font-bold uppercase tracking-[0.2em] text-sm shadow-2xl hover:shadow-[#FDE2E4]/20 transition-all inline-flex items-center gap-4"
                     >
-                        Reserve Your Date <ArrowRight size={20} />
+                        {pageData?.cta?.buttonText || "Reserve Your Date"} <ArrowRight size={20} />
                     </motion.button>
                 </motion.div>
 
@@ -120,7 +127,7 @@ const PreBirthdayHero = ({ hero, themeColor }) => {
                         transition={{ delay: 0.8, type: "spring" }}
                         className="absolute -top-10 md:-top-20 left-1/2 -translate-x-1/2 w-40 md:w-64 z-20 pointer-events-none"
                     >
-                        <img src="https://res.cloudinary.com/djuyp9lut/image/upload/v1736615566/loveandnest/assets/bow.png" alt="" className="w-full drop-shadow-2xl"
+                        <img src={heroImages[1] || "https://res.cloudinary.com/djuyp9lut/image/upload/v1736615566/loveandnest/assets/bow.png"} alt="" className="w-full drop-shadow-2xl"
                             onError={(e) => e.target.style.display = 'none'} />
                         {/* Fallback Bow Icon if image fails */}
                         <div className="w-full h-full flex items-center justify-center text-[#B77A8C]">

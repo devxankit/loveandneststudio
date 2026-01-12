@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, Plus, Trash2, Layout, Save, X, ImageIcon, Type, Sparkles } from 'lucide-react';
-import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage, getFamilyPage, updateFamilyPage, getCakeSmashPage, updateCakeSmashPage, getHospitalPage, updateHospitalPage, getHospitalSession, updateHospitalSession, getToddlerPage, updateToddlerPage, getPreBirthdayPage, updatePreBirthdayPage } from '../../../services/api';
+import { Upload, Plus, Trash2, Layout, Save, X, ImageIcon, Type, Sparkles, LayoutGrid, Play } from 'lucide-react';
+import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage, getFamilyPage, updateFamilyPage, getCakeSmashPage, updateCakeSmashPage, getHospitalPage, updateHospitalPage, getHospitalSession, updateHospitalSession, getToddlerPage, updateToddlerPage, getPreBirthdayPage, updatePreBirthdayPage, getBirthdayPage, updateBirthdayPage } from '../../../services/api';
 
 // Fallback images from assets for Family
 import familyHeroDefault from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 111323.png';
@@ -56,6 +56,7 @@ const ManageCategory = () => {
     const isHospital = category === 'hospital';
     const isToddler = category === 'toddler';
     const isPreBirthday = category === 'pre-birthday';
+    const isBirthday = category === 'birthday';
 
     useEffect(() => {
         fetchData();
@@ -68,8 +69,18 @@ const ManageCategory = () => {
                 const { data } = await getPreBirthdayPage();
                 setPageData({
                     hero: data.hero || { title: 'Pre-Birthday', subtitle: 'Capturing High Hopes', tagline: 'A Magical Journey', images: [] },
-                    cakeGrid: data.cakeGrid || { title: 'The Sweetest Moments', description: '...', images: [] },
+                    cta: data.cta || { title: "Let's Make Their First Wish Come True", description: "...", buttonText: "Reserve Your Date", buttonLink: "/contact" },
+                    themeColor: data.themeColor || '#FDE2E4'
+                });
+            } else if (isBirthday) {
+                const { data } = await getBirthdayPage();
+                setPageData({
+                    hero: data.hero || { title: 'Birthday Celebrations', subtitle: 'Capturing Every Joyous Year', tagline: 'Timeless Memories of Growing Up', floatingImages: [] },
+                    intro: data.intro || { title: 'A Day to Remember', description: '...', image: '' },
                     gallery: data.gallery || [],
+                    videos: data.videos || [],
+                    themes: data.themes || [],
+                    cta: data.cta || { title: "Make Their Wish Last Forever", text: "...", buttonText: "Reserve Your Date", buttonLink: "/contact" },
                     themeColor: data.themeColor || '#FDE2E4'
                 });
             } else if (isToddler) {
@@ -261,6 +272,8 @@ const ManageCategory = () => {
                 await updateToddlerPage(newData);
             } else if (isPreBirthday) {
                 await updatePreBirthdayPage(newData);
+            } else if (isBirthday) {
+                await updateBirthdayPage(newData);
             } else {
                 const sectionsToUpdate = [];
                 if (newData.hero) sectionsToUpdate.push({ id: 'hero', content: newData.hero });
@@ -345,10 +358,13 @@ const ManageCategory = () => {
                     ] : isToddler ? [
                         { id: 'hero', label: 'Arched Hero', icon: Layout },
                         { id: 'gallery', label: 'Art Grid', icon: ImageIcon }
-                    ] : isPreBirthday ? [
-                        { id: 'hero', label: 'Magic Hero', icon: Layout },
-                        { id: 'cakeGrid', label: 'Cake Grid', icon: Layout },
-                        { id: 'gallery', label: 'Gallery', icon: ImageIcon }
+                    ] : isBirthday ? [
+                        { id: 'hero', label: 'Birthday Hero', icon: Layout },
+                        { id: 'intro', label: 'Intro Narrative', icon: Type },
+                        { id: 'themes', label: 'Theme Collections', icon: LayoutGrid },
+                        { id: 'gallery', label: 'Image Vault', icon: ImageIcon },
+                        { id: 'videos', label: 'Videos', icon: Play },
+                        { id: 'cta', label: 'Ending CTA', icon: Save }
                     ] : [ // Newborn or Default
                         { id: 'hero', label: 'Hero', icon: Layout },
                         { id: 'welcome', label: 'Welcome', icon: Sparkles },
@@ -721,6 +737,336 @@ const ManageCategory = () => {
                                             <p className="text-[9px] text-center text-[#5A2A45] font-bold uppercase opacity-50">Tier {i < 1 ? '1' : i < 3 ? '2' : i < 5 ? '3' : '4'}</p>
                                         </div>
                                     ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+
+                {/* BIRTHDAY TABS CONTENT */}
+                {activeTab === 'hero' && isBirthday && (
+                    <div className="max-w-[1240px] space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Hero & Atmosphere</h2>
+                            <button onClick={() => updateAll({
+                                ...pageData,
+                                hero: {
+                                    ...pageData.hero,
+                                    title: document.getElementById('b-title').value,
+                                    subtitle: document.getElementById('b-subtitle').value,
+                                    tagline: document.getElementById('b-tagline').value,
+                                }
+                            })} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
+                                <Save size={16} /> Save Hero
+                            </button>
+                        </div>
+                        <div className="grid lg:grid-cols-2 gap-12">
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Headline</label>
+                                    <input id="b-title" defaultValue={pageData.hero?.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl font-display text-2xl" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
+                                    <input id="b-subtitle" defaultValue={pageData.hero?.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-2xl" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Tagline</label>
+                                    <input id="b-tagline" defaultValue={pageData.hero?.tagline} className="w-full p-4 bg-[#F9F7F2] rounded-2xl italic" />
+                                </div>
+                            </div>
+                            <div className="space-y-6">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Background Image</label>
+                                <div className="aspect-video bg-[#F9F7F2] rounded-3xl relative group overflow-hidden border border-[#5A2A45]/10">
+                                    <img src={pageData.hero?.backgroundImage || 'https://via.placeholder.com/800x450'} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-xs uppercase font-bold tracking-widest">
+                                        Update Backdrop
+                                        <input type="file" className="hidden" onChange={async (e) => {
+                                            const url = await handleUploadImage(e.target.files[0]);
+                                            if (url) updateAll({ ...pageData, hero: { ...pageData.hero, backgroundImage: url } });
+                                        }} />
+                                    </label>
+                                </div>
+
+                                <div className="pt-4">
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-4">Floating Atmosphere Images (Recommended 3)</label>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {[0, 1, 2].map((idx) => (
+                                            <div key={idx} className="aspect-square bg-[#F9F7F2] rounded-2xl relative group overflow-hidden border border-[#5A2A45]/10">
+                                                <img src={pageData.hero?.floatingImages?.[idx] || 'https://via.placeholder.com/200'} className="w-full h-full object-cover" />
+                                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-[10px] text-white font-bold uppercase tracking-tighter">
+                                                    Upload
+                                                    <input type="file" className="hidden" onChange={async (e) => {
+                                                        const url = await handleUploadImage(e.target.files[0]);
+                                                        if (url) {
+                                                            const newFloats = [...(pageData.hero.floatingImages || [])];
+                                                            while (newFloats.length <= idx) newFloats.push('');
+                                                            newFloats[idx] = url;
+                                                            updateAll({ ...pageData, hero: { ...pageData.hero, floatingImages: newFloats } });
+                                                        }
+                                                    }} />
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'intro' && isBirthday && (
+                    <div className="max-w-4xl space-y-8">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Birthday Narrative</h2>
+                            <button onClick={() => updateAll({
+                                ...pageData,
+                                intro: {
+                                    ...pageData.intro,
+                                    title: document.getElementById('bi-title').value,
+                                    description: document.getElementById('bi-desc').value,
+                                }
+                            })} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
+                                <Save size={16} /> Save Narrative
+                            </button>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-12">
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Story Title</label>
+                                    <input id="bi-title" defaultValue={pageData.intro?.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl font-display text-xl" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Narrative Content</label>
+                                    <textarea id="bi-desc" defaultValue={pageData.intro?.description} rows="6" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none" />
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Narrative Image</label>
+                                <div className="aspect-[3/4] bg-[#F9F7F2] rounded-3xl relative group overflow-hidden">
+                                    <img src={pageData.intro?.image || 'https://via.placeholder.com/600x800'} className="w-full h-full object-cover" />
+                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-xs uppercase font-bold tracking-widest">
+                                        Update Image
+                                        <input type="file" className="hidden" onChange={async (e) => {
+                                            const url = await handleUploadImage(e.target.files[0]);
+                                            if (url) updateAll({ ...pageData, intro: { ...pageData.intro, image: url } });
+                                        }} />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'themes' && isBirthday && (
+                    <div className="space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Theme Collections</h2>
+                            <button onClick={() => {
+                                const newThemes = [...(pageData.themes || []), { title: 'New Theme', description: 'Describe the setup...', image: '' }];
+                                updateAll({ ...pageData, themes: newThemes });
+                            }} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
+                                <Plus size={16} /> Add Theme
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {pageData.themes?.map((theme, i) => (
+                                <div key={i} className="bg-white p-6 rounded-[2.5rem] border border-[#5A2A45]/10 shadow-sm relative group space-y-4">
+                                    <button
+                                        onClick={() => {
+                                            if (confirm("Delete this theme?")) {
+                                                const updated = pageData.themes.filter((_, idx) => idx !== i);
+                                                updateAll({ ...pageData, themes: updated });
+                                            }
+                                        }}
+                                        className="absolute top-4 right-4 p-2 bg-rose-100 text-rose-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+
+                                    <div className="aspect-[16/10] rounded-[2rem] overflow-hidden bg-[#F9F7F2] relative">
+                                        <img src={theme.image || 'https://via.placeholder.com/600x400'} className="w-full h-full object-cover" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-xs text-white font-bold uppercase tracking-widest transition-opacity">
+                                            Update Image
+                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                const url = await handleUploadImage(e.target.files[0]);
+                                                if (url) {
+                                                    const updated = [...pageData.themes];
+                                                    updated[i].image = url;
+                                                    updateAll({ ...pageData, themes: updated });
+                                                }
+                                            }} />
+                                        </label>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <input
+                                            defaultValue={theme.title}
+                                            className="w-full p-2 text-xl font-display text-[#5A2A45] bg-transparent border-b border-transparent focus:border-[#5A2A45]/20 outline-none"
+                                            placeholder="Theme Title"
+                                            onChange={(e) => {
+                                                const updated = [...pageData.themes];
+                                                updated[i].title = e.target.value;
+                                                setPageData({ ...pageData, themes: updated });
+                                            }}
+                                        />
+                                        <textarea
+                                            defaultValue={theme.description}
+                                            className="w-full p-2 text-sm text-[#6E5A52] bg-transparent outline-none resize-none"
+                                            placeholder="Description..."
+                                            rows="3"
+                                            onChange={(e) => {
+                                                const updated = [...pageData.themes];
+                                                updated[i].description = e.target.value;
+                                                setPageData({ ...pageData, themes: updated });
+                                            }}
+                                        />
+                                        <div className="flex justify-end">
+                                            <button onClick={() => updateAll(pageData)} className="text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]/40 hover:text-[#5A2A45] transition-colors">Confirm Text Changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'videos' && (
+                    <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">{isBirthday ? 'Birthday Cinematic Clips' : 'Video Showcase'}</h2>
+                            <span className="text-xs bg-[#F9F7F2] px-3 py-1 rounded-full text-[#6E5A52] font-bold">{pageData.videos?.length || 0} / 2 videos</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            {/* Upload New Video Slot */}
+                            {(!pageData.videos || pageData.videos.length < 2) && (
+                                <label className="aspect-[9/16] bg-[#F9F7F2] rounded-[2.5rem] flex flex-col items-center justify-center border-2 border-dashed border-[#5A2A45]/20 cursor-pointer hover:bg-[#5A2A45]/5 transition-all group overflow-hidden">
+                                    <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition-transform">
+                                        <Plus className="text-[#5A2A45]" />
+                                    </div>
+                                    <p className="text-xs font-bold uppercase tracking-widest text-[#5A2A45]">Upload {isBirthday ? 'Magic' : 'Video'}</p>
+                                    <p className="text-[10px] text-[#5A2A45]/50 mt-1 px-4 text-center">Vertical (9:16) recommended</p>
+                                    <input type="file" className="hidden" accept="video/*" onChange={async (e) => {
+                                        const url = await handleUploadImage(e.target.files[0]);
+                                        if (url) {
+                                            const updatedVideos = [...(pageData.videos || []), url];
+                                            updateAll({ ...pageData, videos: updatedVideos });
+                                        }
+                                    }} />
+                                </label>
+                            )}
+
+                            {/* Existing Videos */}
+                            {pageData.videos?.map((vid, i) => (
+                                <div key={i} className="aspect-[9/16] relative group rounded-[2.5rem] overflow-hidden shadow-xl bg-black border border-[#5A2A45]/10">
+                                    <video src={vid} className="w-full h-full object-cover" controls muted />
+                                    <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
+                                        <span className="text-[10px] text-white font-bold uppercase tracking-tighter">Slot {i + 1}</span>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            if (confirm("Remove this video?")) {
+                                                const updated = pageData.videos.filter((_, idx) => idx !== i);
+                                                updateAll({ ...pageData, videos: updated });
+                                            }
+                                        }}
+                                        className="absolute top-4 right-4 p-2 bg-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'cta' && isBirthday && (
+                    <div className="max-w-4xl space-y-8">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Birthday Ending CTA</h2>
+                            <button onClick={() => updateAll({
+                                ...pageData,
+                                cta: {
+                                    ...pageData.cta,
+                                    title: document.getElementById('bc-title').value,
+                                    text: document.getElementById('bc-text').value,
+                                    buttonText: document.getElementById('bc-btn').value,
+                                    buttonLink: document.getElementById('bc-link').value,
+                                }
+                            })} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
+                                <Save size={16} /> Save CTA
+                            </button>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">CTA Headline</label>
+                                    <input id="bc-title" defaultValue={pageData.cta?.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl font-display text-2xl" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">CTA Description</label>
+                                    <textarea id="bc-text" defaultValue={pageData.cta?.text} rows="4" className="w-full p-4 bg-[#F9F7F2] rounded-2xl" />
+                                </div>
+                            </div>
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Text</label>
+                                    <input id="bc-btn" defaultValue={pageData.cta?.buttonText} className="w-full p-4 bg-[#F9F7F2] rounded-2xl" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Link</label>
+                                    <input id="bc-link" defaultValue={pageData.cta?.buttonLink} className="w-full p-4 bg-[#F9F7F2] rounded-2xl" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+
+                {/* PRE-BIRTHDAY CTA TAB */}
+                {activeTab === 'cta' && isPreBirthday && (
+                    <div className="max-w-4xl space-y-8">
+                        <div className="flex items-center justify-between mb-8">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">CTA Section Content</h2>
+                            <button
+                                onClick={() => updateAll({
+                                    ...pageData,
+                                    cta: {
+                                        title: document.getElementById('pb-cta-title').value,
+                                        description: document.getElementById('pb-cta-desc').value,
+                                        buttonText: document.getElementById('pb-cta-btn').value,
+                                        buttonLink: document.getElementById('pb-cta-link').value,
+                                    }
+                                })}
+                                disabled={saving}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2"
+                            >
+                                <Save size={16} /> {saving ? 'Saving...' : 'Save CTA Content'}
+                            </button>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Headline</label>
+                                    <textarea id="pb-cta-title" defaultValue={pageData.cta?.title} rows="3" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-2xl" placeholder="Use <br /> for line breaks" />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description</label>
+                                    <textarea id="pb-cta-desc" defaultValue={pageData.cta?.description} rows="4" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm leading-relaxed" />
+                                </div>
+                            </div>
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Text</label>
+                                    <input id="pb-cta-btn" defaultValue={pageData.cta?.buttonText} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none" />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Link</label>
+                                    <input id="pb-cta-link" defaultValue={pageData.cta?.buttonLink} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none" />
                                 </div>
                             </div>
                         </div>

@@ -47,6 +47,9 @@ export const updateToddlerPage = (data) => api.put('/toddler', data);
 export const getPreBirthdayPage = () => api.get('/pre-birthday');
 export const updatePreBirthdayPage = (data) => api.put('/pre-birthday', data);
 
+export const getBirthdayPage = () => api.get('/birthday');
+export const updateBirthdayPage = (data) => api.put('/birthday', data);
+
 // --- HOSPITAL API ---
 export const getHospitalPage = () => api.get('/hospital/page');
 export const updateHospitalPage = (data) => api.put('/hospital/page', data);

@@ -190,7 +190,7 @@ const PortfolioContent = ({ data }) => {
                                         <h3 className="font-display text-4xl sm:text-5xl text-white mb-2 tracking-tight">
                                             {category.title}
                                         </h3>
-                                        <div className="w-10 h-0.5 bg-[#E8CBB6] transform origin-left transition-all duration-700 group-hover:w-20" />
+                                        <div className={`w-10 h-0.5 ${category.accent || 'bg-[#E8CBB6]'} transform origin-left transition-all duration-700 group-hover:w-20`} />
                                         <p className="text-white/70 text-sm font-light leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700 delay-100">
                                             {category.description}
                                         </p>

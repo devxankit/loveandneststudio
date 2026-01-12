@@ -53,7 +53,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
-app.use(express.json()); // Body parser
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // Routes
 const pageRoutes = require('./routes/pageRoutes');
@@ -83,6 +84,7 @@ app.use('/api/hospital', require('./routes/hospitalRoutes'));
 app.use('/api/cakesmash', require('./routes/cakeSmashRoutes'));
 app.use('/api/toddler', require('./routes/toddlerRoutes'));
 app.use('/api/pre-birthday', require('./routes/preBirthdayRoutes'));
+app.use('/api/birthday', require('./routes/birthdayRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 
 

@@ -60,13 +60,7 @@ const Toddler = () => {
                 >
                     <h2 className="font-display text-5xl md:text-7xl text-[#5A2A45]">Ready to capture <br /> <span className="italic font-light text-[#B77A8C]">their little steps?</span></h2>
                     <p className="font-outfit text-gray-600 max-w-xl mx-auto text-lg leading-relaxed">Let's create timeless memories of these fleeting years together. Every milestone deserves to be celebrated.</p>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-[#5A2A45] text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl hover:bg-[#4a2238] transition-colors inline-flex items-center gap-3"
-                    >
-                        Book A Session <ArrowRight size={18} />
-                    </motion.button>
+
                 </motion.div>
             </section>
         </div>

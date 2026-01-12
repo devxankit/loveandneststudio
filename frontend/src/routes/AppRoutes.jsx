@@ -12,7 +12,8 @@ const Baby = lazy(() => import('../pages/Portfolio/Baby'));
 const Family = lazy(() => import('../pages/Portfolio/Family'));
 const Hospital = lazy(() => import('../pages/Portfolio/Hospital/Hospital'));
 const HospitalSession = lazy(() => import('../pages/Portfolio/Hospital/HospitalSession'));
-const Birthday = lazy(() => import('../pages/Portfolio/Birthday')); // Cake Smash
+const CakeSmash = lazy(() => import('../pages/Portfolio/CakeSmash'));
+const Birthday = lazy(() => import('../pages/Portfolio/Birthday'));
 const Toddler = lazy(() => import('../pages/Portfolio/Toddler'));
 const PreBirthday = lazy(() => import('../pages/Portfolio/PreBirthday'));
 const Services = lazy(() => import('../pages/Services/Services'));
@@ -72,7 +73,8 @@ const AppRoutes = () => {
                         <Route path="/portfolio/family" element={<Family />} />
                         <Route path="/portfolio/hospital" element={<Hospital />} />
                         <Route path="/portfolio/hospital/:type" element={<HospitalSession />} />
-                        <Route path="/portfolio/cakesmash" element={<Birthday />} />
+                        <Route path="/portfolio/cakesmash" element={<CakeSmash />} />
+                        <Route path="/portfolio/birthday" element={<Birthday />} />
                         <Route path="/portfolio/toddler" element={<Toddler />} />
                         <Route path="/portfolio/pre-birthday" element={<PreBirthday />} />
                         <Route path="/services" element={<Services />} />
