@@ -20,6 +20,14 @@ const birthdaySchema = new mongoose.Schema({
         description: String,
         image: String
     }],
+    categories: [{
+        title: String,
+        subtitle: String, // e.g. "The Prologue"
+        description: String,
+        image: String,
+        link: String,
+        buttonText: String
+    }],
     cta: {
         title: { type: String, default: "Make Their Wish Last Forever" },
         text: { type: String, default: "Ready to book a birthday session?" },

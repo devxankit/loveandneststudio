@@ -35,7 +35,12 @@ const ManagePortfolio = () => {
                 const data = res.data.data || res.data;
                 setPageData({
                     hero: data.hero || { titleLine1: 'Port', titleLine2: 'folio', subtext1: '/ Est. 2012 /', subtext2: '/ Dehradun /', strip1: [], strip2: [], strip3: [] },
-                    categories: data.categories || [],
+                    categories: (data.categories || [])
+                        .filter(cat => !['newborn', 'cakesmash', 'pre-birthday', 'prebirthday'].includes(cat.id))
+                        .map(cat => {
+                            if (cat.id === 'baby') return { ...cat, link: '/portfolio/newborn' };
+                            return { ...cat, link: cat.link || `/portfolio/${cat.id}` };
+                        }),
                     experience: data.experience || { titleLine1: 'Every moment', titleLine2: 'is a masterpiece.', buttonText: 'Book Your Story', buttonLink: '/contact' }
                 });
             }

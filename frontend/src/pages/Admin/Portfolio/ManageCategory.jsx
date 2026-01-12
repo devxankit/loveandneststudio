@@ -77,11 +77,27 @@ const ManageCategory = () => {
             } else if (isBirthday) {
                 const { data } = await getBirthdayPage();
                 setPageData({
-                    hero: data.hero || { title: 'Birthday Celebrations', subtitle: 'Capturing Every Joyous Year', tagline: 'Timeless Memories of Growing Up', floatingImages: [] },
+                    hero: data.hero || { title: 'Birthday Celebrations', subtitle: 'Capturing Every Joyous Year', tagline: 'Timeless Memories of Growing Up', floatingImages: [], backgroundImage: '' },
                     intro: data.intro || { title: 'A Day to Remember', description: '...', image: '' },
                     gallery: data.gallery || [],
                     videos: data.videos || [],
                     themes: data.themes || [],
+                    categories: (data.categories && data.categories.length > 0) ? data.categories : [
+                        {
+                            title: "Pre-Birthday",
+                            subtitle: "The Prologue",
+                            description: "Capturing the pure wonder and anticipation before the big celebration. A gentle, artistic session.",
+                            link: "/portfolio/pre-birthday",
+                            image: "https://res.cloudinary.com/djuyp9lut/image/upload/v1736615566/loveandnest/assets/portfolio/toddler/t1.jpg"
+                        },
+                        {
+                            title: "Cake Smash",
+                            subtitle: "The Celebration",
+                            description: "Joyous laughter, first candles, and the sweet mess of discovery. A milestone captured in its purest form.",
+                            link: "/portfolio/cakesmash",
+                            image: "https://images.unsplash.com/photo-1530103862676-de3c9a59af38?q=80&w=2670&auto=format&fit=crop"
+                        }
+                    ],
                     cta: data.cta || { title: "Make Their Wish Last Forever", text: "...", buttonText: "Reserve Your Date", buttonLink: "/contact" },
                     themeColor: data.themeColor || '#FDE2E4'
                 });
@@ -364,7 +380,7 @@ const ManageCategory = () => {
                         { id: 'gallery', label: 'Art Grid', icon: ImageIcon }
                     ] : isBirthday ? [
                         { id: 'hero', label: 'Birthday Hero', icon: Layout },
-                        { id: 'intro', label: 'Intro Narrative', icon: Type },
+                        { id: 'categories', label: 'Category Explorer', icon: Sparkles },
                         { id: 'themes', label: 'Theme Collections', icon: LayoutGrid },
                         { id: 'gallery', label: 'Image Vault', icon: ImageIcon },
                         { id: 'videos', label: 'Videos', icon: Play },
@@ -853,122 +869,9 @@ const ManageCategory = () => {
                     </div>
                 )}
 
-                {activeTab === 'intro' && isBirthday && (
-                    <div className="max-w-4xl space-y-8">
-                        <div className="flex items-center justify-between">
-                            <h2 className="font-display text-2xl text-[#5A2A45]">Birthday Narrative</h2>
-                            <button onClick={() => updateAll({
-                                ...pageData,
-                                intro: {
-                                    ...pageData.intro,
-                                    title: document.getElementById('bi-title').value,
-                                    description: document.getElementById('bi-desc').value,
-                                }
-                            })} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
-                                <Save size={16} /> Save Narrative
-                            </button>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-12">
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Story Title</label>
-                                    <input id="bi-title" defaultValue={pageData.intro?.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl font-display text-xl" />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Narrative Content</label>
-                                    <textarea id="bi-desc" defaultValue={pageData.intro?.description} rows="6" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none" />
-                                </div>
-                            </div>
-                            <div className="space-y-4">
-                                <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Narrative Image</label>
-                                <div className="aspect-[3/4] bg-[#F9F7F2] rounded-3xl relative group overflow-hidden">
-                                    <img src={pageData.intro?.image || 'https://via.placeholder.com/600x800'} className="w-full h-full object-cover" />
-                                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-xs uppercase font-bold tracking-widest">
-                                        Update Image
-                                        <input type="file" className="hidden" onChange={async (e) => {
-                                            const url = await handleUploadImage(e.target.files[0]);
-                                            if (url) updateAll({ ...pageData, intro: { ...pageData.intro, image: url } });
-                                        }} />
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
 
-                {activeTab === 'themes' && isBirthday && (
-                    <div className="space-y-12">
-                        <div className="flex items-center justify-between">
-                            <h2 className="font-display text-2xl text-[#5A2A45]">Theme Collections</h2>
-                            <button onClick={() => {
-                                const newThemes = [...(pageData.themes || []), { title: 'New Theme', description: 'Describe the setup...', image: '' }];
-                                updateAll({ ...pageData, themes: newThemes });
-                            }} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
-                                <Plus size={16} /> Add Theme
-                            </button>
-                        </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {pageData.themes?.map((theme, i) => (
-                                <div key={i} className="bg-white p-6 rounded-[2.5rem] border border-[#5A2A45]/10 shadow-sm relative group space-y-4">
-                                    <button
-                                        onClick={() => {
-                                            if (confirm("Delete this theme?")) {
-                                                const updated = pageData.themes.filter((_, idx) => idx !== i);
-                                                updateAll({ ...pageData, themes: updated });
-                                            }
-                                        }}
-                                        className="absolute top-4 right-4 p-2 bg-rose-100 text-rose-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
 
-                                    <div className="aspect-[16/10] rounded-[2rem] overflow-hidden bg-[#F9F7F2] relative">
-                                        <img src={theme.image || 'https://via.placeholder.com/600x400'} className="w-full h-full object-cover" />
-                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-xs text-white font-bold uppercase tracking-widest transition-opacity">
-                                            Update Image
-                                            <input type="file" className="hidden" onChange={async (e) => {
-                                                const url = await handleUploadImage(e.target.files[0]);
-                                                if (url) {
-                                                    const updated = [...pageData.themes];
-                                                    updated[i].image = url;
-                                                    updateAll({ ...pageData, themes: updated });
-                                                }
-                                            }} />
-                                        </label>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <input
-                                            defaultValue={theme.title}
-                                            className="w-full p-2 text-xl font-display text-[#5A2A45] bg-transparent border-b border-transparent focus:border-[#5A2A45]/20 outline-none"
-                                            placeholder="Theme Title"
-                                            onChange={(e) => {
-                                                const updated = [...pageData.themes];
-                                                updated[i].title = e.target.value;
-                                                setPageData({ ...pageData, themes: updated });
-                                            }}
-                                        />
-                                        <textarea
-                                            defaultValue={theme.description}
-                                            className="w-full p-2 text-sm text-[#6E5A52] bg-transparent outline-none resize-none"
-                                            placeholder="Description..."
-                                            rows="3"
-                                            onChange={(e) => {
-                                                const updated = [...pageData.themes];
-                                                updated[i].description = e.target.value;
-                                                setPageData({ ...pageData, themes: updated });
-                                            }}
-                                        />
-                                        <div className="flex justify-end">
-                                            <button onClick={() => updateAll(pageData)} className="text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]/40 hover:text-[#5A2A45] transition-colors">Confirm Text Changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
 
                 {activeTab === 'videos' && (
                     <div className="space-y-6">
@@ -995,25 +898,223 @@ const ManageCategory = () => {
                                     }} />
                                 </label>
                             )}
+                        </div>
 
-                            {/* Existing Videos */}
-                            {pageData.videos?.map((vid, i) => (
-                                <div key={i} className="aspect-[9/16] relative group rounded-[2.5rem] overflow-hidden shadow-xl bg-black border border-[#5A2A45]/10">
-                                    <video src={vid} className="w-full h-full object-cover" controls muted />
-                                    <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
-                                        <span className="text-[10px] text-white font-bold uppercase tracking-tighter">Slot {i + 1}</span>
+                        {/* Existing Videos */}
+                        {activeTab === 'videos' && isBirthday && (
+                            <div className="max-w-4xl space-y-8">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <h2 className="font-display text-2xl text-[#5A2A45]">Living Memories (Videos)</h2>
+                                        <p className="text-sm text-[#6E5A52]">Upload short cinematic clips (mp4/webm). Max size 100MB.</p>
                                     </div>
+                                    <label className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2 cursor-pointer hover:bg-[#4a2238] transition-colors">
+                                        <Plus size={16} /> Add Video
+                                        <input type="file" accept="video/*" className="hidden" onChange={async (e) => {
+                                            if (e.target.files[0]) {
+                                                setSaving(true);
+                                                const url = await handleUploadImage(e.target.files[0]); // Works for any file type if backend supports it
+                                                if (url) {
+                                                    const newVideos = [...(pageData.videos || []), url];
+                                                    await updateAll({ ...pageData, videos: newVideos });
+                                                }
+                                                setSaving(false);
+                                            }
+                                        }} />
+                                    </label>
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                    {pageData.videos?.map((vid, i) => (
+                                        <div key={i} className="aspect-[9/16] relative group rounded-[2.5rem] overflow-hidden shadow-xl bg-black border border-[#5A2A45]/10">
+                                            <video src={vid} className="w-full h-full object-cover" controls muted />
+                                            <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
+                                                <span className="text-[10px] text-white font-bold uppercase tracking-tighter">Slot {i + 1}</span>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    if (confirm("Remove this video?")) {
+                                                        const updated = pageData.videos.filter((_, idx) => idx !== i);
+                                                        updateAll({ ...pageData, videos: updated });
+                                                    }
+                                                }}
+                                                className="absolute top-4 right-4 p-2 bg-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {activeTab === 'categories' && isBirthday && (
+                    <div className="max-w-5xl space-y-12">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h2 className="font-display text-2xl text-[#5A2A45]">Category Explorer</h2>
+                                <p className="text-sm text-[#6E5A52]">Manage the navigation cards for Pre-Birthday and Cake Smash.</p>
+                            </div>
+
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {pageData.categories?.map((cat, i) => (
+                                <div key={i} className="bg-white p-6 rounded-[2.5rem] border border-[#5A2A45]/10 space-y-6 relative group shadow-sm hover:shadow-xl transition-all">
+
+
+                                    <div className="aspect-[4/5] bg-[#F9F7F2] rounded-3xl relative overflow-hidden group/img">
+                                        <img src={cat.image || 'https://via.placeholder.com/600x800'} className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 flex items-center justify-center cursor-pointer text-white text-xs font-bold uppercase tracking-widest transition-opacity backdrop-blur-sm">
+                                            Update Cover
+                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                const url = await handleUploadImage(e.target.files[0]);
+                                                if (url) {
+                                                    const newCats = [...pageData.categories];
+                                                    newCats[i].image = url;
+                                                    updateAll({ ...pageData, categories: newCats });
+                                                }
+                                            }} />
+                                        </label>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Category Title</label>
+                                            <input
+                                                value={cat.title}
+                                                onChange={(e) => {
+                                                    const newCats = [...pageData.categories];
+                                                    newCats[i].title = e.target.value;
+                                                    setPageData({ ...pageData, categories: newCats });
+                                                }}
+                                                onBlur={() => updateAll(pageData)}
+                                                className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-2xl text-[#5A2A45]"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle / Badge</label>
+                                            <input
+                                                value={cat.subtitle}
+                                                onChange={(e) => {
+                                                    const newCats = [...pageData.categories];
+                                                    newCats[i].subtitle = e.target.value;
+                                                    setPageData({ ...pageData, categories: newCats });
+                                                }}
+                                                onBlur={() => updateAll(pageData)}
+                                                className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-xs font-bold uppercase tracking-widest text-[#B77A8C]"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description</label>
+                                            <textarea
+                                                value={cat.description}
+                                                onChange={(e) => {
+                                                    const newCats = [...pageData.categories];
+                                                    newCats[i].description = e.target.value;
+                                                    setPageData({ ...pageData, categories: newCats });
+                                                }}
+                                                onBlur={() => updateAll(pageData)}
+                                                rows="3"
+                                                className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm leading-relaxed"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Link Path</label>
+                                            <input
+                                                value={cat.link}
+                                                onChange={(e) => {
+                                                    const newCats = [...pageData.categories];
+                                                    newCats[i].link = e.target.value;
+                                                    setPageData({ ...pageData, categories: newCats });
+                                                }}
+                                                onBlur={() => updateAll(pageData)}
+                                                className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm text-blue-600 font-mono"
+                                                placeholder="/portfolio/..."
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'themes' && isBirthday && (
+                    <div className="max-w-4xl space-y-12">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h2 className="font-display text-2xl text-[#5A2A45]">Custom Themes</h2>
+                                <p className="text-sm text-[#6E5A52]">Manage the curated theme options shown on the page.</p>
+                            </div>
+                            <button onClick={() => {
+                                const newTheme = { title: "New Theme", description: "Theme description...", image: "" };
+                                updateAll({ ...pageData, themes: [...(pageData.themes || []), newTheme] });
+                            }} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
+                                <Plus size={16} /> Add Theme
+                            </button>
+                        </div>
+
+                        <div className="grid gap-8">
+                            {pageData.themes?.map((theme, i) => (
+                                <div key={i} className="bg-white p-6 rounded-3xl border border-[#5A2A45]/10 flex flex-col md:flex-row gap-8 items-start relative group">
                                     <button
                                         onClick={() => {
-                                            if (confirm("Remove this video?")) {
-                                                const updated = pageData.videos.filter((_, idx) => idx !== i);
-                                                updateAll({ ...pageData, videos: updated });
+                                            if (confirm('Delete theme?')) {
+                                                const newThemes = pageData.themes.filter((_, idx) => idx !== i);
+                                                updateAll({ ...pageData, themes: newThemes });
                                             }
                                         }}
-                                        className="absolute top-4 right-4 p-2 bg-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg"
+                                        className="absolute top-4 right-4 text-rose-300 hover:text-rose-600 p-2"
                                     >
-                                        <Trash2 size={16} />
+                                        <Trash2 size={18} />
                                     </button>
+
+                                    <div className="w-full md:w-1/3 aspect-[4/5] bg-[#F9F7F2] rounded-2xl relative overflow-hidden flex-shrink-0">
+                                        <img src={theme.image || 'https://via.placeholder.com/300x400'} className="w-full h-full object-cover" />
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-xs font-bold uppercase transition-opacity">
+                                            Change Image
+                                            <input type="file" className="hidden" onChange={async (e) => {
+                                                const url = await handleUploadImage(e.target.files[0]);
+                                                if (url) {
+                                                    const newThemes = [...pageData.themes];
+                                                    newThemes[i].image = url;
+                                                    updateAll({ ...pageData, themes: newThemes });
+                                                }
+                                            }} />
+                                        </label>
+                                    </div>
+
+                                    <div className="flex-grow space-y-6 w-full">
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Theme Title</label>
+                                            <input
+                                                value={theme.title}
+                                                onChange={(e) => {
+                                                    const newThemes = [...pageData.themes];
+                                                    newThemes[i].title = e.target.value;
+                                                    setPageData({ ...pageData, themes: newThemes }); // Optimistic
+                                                }}
+                                                onBlur={() => updateAll(pageData)} // Save on blur
+                                                className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none font-display text-xl text-[#5A2A45]"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Theme Description</label>
+                                            <textarea
+                                                value={theme.description}
+                                                onChange={(e) => {
+                                                    const newThemes = [...pageData.themes];
+                                                    newThemes[i].description = e.target.value;
+                                                    setPageData({ ...pageData, themes: newThemes });
+                                                }}
+                                                onBlur={() => updateAll(pageData)}
+                                                rows="5"
+                                                className="w-full p-4 bg-[#F9F7F2] rounded-xl outline-none text-sm leading-relaxed"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -1407,7 +1508,19 @@ const ManageCategory = () => {
                             {(pageData.sessions || []).map((session, sIndex) => (
                                 <div key={sIndex} className="bg-white p-8 rounded-3xl shadow-sm border border-[#5A2A45]/5 space-y-8">
                                     <div className="flex items-center justify-between">
-                                        <h4 className="font-display text-xl text-[#5A2A45] capitalize">{session.type} Session</h4>
+                                        <div className="flex flex-col">
+                                            <h4 className="font-display text-xl text-[#5A2A45] capitalize">
+                                                {session.type === 'birth' ? 'Birth Story' :
+                                                    session.type === 'newborn' ? 'Fresh 48 Session' :
+                                                        session.type === 'family' ? 'First Family Session' :
+                                                            `${session.type} Session`}
+                                            </h4>
+                                            {session.type === 'birth' && (
+                                                <span className="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider inline-block mt-1 w-fit">
+                                                    Linked to Portfolio View
+                                                </span>
+                                            )}
+                                        </div>
                                         <button
                                             onClick={async () => {
                                                 setSaving(true);
