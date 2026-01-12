@@ -137,9 +137,9 @@ const AdminLayout = () => {
             path: '/admin/portfolio',
             subItems: [
                 { label: 'Main Layout', path: '/admin/portfolio' },
-                { label: 'Newborn', path: '/admin/portfolio/newborn' },
+                { label: 'Birth', path: '/admin/portfolio/birth' },
                 { label: 'Maternity', path: '/admin/portfolio/maternity' },
-                { label: 'Baby', path: '/admin/portfolio/baby' },
+                { label: 'Newborn', path: '/admin/portfolio/newborn' },
                 { label: 'Family', path: '/admin/portfolio/family' },
                 { label: 'Cake Smash', path: '/admin/portfolio/cakesmash' },
                 { label: 'Hospital', path: '/admin/portfolio/hospital' },

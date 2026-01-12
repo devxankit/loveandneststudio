@@ -20,9 +20,9 @@ const img6 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937579/love
 const img7 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937581/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225901.png";
 const img8 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937582/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225916.png";
 const img9 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937583/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20225924.png";
-const img10 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937584/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%230059.png";
-const img11 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937585/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%230114.png";
-const img12 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937586/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%230124.png";
+const img10 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937584/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20230059.png";
+const img11 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937585/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20230114.png";
+const img12 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937586/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20230124.png";
 
 
 const Maternity = () => {

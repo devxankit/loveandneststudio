@@ -7,7 +7,7 @@ import api from '../../../services/api';
 
 // Fallbacks
 const heroFallback = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937541/loveandnest/assets/hero/Screenshot%202025-12-30%20141652.png";
-const catFallback1 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937585/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%230114.png";
+const catFallback1 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937585/loveandnest/assets/portfolio/maternity/Screenshot%202026-01-01%20230114.png";
 const catFallback2 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937541/loveandnest/assets/hero/Screenshot%202025-12-30%20141652.png";
 const catFallback3 = "https://res.cloudinary.com/djuyp9lut/image/upload/v1767937567/loveandnest/assets/portfolio/family/Screenshot%202025-12-31%20111323.png";
 

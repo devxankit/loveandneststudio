@@ -20,6 +20,12 @@ const PortfolioContent = ({ data }) => {
 
     const { hero = {}, categories = [], experience = {} } = data || {};
 
+    const remappedCategories = categories.map(cat => {
+        if (cat.id === 'newborn') return { ...cat, title: 'Birth', link: '/portfolio/birth' };
+        if (cat.id === 'baby') return { ...cat, title: 'Newborn', link: '/portfolio/newborn' };
+        return cat;
+    });
+
     // Helper to ensure strips are long enough for the parallax journey
     // We repeat the images until we have a substantial number
     const buildStrip = (providedImages, fallbackImages) => {
@@ -166,7 +172,7 @@ const PortfolioContent = ({ data }) => {
                     viewport={{ once: true, margin: "-100px" }}
                     className="flex flex-wrap justify-center gap-6 sm:gap-10"
                 >
-                    {categories.map((category) => (
+                    {remappedCategories.map((category) => (
                         <motion.div
                             key={category.id}
                             variants={cardVariants}

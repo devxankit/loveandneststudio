@@ -48,9 +48,9 @@ const ManageCategory = () => {
 
     // Capitalize for display
     const title = category?.charAt(0).toUpperCase() + category?.slice(1);
-    const isNewborn = category === 'newborn';
+    const isNewborn = category === 'birth';
     const isMaternity = category === 'maternity';
-    const isBaby = category === 'baby';
+    const isBaby = category === 'newborn';
     const isFamily = category === 'family';
     const isCakeSmash = category === 'cakesmash';
     const isHospital = category === 'hospital';
@@ -274,6 +274,8 @@ const ManageCategory = () => {
                 await updatePreBirthdayPage(newData);
             } else if (isBirthday) {
                 await updateBirthdayPage(newData);
+            } else if (isHospital) {
+                await updateHospitalPage(newData);
             } else {
                 const sectionsToUpdate = [];
                 if (newData.hero) sectionsToUpdate.push({ id: 'hero', content: newData.hero });
@@ -1349,7 +1351,7 @@ const ManageCategory = () => {
                                             <Trash2 size={16} />
                                         </button>
                                     </div>
-                                    <button onClick={() => updateAll(pageData, updateHospitalPage)} className="w-full bg-[#5A2A45]/10 text-[#5A2A45] py-2 rounded-lg text-xs font-bold uppercase hover:bg-[#5A2A45] hover:text-white transition-all">
+                                    <button onClick={() => updateAll(pageData)} className="w-full bg-[#5A2A45]/10 text-[#5A2A45] py-2 rounded-lg text-xs font-bold uppercase hover:bg-[#5A2A45] hover:text-white transition-all">
                                         Save Changes
                                     </button>
                                 </div>

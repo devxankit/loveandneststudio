@@ -80,8 +80,8 @@ const Footer = () => {
                         <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 flex flex-col items-center">
                             {[
                                 { name: 'Maternity', path: '/portfolio/maternity' },
+                                { name: 'Birth', path: '/portfolio/birth' },
                                 { name: 'Newborn', path: '/portfolio/newborn' },
-                                { name: 'Baby', path: '/portfolio/baby' },
                                 { name: 'Family', path: '/portfolio/family' }
                             ].map((item, i) => (
                                 <li key={i} className="group flex items-center gap-3">
