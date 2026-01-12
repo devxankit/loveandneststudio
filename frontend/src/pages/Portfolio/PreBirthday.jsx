@@ -109,7 +109,9 @@ const PreBirthdayHero = ({ hero, themeColor }) => {
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
     const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
 
-    const heroImages = hero?.images?.length >= 2 ? hero.images : PreBirthdayFallbackImages;
+    const heroImages = hero?.images || [];
+    const mainImg = heroImages[0] || PreBirthdayFallbackImages[0];
+    const bowImg = heroImages[1] || "https://res.cloudinary.com/djuyp9lut/image/upload/v1736615566/loveandnest/assets/bow.png";
 
     return (
         <section ref={containerRef} className="relative h-screen min-h-[700px] w-full flex items-center justify-center overflow-hidden bg-white">
@@ -127,7 +129,7 @@ const PreBirthdayHero = ({ hero, themeColor }) => {
                         transition={{ delay: 0.8, type: "spring" }}
                         className="absolute -top-10 md:-top-20 left-1/2 -translate-x-1/2 w-40 md:w-64 z-20 pointer-events-none"
                     >
-                        <img src={heroImages[1] || "https://res.cloudinary.com/djuyp9lut/image/upload/v1736615566/loveandnest/assets/bow.png"} alt="" className="w-full drop-shadow-2xl"
+                        <img src={bowImg} alt="" className="w-full drop-shadow-2xl"
                             onError={(e) => e.target.style.display = 'none'} />
                         {/* Fallback Bow Icon if image fails */}
                         <div className="w-full h-full flex items-center justify-center text-[#B77A8C]">
@@ -138,7 +140,7 @@ const PreBirthdayHero = ({ hero, themeColor }) => {
                     {/* Circular Image Frame */}
                     <div className="w-full h-full rounded-full overflow-hidden border-[15px] border-white shadow-[0_40px_100px_rgba(0,0,0,0.1)]">
                         <LazyImage
-                            src={heroImages[0]}
+                            src={mainImg}
                             className="w-full h-full object-cover"
                         />
                     </div>
@@ -159,8 +161,14 @@ const PreBirthdayHero = ({ hero, themeColor }) => {
                         {hero?.tagline || 'A MAGICAL JOURNEY'}
                     </span>
                     <h1 className="font-display text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] text-[#5A2A45] leading-[0.8] mb-8 tracking-tighter">
-                        {hero?.title || 'Pre'} <br />
-                        <span className="italic font-light text-[#B77A8C]">Birthday</span>
+                        {hero?.title?.split(' ').map((word, i) => (
+                            <React.Fragment key={i}>
+                                {i > 0 && <br />}
+                                <span className={i === 1 ? "italic font-light text-[#B77A8C]" : ""}>{word}</span>
+                            </React.Fragment>
+                        )) || (
+                                <>Pre <br /><span className="italic font-light text-[#B77A8C]">Birthday</span></>
+                            )}
                     </h1>
                     <p className="font-outfit text-[#5A2A45]/60 text-lg md:text-xl font-medium tracking-widest uppercase">
                         {hero?.subtitle || 'CAPTURING THE ANTICIPATION'}
@@ -191,7 +199,8 @@ const PreBirthdayHero = ({ hero, themeColor }) => {
 };
 
 const CakeShapeGrid = ({ data, themeColor }) => {
-    const images = data?.images?.length >= 7 ? data.images : PreBirthdayFallbackImages;
+    const images = data?.images || [];
+    const getImg = (i) => images[i] || PreBirthdayFallbackImages[i % PreBirthdayFallbackImages.length];
 
     return (
         <section className="py-24 px-6 bg-[#FFFCF9] relative overflow-hidden">
@@ -218,50 +227,50 @@ const CakeShapeGrid = ({ data, themeColor }) => {
                         viewport={{ once: true }}
                         className="w-20 md:w-32 aspect-[1/2] rounded-full overflow-hidden shadow-xl border-4 border-white z-40"
                     >
-                        <LazyImage src={images[0]} className="w-full h-full object-cover" />
+                        <LazyImage src={getImg(0)} className="w-full h-full object-cover" />
                     </motion.div>
 
                     {/* Level 2: Top Tier (2 Arched Segments) */}
                     <div className="grid grid-cols-2 gap-4 w-[60%] md:w-[50%]">
-                        {images.slice(1, 3).map((img, i) => (
+                        {[1, 2].map((idx) => (
                             <motion.div
-                                key={i}
-                                initial={{ opacity: 0, x: i === 0 ? -30 : 30 }}
+                                key={idx}
+                                initial={{ opacity: 0, x: idx === 1 ? -30 : 30 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                className={`aspect-square sm:aspect-video rounded-[2rem] overflow-hidden shadow-lg border-2 border-white ${i === 0 ? 'rounded-tl-[100px]' : 'rounded-tr-[100px]'}`}
+                                className={`aspect-square sm:aspect-video rounded-[2rem] overflow-hidden shadow-lg border-2 border-white ${idx === 1 ? 'rounded-tl-[100px]' : 'rounded-tr-[100px]'}`}
                             >
-                                <LazyImage src={img} className="w-full h-full object-cover" />
+                                <LazyImage src={getImg(idx)} className="w-full h-full object-cover" />
                             </motion.div>
                         ))}
                     </div>
 
                     {/* Level 3: Middle Tier (2 Larger Segments) */}
                     <div className="grid grid-cols-2 gap-5 w-[85%] md:w-[75%]">
-                        {images.slice(3, 5).map((img, i) => (
+                        {[3, 4].map((idx) => (
                             <motion.div
-                                key={i}
-                                initial={{ opacity: 0, x: i === 0 ? -40 : 40 }}
+                                key={idx}
+                                initial={{ opacity: 0, x: idx === 3 ? -40 : 40 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                className={`aspect-square sm:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white ${i === 0 ? 'rounded-tl-[50px] rounded-br-[150px]' : 'rounded-tr-[50px] rounded-bl-[150px]'}`}
+                                className={`aspect-square sm:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white ${idx === 3 ? 'rounded-tl-[50px] rounded-br-[150px]' : 'rounded-tr-[50px] rounded-bl-[150px]'}`}
                             >
-                                <LazyImage src={img} className="w-full h-full object-cover" />
+                                <LazyImage src={getImg(idx)} className="w-full h-full object-cover" />
                             </motion.div>
                         ))}
                     </div>
 
                     {/* Level 4: Bottom Base (2 Wider Segments) */}
                     <div className="grid grid-cols-2 gap-6 w-full">
-                        {images.slice(5, 7).map((img, i) => (
+                        {[5, 6].map((idx) => (
                             <motion.div
-                                key={i}
+                                key={idx}
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className={`aspect-video rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white ${i === 0 ? 'rounded-bl-[150px] rounded-tr-[80px]' : 'rounded-br-[150px] rounded-tl-[80px]'}`}
+                                className={`aspect-video rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white ${idx === 5 ? 'rounded-bl-[150px] rounded-tr-[80px]' : 'rounded-br-[150px] rounded-tl-[80px]'}`}
                             >
-                                <LazyImage src={img} className="w-full h-full object-cover" />
+                                <LazyImage src={getImg(idx)} className="w-full h-full object-cover" />
                             </motion.div>
                         ))}
                     </div>

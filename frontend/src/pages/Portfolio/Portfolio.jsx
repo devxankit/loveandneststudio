@@ -20,11 +20,12 @@ const PortfolioContent = ({ data }) => {
 
     const { hero = {}, categories = [], experience = {} } = data || {};
 
-    const remappedCategories = categories.map(cat => {
-        if (cat.id === 'newborn') return { ...cat, title: 'Birth', link: '/portfolio/birth' };
-        if (cat.id === 'baby') return { ...cat, title: 'Newborn', link: '/portfolio/newborn' };
-        return cat;
-    });
+    const remappedCategories = categories
+        .filter(cat => !['newborn', 'cakesmash', 'pre-birthday', 'prebirthday'].includes(cat.id)) // Remove Birth, Cake Smash and Pre-Birthday from main grid
+        .map(cat => {
+            if (cat.id === 'baby') return { ...cat, link: '/portfolio/newborn' };
+            return { ...cat, link: cat.link || `/portfolio/${cat.id}` };
+        });
 
     // Helper to ensure strips are long enough for the parallax journey
     // We repeat the images until we have a substantial number
@@ -164,19 +165,19 @@ const PortfolioContent = ({ data }) => {
             </section>
 
             {/* 2. CATEGORIES GRID */}
-            <section className="py-20 px-4 sm:px-8 md:px-12 max-w-[1700px] mx-auto relative z-10">
+            <section className="py-20 px-4 sm:px-8 md:px-12 max-w-[1600px] mx-auto relative z-10">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="flex flex-wrap justify-center gap-6 sm:gap-10"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-16"
                 >
                     {remappedCategories.map((category) => (
                         <motion.div
                             key={category.id}
                             variants={cardVariants}
-                            className="group relative w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(25%-1.875rem)] h-[450px] sm:h-[550px] md:h-[650px] overflow-hidden rounded-[3rem] shadow-2xl bg-white"
+                            className="group relative h-[450px] sm:h-[550px] md:h-[650px] overflow-hidden rounded-[3rem] shadow-2xl bg-white"
                         >
                             <Link to={category.link} className="block w-full h-full">
                                 <div className="absolute inset-0 z-0">

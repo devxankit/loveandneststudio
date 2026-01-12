@@ -154,10 +154,22 @@ const Services = () => {
                                 {/* Hover Overlay Context */}
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20 backdrop-blur-[2px]">
                                     <Link
-                                        to={`/services/${service.id}`}
+                                        to={
+                                            {
+                                                'maternity': '/portfolio/maternity',
+                                                'birth': '/portfolio/birth',
+                                                'newborn': '/portfolio/newborn',
+                                                'pre-bday': '/portfolio/pre-birthday',
+                                                'cakesmash': '/portfolio/cakesmash',
+                                                'toddler': '/portfolio/toddler',
+                                                'family': '/portfolio/family',
+                                                'birthday': '/portfolio/birthday',
+                                                'hospital': '/portfolio/hospital'
+                                            }[service.id] || `/portfolio`
+                                        }
                                         className="px-6 py-2 bg-white/90 text-primary-dark rounded-full text-sm font-medium tracking-wide shadow-lg hover:bg-white hover:scale-105 transition-all"
                                     >
-                                        View Gallery
+                                        View Details
                                     </Link>
                                 </div>
                             </div>

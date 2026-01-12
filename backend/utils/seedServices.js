@@ -145,6 +145,17 @@ const savedServices = [
         ],
         price: 25000,
         isActive: true
+    },
+    {
+        id: 'hospital',
+        title: "Hospital",
+        subtitle: "First Fresh Moments",
+        description: "Capturing those first precious hours in the hospital. Sweet, organic, and purely natural moments of your newest family member.",
+        details: "A documentary-style session within the first 48 hours of birth. No props, just your baby and the raw beauty of your new journey.",
+        coverImage: "/images/hero/Screenshot 2025-12-30 141756.png",
+        galleryImages: [],
+        price: 15000,
+        isActive: true
     }
 ];
 

@@ -35,28 +35,6 @@ const HospitalSession = () => {
     const hero = data?.hero || {};
     const puzzleImages = data?.puzzleImages || [];
 
-    // --- EXACT Baby.jsx Layout Structure ---
-    const puzzleLayout = [
-        { span: 1, rounded: 'rounded-tl-2xl' },
-        { span: 2, rounded: 'rounded-tr-lg' },
-        { span: 1, rounded: '' },
-        { span: 1, rounded: '' },
-        { span: 2, rounded: '' },
-        { span: 1, rounded: 'rounded-tr-3xl' },
-        { span: 1, rounded: 'rounded-bl-lg' },
-        { span: 2, rounded: '' },
-        { span: 2, rounded: '' },
-        { span: 1, rounded: '' },
-        { span: 1, rounded: 'rounded-br-xl' },
-        { span: 2, rounded: 'rounded-bl-3xl' },
-        { span: 1, rounded: '' },
-        { span: 2, rounded: 'rounded-br-2xl' },
-        { span: 1, rounded: '' },
-    ].map((slot, i) => ({
-        ...slot,
-        img: puzzleImages[i % puzzleImages.length] || defaultImg
-    }));
-
     return (
         <>
             <SEO
@@ -87,27 +65,35 @@ const HospitalSession = () => {
                     </motion.div>
                 </div>
 
-                {/* Swapping Grid (Exactly matching Baby.jsx) */}
-                <div className="max-w-5xl mx-auto grid grid-cols-4 md:grid-cols-8 gap-2 pb-20 w-full">
-                    {puzzleLayout.map((item, index) => (
-                        <div key={index} className={`relative group perspective-1000 cursor-pointer aspect-square ${item.span === 2 ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1'}`}>
-                            <div className="w-full h-full duration-700 preserve-3d group-hover:[transform:rotateX(180deg)] relative">
-                                <div className={`absolute inset-0 backface-hidden w-full h-full overflow-hidden bg-white shadow-sm ${item.rounded}`}>
-                                    <LazyImage src={item.img} className="w-full h-full object-cover" />
-                                    <div className="absolute inset-0 bg-[#B77A8C]/0 group-hover:bg-[#B77A8C]/10 transition-colors" />
-                                </div>
-                                <div className={`absolute inset-0 backface-hidden w-full h-full [transform:rotateX(180deg)] bg-[#B77A8C] flex items-center justify-center text-white ${item.rounded}`}>
-                                    <div className="text-center p-2">
-                                        {item.span === 2 ? (
-                                            <><span className="font-display text-2xl md:text-3xl block">Love</span><span className="font-display text-2xl md:text-3xl block">& Nest</span></>
-                                        ) : (
-                                            <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mx-auto"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
-                                        )}
-                                    </div>
-                                </div>
+                {/* Simple & Clean Gallery Grid (Replacing Swapping Grid) */}
+                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 pb-32">
+                    {puzzleImages.map((img, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, delay: index * 0.1 }}
+                            className={`relative group overflow-hidden bg-white shadow-xl ${index % 5 === 0 ? 'md:col-span-2 md:row-span-2' : ''
+                                }`}
+                        >
+                            <div className="aspect-[4/5] w-full h-full">
+                                <LazyImage
+                                    src={img || defaultImg}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                />
                             </div>
-                        </div>
+                            <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/20 to-transparent">
+                                <div className="w-8 h-[1px] bg-white/60 mb-2"></div>
+                                <p className="text-[10px] text-white/80 uppercase tracking-widest font-bold">L&N Archives</p>
+                            </div>
+                        </motion.div>
                     ))}
+                    {puzzleImages.length === 0 && (
+                        <div className="col-span-full py-20 text-center opacity-40 italic">
+                            No images captured in this session yet.
+                        </div>
+                    )}
                 </div>
 
                 <style>{`

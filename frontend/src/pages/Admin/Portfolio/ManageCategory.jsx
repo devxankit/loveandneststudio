@@ -69,7 +69,9 @@ const ManageCategory = () => {
                 const { data } = await getPreBirthdayPage();
                 setPageData({
                     hero: data.hero || { title: 'Pre-Birthday', subtitle: 'Capturing High Hopes', tagline: 'A Magical Journey', images: [] },
-                    cta: data.cta || { title: "Let's Make Their First Wish Come True", description: "...", buttonText: "Reserve Your Date", buttonLink: "/contact" },
+                    cakeGrid: data.cakeGrid || { title: 'The Sweetest Moments', description: 'Custom cake-shaped gallery...', images: [] },
+                    gallery: data.gallery || [],
+                    cta: data.cta || { title: "Let's Make Their First Wish Come True", description: "Every big milestone starts with a tiny moment of wonder. Let's capture the magic before the candles are lit.", buttonText: "Reserve Your Date", buttonLink: "/contact" },
                     themeColor: data.themeColor || '#FDE2E4'
                 });
             } else if (isBirthday) {
@@ -367,6 +369,11 @@ const ManageCategory = () => {
                         { id: 'gallery', label: 'Image Vault', icon: ImageIcon },
                         { id: 'videos', label: 'Videos', icon: Play },
                         { id: 'cta', label: 'Ending CTA', icon: Save }
+                    ] : isPreBirthday ? [
+                        { id: 'hero', label: 'Magic Hero', icon: Layout },
+                        { id: 'cakeGrid', label: 'Cake Structure', icon: LayoutGrid },
+                        { id: 'gallery', label: 'Portfolio Grid', icon: ImageIcon },
+                        { id: 'cta', label: 'CTA', icon: Save }
                     ] : [ // Newborn or Default
                         { id: 'hero', label: 'Hero', icon: Layout },
                         { id: 'welcome', label: 'Welcome', icon: Sparkles },
@@ -628,15 +635,7 @@ const ManageCategory = () => {
                         <div className="flex items-center justify-between">
                             <h2 className="font-display text-2xl text-[#5A2A45]">Pre-Birthday Magic Hero</h2>
                             <button
-                                onClick={() => updateAll({
-                                    ...pageData,
-                                    hero: {
-                                        ...pageData.hero,
-                                        title: document.getElementById('pb-title').value,
-                                        subtitle: document.getElementById('pb-subtitle').value,
-                                        tagline: document.getElementById('pb-tagline').value,
-                                    }
-                                })}
+                                onClick={() => updateAll(pageData)}
                                 className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:brightness-110 transition-all flex items-center gap-2"
                             >
                                 <Save size={16} /> {saving ? 'Saving...' : 'Save Hero Content'}
@@ -647,15 +646,15 @@ const ManageCategory = () => {
                             <div className="space-y-6">
                                 <div className="space-y-4">
                                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Hero Title</label>
-                                    <input id="pb-title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-2xl" />
+                                    <input value={pageData.hero?.title} onChange={(e) => setPageData({ ...pageData, hero: { ...pageData.hero, title: e.target.value } })} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-2xl" />
                                 </div>
                                 <div className="space-y-4">
                                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Hero Subtitle</label>
-                                    <input id="pb-subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none" />
+                                    <input value={pageData.hero?.subtitle} onChange={(e) => setPageData({ ...pageData, hero: { ...pageData.hero, subtitle: e.target.value } })} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none" />
                                 </div>
                                 <div className="space-y-4">
                                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Hero Tagline</label>
-                                    <input id="pb-tagline" defaultValue={pageData.hero.tagline} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none italic" />
+                                    <input value={pageData.hero?.tagline} onChange={(e) => setPageData({ ...pageData, hero: { ...pageData.hero, tagline: e.target.value } })} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none italic" />
                                 </div>
                             </div>
                             <div className="space-y-6">
@@ -692,14 +691,7 @@ const ManageCategory = () => {
                         <div className="flex items-center justify-between">
                             <h2 className="font-display text-2xl text-[#5A2A45]">Cake Shape Gallery Management</h2>
                             <button
-                                onClick={() => updateAll({
-                                    ...pageData,
-                                    cakeGrid: {
-                                        ...pageData.cakeGrid,
-                                        title: document.getElementById('cg-title').value,
-                                        description: document.getElementById('cg-desc').value,
-                                    }
-                                })}
+                                onClick={() => updateAll(pageData)}
                                 className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:brightness-110 transition-all flex items-center gap-2"
                             >
                                 <Save size={16} /> {saving ? 'Saving...' : 'Save Structure Content'}
@@ -710,11 +702,11 @@ const ManageCategory = () => {
                             <div className="lg:col-span-1 space-y-6">
                                 <div className="space-y-4">
                                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Section Title</label>
-                                    <input id="cg-title" defaultValue={pageData.cakeGrid.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-xl" />
+                                    <input value={pageData.cakeGrid?.title} onChange={(e) => setPageData({ ...pageData, cakeGrid: { ...pageData.cakeGrid, title: e.target.value } })} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-xl" />
                                 </div>
                                 <div className="space-y-4">
                                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Description</label>
-                                    <textarea id="cg-desc" defaultValue={pageData.cakeGrid.description} rows="4" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm leading-relaxed" />
+                                    <textarea value={pageData.cakeGrid?.description} onChange={(e) => setPageData({ ...pageData, cakeGrid: { ...pageData.cakeGrid, description: e.target.value } })} rows="4" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm leading-relaxed" />
                                 </div>
                             </div>
                             <div className="lg:col-span-2 space-y-8">
@@ -745,21 +737,64 @@ const ManageCategory = () => {
                     </div>
                 )}
 
+                {activeTab === 'cta' && isPreBirthday && (
+                    <div className="max-w-2xl space-y-8">
+                        <div className="flex items-center justify-between mb-8">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Ending Magic CTA</h2>
+                            <button
+                                onClick={() => updateAll(pageData)}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:brightness-110 transition-all flex items-center gap-2"
+                            >
+                                <Save size={16} /> {saving ? 'Saving...' : 'Save CTA Changes'}
+                            </button>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">CTA Title (Use &lt;br /&gt; for line breaks)</label>
+                                <textarea
+                                    value={pageData.cta?.title}
+                                    onChange={(e) => setPageData({ ...pageData, cta: { ...pageData.cta, title: e.target.value } })}
+                                    rows="3" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-2xl"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Description</label>
+                                <textarea
+                                    value={pageData.cta?.description}
+                                    onChange={(e) => setPageData({ ...pageData, cta: { ...pageData.cta, description: e.target.value } })}
+                                    rows="4" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm leading-relaxed"
+                                />
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Text</label>
+                                    <input
+                                        value={pageData.cta?.buttonText}
+                                        onChange={(e) => setPageData({ ...pageData, cta: { ...pageData.cta, buttonText: e.target.value } })}
+                                        className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Button Link</label>
+                                    <input
+                                        value={pageData.cta?.buttonLink}
+                                        onChange={(e) => setPageData({ ...pageData, cta: { ...pageData.cta, buttonLink: e.target.value } })}
+                                        className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
 
                 {/* BIRTHDAY TABS CONTENT */}
                 {activeTab === 'hero' && isBirthday && (
                     <div className="max-w-[1240px] space-y-12">
                         <div className="flex items-center justify-between">
                             <h2 className="font-display text-2xl text-[#5A2A45]">Hero & Atmosphere</h2>
-                            <button onClick={() => updateAll({
-                                ...pageData,
-                                hero: {
-                                    ...pageData.hero,
-                                    title: document.getElementById('b-title').value,
-                                    subtitle: document.getElementById('b-subtitle').value,
-                                    tagline: document.getElementById('b-tagline').value,
-                                }
-                            })} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
+                            <button onClick={() => updateAll(pageData)} className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl flex items-center gap-2">
                                 <Save size={16} /> Save Hero
                             </button>
                         </div>
@@ -767,15 +802,15 @@ const ManageCategory = () => {
                             <div className="space-y-6">
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Main Headline</label>
-                                    <input id="b-title" defaultValue={pageData.hero?.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl font-display text-2xl" />
+                                    <input value={pageData.hero?.title} onChange={(e) => setPageData({ ...pageData, hero: { ...pageData.hero, title: e.target.value } })} className="w-full p-4 bg-[#F9F7F2] rounded-2xl font-display text-2xl" />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Subtitle</label>
-                                    <input id="b-subtitle" defaultValue={pageData.hero?.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-2xl" />
+                                    <input value={pageData.hero?.subtitle} onChange={(e) => setPageData({ ...pageData, hero: { ...pageData.hero, subtitle: e.target.value } })} className="w-full p-4 bg-[#F9F7F2] rounded-2xl" />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-widest text-[#5A2A45] mb-2">Tagline</label>
-                                    <input id="b-tagline" defaultValue={pageData.hero?.tagline} className="w-full p-4 bg-[#F9F7F2] rounded-2xl italic" />
+                                    <input value={pageData.hero?.tagline} onChange={(e) => setPageData({ ...pageData, hero: { ...pageData.hero, tagline: e.target.value } })} className="w-full p-4 bg-[#F9F7F2] rounded-2xl italic" />
                                 </div>
                             </div>
                             <div className="space-y-6">

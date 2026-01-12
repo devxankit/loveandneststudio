@@ -72,6 +72,7 @@ const AppRoutes = () => {
                         <Route path="/portfolio/newborn" element={<Baby />} />
                         <Route path="/portfolio/family" element={<Family />} />
                         <Route path="/portfolio/hospital" element={<Hospital />} />
+                        <Route path="/portfolio/hospital/birth" element={<Newborn />} />
                         <Route path="/portfolio/hospital/:type" element={<HospitalSession />} />
                         <Route path="/portfolio/cakesmash" element={<CakeSmash />} />
                         <Route path="/portfolio/birthday" element={<Birthday />} />

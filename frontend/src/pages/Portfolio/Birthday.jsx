@@ -250,27 +250,72 @@ const BirthdayPage = () => {
 
             <BirthdayHero data={data} />
 
-            {/* Artistic Intro Section */}
-            <section className="py-32 px-6 relative">
-                <div className="max-w-4xl mx-auto text-center space-y-12">
+            {/* 2.5 CATEGORY EXPLORER */}
+            <section className="pb-32 px-6 max-w-7xl mx-auto relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+                    {/* Pre-Birthday Category */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        className="w-20 h-20 mx-auto rounded-full bg-[#B77A8C]/20 border border-[#B77A8C]/40 flex items-center justify-center text-[#B77A8C]"
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="group relative h-[500px] md:h-[650px] rounded-[3.5rem] overflow-hidden bg-white/5 border border-white/10 shadow-2xl transition-all duration-700 hover:border-[#B77A8C]/30"
                     >
-                        <Cake size={32} strokeWidth={1.5} />
+                        <a href="/portfolio/pre-birthday" className="block w-full h-full relative">
+                            <img
+                                src="https://res.cloudinary.com/djuyp9lut/image/upload/v1736615566/loveandnest/assets/portfolio/toddler/t1.jpg"
+                                alt="Pre-Birthday"
+                                className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent"></div>
+
+                            <div className="absolute inset-x-0 bottom-0 p-12 space-y-5">
+                                <div className="flex items-center gap-3">
+                                    <span className="w-8 h-[1px] bg-[#B77A8C]"></span>
+                                    <span className="text-[10px] uppercase font-bold tracking-[0.5em] text-[#B77A8C]">The Prologue</span>
+                                </div>
+                                <h3 className="font-display text-5xl md:text-6xl text-white tracking-tight">Pre-Birthday</h3>
+                                <p className="text-white/50 text-base font-outfit leading-relaxed max-w-sm transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700">
+                                    Capturing the pure wonder and anticipation before the big celebration. A gentle, artistic session.
+                                </p>
+                                <div className="pt-6 flex items-center gap-4 text-white text-[11px] uppercase font-bold tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                                    <span className="hover:text-[#B77A8C] transition-colors">Enter Gallery</span>
+                                    <ChevronRight size={16} className="text-[#B77A8C]" />
+                                </div>
+                            </div>
+                        </a>
                     </motion.div>
-                    <h2 className="font-display text-4xl md:text-6xl text-white leading-tight">
-                        {data?.intro?.title || "Every year is a story worth telling."}
-                    </h2>
-                    <p className="font-outfit text-white/60 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-light">
-                        {data?.intro?.description || "From the first candle to every wish thereafter, we capture the magic of childhood birthdays with editorial precision and warmth."}
-                    </p>
-                    <div className="flex justify-center gap-12 opacity-30">
-                        <Sparkles size={24} />
-                        <Star size={24} />
-                        <Sparkles size={24} />
-                    </div>
+
+                    {/* Cake Smash Category */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="group relative h-[500px] md:h-[650px] rounded-[3.5rem] overflow-hidden bg-white/5 border border-white/10 shadow-2xl transition-all duration-700 hover:border-[#E8CBB6]/30"
+                    >
+                        <a href="/portfolio/cakesmash" className="block w-full h-full relative">
+                            <img
+                                src="https://images.unsplash.com/photo-1530103862676-de3c9a59af38?q=80&w=2670&auto=format&fit=crop"
+                                alt="Cake Smash"
+                                className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent"></div>
+
+                            <div className="absolute inset-x-0 bottom-0 p-12 space-y-5">
+                                <div className="flex items-center gap-3">
+                                    <span className="w-8 h-[1px] bg-[#E8CBB6]"></span>
+                                    <span className="text-[10px] uppercase font-bold tracking-[0.5em] text-[#E8CBB6]">The Celebration</span>
+                                </div>
+                                <h3 className="font-display text-5xl md:text-6xl text-white tracking-tight">Cake Smash</h3>
+                                <p className="text-white/50 text-base font-outfit leading-relaxed max-w-sm transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700">
+                                    Joyous laughter, first candles, and the sweet mess of discovery. A milestone captured in its purest form.
+                                </p>
+                                <div className="pt-6 flex items-center gap-4 text-white text-[11px] uppercase font-bold tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                                    <span className="hover:text-[#E8CBB6] transition-colors">Enter Gallery</span>
+                                    <ChevronRight size={16} className="text-[#E8CBB6]" />
+                                </div>
+                            </div>
+                        </a>
+                    </motion.div>
                 </div>
             </section>
 

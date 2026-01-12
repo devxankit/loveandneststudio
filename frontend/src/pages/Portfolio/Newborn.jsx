@@ -207,10 +207,7 @@ const Newborn = () => {
 
                 {/* 4. GALLERY GRID (Instagram Style) */}
                 <section className="py-20 px-4 md:px-8 bg-[#FAF9F6]">
-                    <div className="text-center mb-16">
-                        <h3 className="font-display text-3xl md:text-4xl text-[#4A4A4A] mb-4">Instagram</h3>
-                        <p className="uppercase tracking-widest text-[#B77A8C] text-xs">@loveandnest_newborn</p>
-                    </div>
+
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-4 max-w-6xl mx-auto">
                         {gallery.length === 0 && (

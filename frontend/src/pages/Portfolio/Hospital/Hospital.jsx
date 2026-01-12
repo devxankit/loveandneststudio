@@ -77,8 +77,11 @@ const Hospital = () => {
                             <p className="font-outfit text-white/90 text-sm md:text-base leading-relaxed mb-8">
                                 {hero.description || "Love & Nest is the home of all things joy, capturing simple beauty and raw emotion. Join us as we document the first breaths, the tiny fingers, and the overwhelming love of the first 48 hours."}
                             </p>
-                            <button className="border border-white text-white px-8 py-3 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-[#5A2A45] transition-colors duration-300">
-                                {hero.buttonText || "Read More"}
+                            <button
+                                onClick={() => document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' })}
+                                className="border border-white text-white px-8 py-3 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-[#5A2A45] transition-colors duration-300"
+                            >
+                                {hero.buttonText || "View Gallery"}
                             </button>
                         </motion.div>
                     </div>
@@ -86,7 +89,7 @@ const Hospital = () => {
 
 
                 {/* --- Categories Grid matching "Current Obsessions" style --- */}
-                <div className="max-w-[1400px] mx-auto pt-20">
+                <div id="categories-section" className="max-w-[1400px] mx-auto pt-20">
                     <div className="flex flex-col md:flex-row items-baseline gap-4 mb-16">
                         <h2 className="font-display text-4xl md:text-5xl text-[#E8CBB6] uppercase leading-none">
                             {categoriesSection.title?.split(' ')[0] || "Current"} <br />
@@ -99,8 +102,12 @@ const Hospital = () => {
                         {categories.map((cat, index) => {
                             const fallbackImg = index === 0 ? catFallback1 : index === 1 ? catFallback2 : catFallback3;
 
+                            // Link Birth category directly to the main Birth portfolio page
+                            const isBirth = cat.title?.toLowerCase() === 'birth';
+                            const linkDestination = isBirth ? '/portfolio/birth' : cat.link;
+
                             return (
-                                <Link to={cat.link} key={index} className="group cursor-pointer">
+                                <Link to={linkDestination} key={index} className="group cursor-pointer">
                                     <motion.div
                                         initial={{ opacity: 0, y: 30 }}
                                         whileInView={{ opacity: 1, y: 0 }}

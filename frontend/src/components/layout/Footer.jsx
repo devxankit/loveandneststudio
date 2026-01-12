@@ -21,14 +21,13 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer className="relative bg-[#1a0f16] text-[#FAF9F6] overflow-hidden pt-16 pb-8 px-6 sm:px-10 lg:px-16 border-t border-white/5">
+        <footer className="relative bg-[#0d0d0d] text-[#FAF9F6] overflow-hidden pt-20 pb-12 px-6 sm:px-10 border-t border-white/5">
             {/* Premium Background Effects */}
-            <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
-            <div className="absolute top-[-50%] right-[-10%] w-[80vw] sm:w-[50vw] h-[80vw] sm:h-[50vw] bg-[#5A2A45] rounded-full blur-[100px] sm:blur-[150px] opacity-20 pointer-events-none animate-pulse"></div>
-            <div className="absolute bottom-[-50%] left-[-10%] w-[60vw] sm:w-[40vw] h-[60vw] sm:h-[40vw] bg-[#B77A8C] rounded-full blur-[80px] sm:blur-[120px] opacity-10 pointer-events-none"></div>
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+            <div className="absolute top-[-50%] right-[-10%] w-[80vw] sm:w-[50vw] h-[80vw] sm:h-[50vw] bg-[#5A2A45] rounded-full blur-[100px] sm:blur-[150px] opacity-10 pointer-events-none animate-pulse"></div>
 
-            <div className="max-w-[1400px] mx-auto relative z-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-x-8 sm:gap-y-12 lg:gap-8 text-center mb-12 sm:mb-16">
+            <div className="max-w-[1200px] mx-auto relative z-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 sm:gap-x-12 sm:gap-y-16 text-center mb-16 sm:mb-20">
 
                     {/* 1. Brand / Logo */}
                     <div className="col-span-1 space-y-6 flex flex-col items-center">
@@ -55,20 +54,22 @@ const Footer = () => {
 
                     {/* 2. Explore Links */}
                     <div className="col-span-1 flex flex-col items-center">
-                        <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Explore</h4>
-                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 flex flex-col items-center">
+                        <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-8 font-light tracking-wide">Explore</h4>
+                        <ul className="space-y-4 text-sm font-outfit text-white/50 flex flex-col items-center">
                             {[
                                 { name: 'Home', path: '/' },
                                 { name: 'About Anamika', path: '/about' },
                                 { name: 'Portfolio', path: '/portfolio' },
                                 { name: 'Journal', path: '/blog' }
                             ].map((item, i) => (
-                                <li key={i} className="group flex items-center gap-3">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"></span>
-                                    <Link to={item.path} className="group-hover:text-white transition-all whitespace-nowrap">
-                                        {item.name}
-                                    </Link>
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 shrink-0"></span> {/* Mirror for centering */}
+                                <li key={i} className="group flex items-center justify-center min-w-[140px]">
+                                    <div className="flex items-center gap-3">
+                                        <span className="w-1 h-1 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-all duration-300 scale-0 group-hover:scale-100 shrink-0"></span>
+                                        <Link to={item.path} className="group-hover:text-white transition-all uppercase tracking-widest text-[11px]">
+                                            {item.name}
+                                        </Link>
+                                        <span className="w-1 h-1 rounded-full bg-transparent opacity-0 shrink-0"></span>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -76,20 +77,22 @@ const Footer = () => {
 
                     {/* 3. Services Links */}
                     <div className="col-span-1 flex flex-col items-center">
-                        <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-6 sm:mb-8">Services</h4>
-                        <ul className="space-y-3 sm:space-y-4 text-sm font-outfit text-white/60 flex flex-col items-center">
+                        <h4 className="font-display italic text-2xl text-[#E8CBB6] mb-8 font-light tracking-wide">Services</h4>
+                        <ul className="space-y-4 text-sm font-outfit text-white/50 flex flex-col items-center">
                             {[
                                 { name: 'Maternity', path: '/portfolio/maternity' },
                                 { name: 'Birth', path: '/portfolio/birth' },
                                 { name: 'Newborn', path: '/portfolio/newborn' },
                                 { name: 'Family', path: '/portfolio/family' }
                             ].map((item, i) => (
-                                <li key={i} className="group flex items-center gap-3">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"></span>
-                                    <Link to={item.path} className="group-hover:text-white transition-all whitespace-nowrap">
-                                        {item.name}
-                                    </Link>
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#B77A8C] opacity-0 shrink-0"></span> {/* Mirror for centering */}
+                                <li key={i} className="group flex items-center justify-center min-w-[140px]">
+                                    <div className="flex items-center gap-3">
+                                        <span className="w-1 h-1 rounded-full bg-[#B77A8C] opacity-0 group-hover:opacity-100 transition-all duration-300 scale-0 group-hover:scale-100 shrink-0"></span>
+                                        <Link to={item.path} className="group-hover:text-white transition-all uppercase tracking-widest text-[11px]">
+                                            {item.name}
+                                        </Link>
+                                        <span className="w-1 h-1 rounded-full bg-transparent opacity-0 shrink-0"></span>
+                                    </div>
                                 </li>
                             ))}
                         </ul>

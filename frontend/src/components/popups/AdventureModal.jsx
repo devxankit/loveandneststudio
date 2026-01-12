@@ -82,15 +82,15 @@ const AdventureModal = ({ isOpen, onClose, data }) => {
                                     </div>
                                 </motion.div>
 
-                                {/* Right Side Image - Animated Slide In & Rotate */}
+                                {/* Right Side Image - Animated Slide In */}
                                 <motion.div
-                                    initial={{ opacity: 0, x: 50, rotate: 5 }}
-                                    whileInView={{ opacity: 1, x: 0, rotate: 2 }}
+                                    initial={{ opacity: 0, x: 50 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.8, delay: 0.4 }}
                                     className="w-full md:w-1/3"
                                 >
-                                    <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-md hover:rotate-0 transition-transform duration-500 bg-white p-2">
+                                    <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-md transition-transform duration-500 bg-white p-2">
                                         <div className="w-full h-full rounded overflow-hidden bg-gray-200">
                                             {sideImage ? (
                                                 <LazyImage

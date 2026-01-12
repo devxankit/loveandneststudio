@@ -121,7 +121,7 @@ const CakeSmash = () => {
             </section>
 
             {/* 2. INTRO / CELEBRATION TEXT */}
-            <section className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center space-y-8">
+            <section className="py-20 md:pt-32 md:pb-16 px-6 max-w-4xl mx-auto text-center space-y-8">
                 <Gift className="mx-auto text-[#B77A8C] w-12 h-12 mb-6" />
                 <h2 className="font-display text-4xl md:text-5xl text-[#5A2A45]">{data?.celebrationText?.title || "A Sweet Celebration"}</h2>
                 <p className="font-outfit text-lg md:text-xl text-[#8F8A86] leading-relaxed">
@@ -129,6 +129,7 @@ const CakeSmash = () => {
                 </p>
                 <div className="w-24 h-[1px] bg-[#E8CBB6] mx-auto"></div>
             </section>
+
 
             {/* 3. THE SWEET CELEBRATION - Compact & Creative Portfolio Tray */}
             <section className="py-20 px-6 max-w-[1000px] mx-auto mb-20 relative">

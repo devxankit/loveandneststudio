@@ -19,13 +19,11 @@ router.get('/', async (req, res) => {
 // Update page data
 router.put('/', protect, async (req, res) => {
     try {
-        let data = await PreBirthday.findOne();
-        if (!data) {
-            data = new PreBirthday(req.body);
-        } else {
-            Object.assign(data, req.body);
-        }
-        await data.save();
+        const data = await PreBirthday.findOneAndUpdate({}, req.body, {
+            new: true,
+            upsert: true,
+            setDefaultsOnInsert: true
+        });
         res.json(data);
     } catch (error) {
         res.status(400).json({ message: error.message });
