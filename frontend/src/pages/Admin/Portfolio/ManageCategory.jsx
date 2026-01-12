@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Plus, Trash2, Layout, Save, X, ImageIcon, Type, Sparkles } from 'lucide-react';
-import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage, getFamilyPage, updateFamilyPage, getCakeSmashPage, updateCakeSmashPage, getHospitalPage, updateHospitalPage, getHospitalSession, updateHospitalSession, getToddlerPage, updateToddlerPage } from '../../../services/api';
+import { getPage, updatePageSectionJSON, uploadImage, createPage, getNewbornPage, updateNewbornPage, getMaternityPage, updateMaternityPage, getBabyPage, updateBabyPage, getFamilyPage, updateFamilyPage, getCakeSmashPage, updateCakeSmashPage, getHospitalPage, updateHospitalPage, getHospitalSession, updateHospitalSession, getToddlerPage, updateToddlerPage, getPreBirthdayPage, updatePreBirthdayPage } from '../../../services/api';
 
 // Fallback images from assets for Family
 import familyHeroDefault from '../../../assets/images/portfolio/family/Screenshot 2025-12-31 111323.png';
@@ -55,6 +55,7 @@ const ManageCategory = () => {
     const isCakeSmash = category === 'cakesmash';
     const isHospital = category === 'hospital';
     const isToddler = category === 'toddler';
+    const isPreBirthday = category === 'pre-birthday';
 
     useEffect(() => {
         fetchData();
@@ -63,7 +64,15 @@ const ManageCategory = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            if (isToddler) {
+            if (isPreBirthday) {
+                const { data } = await getPreBirthdayPage();
+                setPageData({
+                    hero: data.hero || { title: 'Pre-Birthday', subtitle: 'Capturing High Hopes', tagline: 'A Magical Journey', images: [] },
+                    cakeGrid: data.cakeGrid || { title: 'The Sweetest Moments', description: '...', images: [] },
+                    gallery: data.gallery || [],
+                    themeColor: data.themeColor || '#FDE2E4'
+                });
+            } else if (isToddler) {
                 const { data } = await getToddlerPage();
                 setPageData({
                     hero: data.hero || { title: 'Toddler', subtitle: 'Photography & Videography', tagline: 'From Planning to Execution', images: [] },
@@ -250,6 +259,8 @@ const ManageCategory = () => {
                 await updateCakeSmashPage(newData);
             } else if (isToddler) {
                 await updateToddlerPage(newData);
+            } else if (isPreBirthday) {
+                await updatePreBirthdayPage(newData);
             } else {
                 const sectionsToUpdate = [];
                 if (newData.hero) sectionsToUpdate.push({ id: 'hero', content: newData.hero });
@@ -334,6 +345,10 @@ const ManageCategory = () => {
                     ] : isToddler ? [
                         { id: 'hero', label: 'Arched Hero', icon: Layout },
                         { id: 'gallery', label: 'Art Grid', icon: ImageIcon }
+                    ] : isPreBirthday ? [
+                        { id: 'hero', label: 'Magic Hero', icon: Layout },
+                        { id: 'cakeGrid', label: 'Cake Grid', icon: Layout },
+                        { id: 'gallery', label: 'Gallery', icon: ImageIcon }
                     ] : [ // Newborn or Default
                         { id: 'hero', label: 'Hero', icon: Layout },
                         { id: 'welcome', label: 'Welcome', icon: Sparkles },
@@ -587,6 +602,130 @@ const ManageCategory = () => {
                     </div>
                 )}
 
+
+
+                {/* PRE-BIRTHDAY HERO TAB */}
+                {activeTab === 'hero' && isPreBirthday && (
+                    <div className="max-w-[1240px] space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Pre-Birthday Magic Hero</h2>
+                            <button
+                                onClick={() => updateAll({
+                                    ...pageData,
+                                    hero: {
+                                        ...pageData.hero,
+                                        title: document.getElementById('pb-title').value,
+                                        subtitle: document.getElementById('pb-subtitle').value,
+                                        tagline: document.getElementById('pb-tagline').value,
+                                    }
+                                })}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:brightness-110 transition-all flex items-center gap-2"
+                            >
+                                <Save size={16} /> {saving ? 'Saving...' : 'Save Hero Content'}
+                            </button>
+                        </div>
+
+                        <div className="grid lg:grid-cols-2 gap-12">
+                            <div className="space-y-6">
+                                <div className="space-y-4">
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Hero Title</label>
+                                    <input id="pb-title" defaultValue={pageData.hero.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-2xl" />
+                                </div>
+                                <div className="space-y-4">
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Hero Subtitle</label>
+                                    <input id="pb-subtitle" defaultValue={pageData.hero.subtitle} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none" />
+                                </div>
+                                <div className="space-y-4">
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Hero Tagline</label>
+                                    <input id="pb-tagline" defaultValue={pageData.hero.tagline} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none italic" />
+                                </div>
+                            </div>
+                            <div className="space-y-6">
+                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] text-center">Hero Images (Floating Circle & Bow)</label>
+                                <div className="grid grid-cols-2 gap-6">
+                                    {[0, 1].map((i) => (
+                                        <div key={i} className="space-y-2">
+                                            <div className="aspect-square bg-white rounded-full relative group overflow-hidden border-4 border-white shadow-xl">
+                                                <img src={pageData.hero.images[i] || 'https://via.placeholder.com/400'} className="w-full h-full object-cover" />
+                                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center">
+                                                    Update<br />Slot {i + 1}
+                                                    <input type="file" className="hidden" onChange={async (e) => {
+                                                        const url = await handleUploadImage(e.target.files[0]);
+                                                        if (url) {
+                                                            const newImgs = [...(pageData.hero.images || ['', ''])];
+                                                            newImgs[i] = url;
+                                                            updateAll({ ...pageData, hero: { ...pageData.hero, images: newImgs } });
+                                                        }
+                                                    }} />
+                                                </label>
+                                            </div>
+                                            <p className="text-[9px] text-center text-[#5A2A45] font-bold uppercase opacity-60">{i === 0 ? 'Main Circle' : 'Overlay/Bow Style'}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* PRE-BIRTHDAY CAKE GRID TAB */}
+                {activeTab === 'cakeGrid' && isPreBirthday && (
+                    <div className="max-w-[1240px] space-y-12">
+                        <div className="flex items-center justify-between">
+                            <h2 className="font-display text-2xl text-[#5A2A45]">Cake Shape Gallery Management</h2>
+                            <button
+                                onClick={() => updateAll({
+                                    ...pageData,
+                                    cakeGrid: {
+                                        ...pageData.cakeGrid,
+                                        title: document.getElementById('cg-title').value,
+                                        description: document.getElementById('cg-desc').value,
+                                    }
+                                })}
+                                className="bg-[#5A2A45] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:brightness-110 transition-all flex items-center gap-2"
+                            >
+                                <Save size={16} /> {saving ? 'Saving...' : 'Save Structure Content'}
+                            </button>
+                        </div>
+
+                        <div className="grid lg:grid-cols-3 gap-12">
+                            <div className="lg:col-span-1 space-y-6">
+                                <div className="space-y-4">
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Section Title</label>
+                                    <input id="cg-title" defaultValue={pageData.cakeGrid.title} className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none font-display text-xl" />
+                                </div>
+                                <div className="space-y-4">
+                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45]">Description</label>
+                                    <textarea id="cg-desc" defaultValue={pageData.cakeGrid.description} rows="4" className="w-full p-4 bg-[#F9F7F2] rounded-2xl outline-none text-sm leading-relaxed" />
+                                </div>
+                            </div>
+                            <div className="lg:col-span-2 space-y-8">
+                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#5A2A45] text-center">Cake Structure Images (7 slots)</label>
+                                <div className="grid grid-cols-4 gap-4">
+                                    {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+                                        <div key={i} className="space-y-2">
+                                            <div className="aspect-[3/4] bg-white rounded-xl relative group overflow-hidden border border-[#5A2A45]/10">
+                                                <img src={pageData.cakeGrid.images[i] || 'https://via.placeholder.com/400x533'} className="w-full h-full object-cover" />
+                                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer text-white text-[10px] uppercase font-bold tracking-widest transition-opacity text-center p-2">
+                                                    Update<br />Slot {i + 1}
+                                                    <input type="file" className="hidden" onChange={async (e) => {
+                                                        const url = await handleUploadImage(e.target.files[0]);
+                                                        if (url) {
+                                                            const newImgs = [...(pageData.cakeGrid.images || ['', '', '', '', '', '', ''])];
+                                                            newImgs[i] = url;
+                                                            updateAll({ ...pageData, cakeGrid: { ...pageData.cakeGrid, images: newImgs } });
+                                                        }
+                                                    }} />
+                                                </label>
+                                            </div>
+                                            <p className="text-[9px] text-center text-[#5A2A45] font-bold uppercase opacity-50">Tier {i < 1 ? '1' : i < 3 ? '2' : i < 5 ? '3' : '4'}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
 
                 {/* 3. WELCOME TAB (For categories using the generic welcome section) */}

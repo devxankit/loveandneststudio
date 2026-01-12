@@ -144,6 +144,7 @@ const AdminLayout = () => {
                 { label: 'Cake Smash', path: '/admin/portfolio/cakesmash' },
                 { label: 'Hospital', path: '/admin/portfolio/hospital' },
                 { label: 'Toddler', path: '/admin/portfolio/toddler' },
+                { label: 'Pre Birthday', path: '/admin/portfolio/pre-birthday' },
             ]
         },
         { icon: Sparkles, label: 'Services', path: '/admin/services' },

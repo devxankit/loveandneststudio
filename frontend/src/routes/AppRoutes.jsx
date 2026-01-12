@@ -14,6 +14,7 @@ const Hospital = lazy(() => import('../pages/Portfolio/Hospital/Hospital'));
 const HospitalSession = lazy(() => import('../pages/Portfolio/Hospital/HospitalSession'));
 const Birthday = lazy(() => import('../pages/Portfolio/Birthday')); // Cake Smash
 const Toddler = lazy(() => import('../pages/Portfolio/Toddler'));
+const PreBirthday = lazy(() => import('../pages/Portfolio/PreBirthday'));
 const Services = lazy(() => import('../pages/Services/Services'));
 const ServiceGallery = lazy(() => import('../pages/Services/ServiceGallery'));
 const Blog = lazy(() => import('../pages/Blog/Blog'));
@@ -73,6 +74,7 @@ const AppRoutes = () => {
                         <Route path="/portfolio/hospital/:type" element={<HospitalSession />} />
                         <Route path="/portfolio/cakesmash" element={<Birthday />} />
                         <Route path="/portfolio/toddler" element={<Toddler />} />
+                        <Route path="/portfolio/pre-birthday" element={<PreBirthday />} />
                         <Route path="/services" element={<Services />} />
                         <Route path="/services/:id" element={<ServiceGallery />} />
                         <Route path="/blog" element={<Blog />} />
