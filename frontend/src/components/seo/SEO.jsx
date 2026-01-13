@@ -32,8 +32,8 @@ const SEO = ({
         "@context": "https://schema.org",
         "@type": "PhotographyBusiness",
         "name": "Love & Nest Studio",
-        "image": "https://loveandneststudio.com/Loveandneststudiologo.png",
-        "logo": "https://loveandneststudio.com/Loveandneststudiologo.png",
+        "image": "https://loveandneststudio.com/Love&NestStudioLogo.jpeg",
+        "logo": "https://loveandneststudio.com/Love&NestStudioLogo.jpeg",
         "@id": "https://loveandneststudio.com",
         "url": "https://loveandneststudio.com",
         "telephone": "+919876543210",
@@ -61,7 +61,7 @@ const SEO = ({
     };
 
     const structureData = schema || defaultSchema;
-    const finalImage = ogImage || 'https://loveandneststudio.com/Loveandneststudiologo.png';
+    const finalImage = ogImage || 'https://loveandneststudio.com/Love&NestStudioLogo.jpeg';
 
     return (
         <Helmet>
