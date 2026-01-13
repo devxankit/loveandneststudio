@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import api from '../../services/api';
-import defaultLogo from '../../assets/logo/Gemini_Generated_Image_adt2l4adt2l4adt2-removebg-preview.png';
-
 const Navbar = React.memo(() => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [navbarLogo, setNavbarLogo] = useState(null);
+    const [siteTitle, setSiteTitle] = useState('Love & Nest');
     const { scrollY } = useScroll();
     const location = useLocation();
 
@@ -22,13 +21,16 @@ const Navbar = React.memo(() => {
         setIsMenuOpen(false);
     }, [location.pathname]);
 
-    // Fetch dynamic logo
+    // Fetch dynamic logo and settings
     useEffect(() => {
         const fetchSettings = async () => {
             try {
                 const res = await api.get('/settings');
                 if (res.data.navbarLogo) {
                     setNavbarLogo(res.data.navbarLogo);
+                }
+                if (res.data.siteTitle) {
+                    setSiteTitle(res.data.siteTitle);
                 }
             } catch (error) {
                 console.error("Error fetching navbar logo:", error);
@@ -48,8 +50,6 @@ const Navbar = React.memo(() => {
         } after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'
         } ${(!isScrolled && !isDarkPage) ? 'hover:brightness-110 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : ''}`;
 
-    const displayLogo = navbarLogo || defaultLogo;
-
     return (
         <>
             <motion.nav
@@ -63,11 +63,17 @@ const Navbar = React.memo(() => {
 
                     {/* Logo Section */}
                     <Link to="/" className="flex items-center z-[1001] relative transition-transform duration-500 hover:scale-105 active:scale-95">
-                        <img
-                            src={displayLogo}
-                            alt="Love & Nest Studio"
-                            className={`transition-all duration-500 w-auto object-contain ${(isScrolled || isDarkPage) ? 'h-10 md:h-12 lg:h-14' : 'h-12 md:h-16 lg:h-20'}`}
-                        />
+                        {navbarLogo ? (
+                            <img
+                                src={navbarLogo}
+                                alt={siteTitle}
+                                className={`transition-all duration-500 w-auto object-contain ${(isScrolled || isDarkPage) ? 'h-10 md:h-12 lg:h-14' : 'h-12 md:h-16 lg:h-20'}`}
+                            />
+                        ) : (
+                            <span className={`font-display text-2xl md:text-3xl italic tracking-tight ${(isScrolled || isDarkPage) ? 'text-[#5A2A45]' : 'text-white shadow-sm'}`}>
+                                {siteTitle}
+                            </span>
+                        )}
                     </Link>
 
                     {/* Desktop Navigation */}

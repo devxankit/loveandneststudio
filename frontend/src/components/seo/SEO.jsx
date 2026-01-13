@@ -32,7 +32,7 @@ const SEO = ({
         "@context": "https://schema.org",
         "@type": "PhotographyBusiness",
         "name": "Love & Nest Studio",
-        "image": "https://loveandneststudio.com/images/logo-icon.png",
+        "image": "https://loveandneststudio.com/Loveandneststudiologo.png",
         "@id": "https://loveandneststudio.com",
         "url": "https://loveandneststudio.com",
         "telephone": "+919876543210",
@@ -60,6 +60,7 @@ const SEO = ({
     };
 
     const structureData = schema || defaultSchema;
+    const finalImage = ogImage || 'https://loveandneststudio.com/Loveandneststudiologo.png';
 
     return (
         <Helmet>
@@ -78,13 +79,13 @@ const SEO = ({
             <meta property="og:description" content={finalDescription} />
             <meta property="og:type" content="website" />
             <meta property="og:url" content={finalUrl} />
-            {ogImage && <meta property="og:image" content={ogImage} />}
+            <meta property="og:image" content={finalImage} />
 
             {/* Twitter Card */}
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:title" content={fullTitle} />
             <meta name="twitter:description" content={finalDescription} />
-            {ogImage && <meta name="twitter:image" content={ogImage} />}
+            <meta name="twitter:image" content={finalImage} />
 
             {/* Schema.org JSON-LD */}
             <script type="application/ld+json">
