@@ -33,6 +33,7 @@ const SEO = ({
         "@type": "PhotographyBusiness",
         "name": "Love & Nest Studio",
         "image": "https://loveandneststudio.com/Loveandneststudiologo.png",
+        "logo": "https://loveandneststudio.com/Loveandneststudiologo.png",
         "@id": "https://loveandneststudio.com",
         "url": "https://loveandneststudio.com",
         "telephone": "+919876543210",
