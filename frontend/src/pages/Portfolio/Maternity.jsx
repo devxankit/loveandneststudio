@@ -210,7 +210,7 @@ const HeroSection = ({ data }) => {
                         initial={{ y: "100%" }}
                         animate={{ y: 0 }}
                         transition={{ duration: 1, delay: 0.7, ease: [0.76, 0, 0.24, 1] }}
-                        className="font-display font-medium text-[clamp(4.5rem,14vw,11rem)] leading-[0.9] text-[#5A2A45] tracking-tight uppercase"
+                        className="font-display font-medium text-[clamp(3rem,14vw,11rem)] leading-[0.9] text-[#5A2A45] tracking-tight uppercase"
                     >
                         {title}
                     </motion.h1>
@@ -279,7 +279,7 @@ const EditorialSection = ({ data }) => {
                         transition={{ duration: 0.8 }}
                         className="relative z-10"
                     >
-                        <h2 className="font-display text-5xl md:text-7xl mb-8 leading-tight text-[#5A2A45]" dangerouslySetInnerHTML={{ __html: title }} />
+                        <h2 className="font-display text-4xl sm:text-5xl md:text-7xl mb-8 leading-tight text-[#5A2A45]" dangerouslySetInnerHTML={{ __html: title }} />
                         <p className="font-outfit text-lg text-[#8F8A86] leading-relaxed max-w-md">
                             {text}
                         </p>
@@ -351,7 +351,7 @@ const ArtisticSilhouetteSection = ({ data }) => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
-                        <h3 className="font-display text-5xl md:text-7xl text-[#5A2A45] mb-8 leading-[0.9]" dangerouslySetInnerHTML={{ __html: title }} />
+                        <h3 className="font-display text-4xl sm:text-5xl md:text-7xl text-[#5A2A45] mb-8 leading-[0.9]" dangerouslySetInnerHTML={{ __html: title }} />
                         <div className="w-20 h-[1px] bg-[#B77A8C] mb-8 mx-auto md:mx-0"></div>
                         <p className="font-outfit text-[#8F8A86] text-lg leading-relaxed max-w-md mx-auto md:mx-0 mb-8">
                             {text}

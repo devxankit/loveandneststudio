@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
     <div className="app selection:bg-[#5A2A45] selection:text-[#F1EBDD] flex flex-col min-h-screen">
       {!isAdminRoute && <GrainOverlay />}
       {!isAdminRoute && <Navbar />}
-      <main className="relative z-0 flex-grow min-h-screen">
+      <main className="relative z-0 flex-grow">
         {children}
       </main>
       {!isAdminRoute && <Footer />}
@@ -33,6 +33,11 @@ const Layout = ({ children }) => {
 function App() {
   // Initialize Lenis Smooth Scroll
   useEffect(() => {
+    // Disable default browser scroll restoration
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

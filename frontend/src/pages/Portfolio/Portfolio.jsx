@@ -171,13 +171,13 @@ const PortfolioContent = ({ data }) => {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-16"
+                    className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-10 md:gap-16"
                 >
                     {remappedCategories.map((category) => (
                         <motion.div
                             key={category.id}
                             variants={cardVariants}
-                            className="group relative h-[450px] sm:h-[550px] md:h-[650px] overflow-hidden rounded-[3rem] shadow-2xl bg-white"
+                            className="group relative h-[280px] sm:h-[450px] md:h-[550px] lg:h-[650px] overflow-hidden rounded-[1.5rem] sm:rounded-[3rem] shadow-2xl bg-white"
                         >
                             <Link to={category.link} className="block w-full h-full">
                                 <div className="absolute inset-0 z-0">
@@ -189,23 +189,23 @@ const PortfolioContent = ({ data }) => {
                                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/70 opacity-80" />
                                 </div>
 
-                                <div className="absolute inset-x-0 bottom-0 p-10 z-10">
+                                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-10 z-10">
                                     <div className="space-y-3">
-                                        <span className="text-[10px] uppercase tracking-[0.4em] text-white/70 font-bold block">
+                                        <span className="text-[8px] sm:text-[10px] uppercase tracking-[0.4em] text-white/70 font-bold block">
                                             {category.subtitle}
                                         </span>
-                                        <h3 className="font-display text-4xl sm:text-5xl text-white mb-2 tracking-tight">
+                                        <h3 className="font-display text-xl sm:text-4xl md:text-5xl text-white mb-2 tracking-tight">
                                             {category.title}
                                         </h3>
                                         <div className={`w-10 h-0.5 ${category.accent || 'bg-[#E8CBB6]'} transform origin-left transition-all duration-700 group-hover:w-20`} />
-                                        <p className="text-white/70 text-sm font-light leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700 delay-100">
+                                        <p className="hidden sm:block text-white/70 text-sm font-light leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700 delay-100">
                                             {category.description}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="absolute top-10 right-10 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-700">
-                                    <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div className="absolute top-4 right-4 sm:top-10 sm:right-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-700">
+                                    <svg className="w-5 h-5 sm:w-7 sm:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>
                                 </div>

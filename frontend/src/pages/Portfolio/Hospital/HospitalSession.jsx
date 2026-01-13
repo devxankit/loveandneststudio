@@ -191,13 +191,6 @@ const HospitalSession = () => {
                                     <p className="text-[#6E5A52] font-outfit text-lg md:text-xl leading-relaxed font-light">
                                         {data.welcome.text || "There is nothing quite like those first few hours of life. The tiny details, the overwhelming love, and the magic of a new beginning."}
                                     </p>
-                                    <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        className="bg-[#5A2A45] text-white px-10 py-5 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:bg-[#B77A8C] transition-colors"
-                                    >
-                                        {data.welcome.buttonText || "Book Your Session"}
-                                    </motion.button>
                                 </motion.div>
                             </div>
 
