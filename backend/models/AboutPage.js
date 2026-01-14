@@ -37,7 +37,13 @@ const aboutPageSchema = new mongoose.Schema({
             type: String,
             default: "Thank You"
         }
-    }
+    },
+    portfolioCategories: [
+        {
+            name: { type: String, required: true },
+            image: { type: String, required: true }
+        }
+    ]
 }, { timestamps: true });
 
 module.exports = mongoose.model('AboutPage', aboutPageSchema);

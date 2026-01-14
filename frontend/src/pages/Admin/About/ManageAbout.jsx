@@ -13,6 +13,12 @@ const ManageAbout = () => {
     const [saving, setSaving] = useState(false);
     const [pageData, setPageData] = useState({
         hero: { images: [] },
+        portfolioCategories: [
+            { name: 'Newborn', image: '' },
+            { name: 'Maternity', image: '' },
+            { name: 'Baby', image: '' },
+            { name: 'Family', image: '' }
+        ],
         bio: {
             intro: '',
             photographer: { heading: '', text: '' },
@@ -31,7 +37,19 @@ const ManageAbout = () => {
     const fetchData = async () => {
         try {
             const res = await getAboutPage();
-            setPageData(res.data.data || res.data);
+            const data = res.data.data || res.data;
+
+            // Ensure portfolioCategories has at least 4 items
+            if (!data.portfolioCategories || data.portfolioCategories.length === 0) {
+                data.portfolioCategories = [
+                    { name: 'Newborn', image: '' },
+                    { name: 'Maternity', image: '' },
+                    { name: 'Baby', image: '' },
+                    { name: 'Family', image: '' }
+                ];
+            }
+
+            setPageData(data);
         } catch (error) {
             console.error("Failed to fetch about data", error);
         } finally {
@@ -70,6 +88,32 @@ const ManageAbout = () => {
             return url;
         } catch (error) {
             console.error("Upload failed", error);
+            alert("Image upload failed");
+        }
+    };
+
+    const handleUpdateCategory = (index, field, value) => {
+        setPageData(prev => {
+            const newCategories = [...(prev.portfolioCategories || [])];
+            if (newCategories[index]) {
+                newCategories[index][field] = value;
+            } else {
+                newCategories[index] = { name: '', image: '', [field]: value };
+            }
+            return { ...prev, portfolioCategories: newCategories };
+        });
+    };
+
+    const handleUploadCategoryImage = async (file, index) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+            const res = await uploadImage(formData);
+            const url = res.data.url;
+            handleUpdateCategory(index, 'image', url);
+            return url;
+        } catch (error) {
+            console.error("Category image upload failed", error);
             alert("Image upload failed");
         }
     };
@@ -117,6 +161,7 @@ const ManageAbout = () => {
                 {[
                     { id: 'bio', label: 'Biography & Narrative', icon: User },
                     { id: 'hero-gallery', label: 'Floating Hero Images', icon: ImageIcon },
+                    { id: 'categories', label: 'Portfolio Categories', icon: Heart },
                     { id: 'philosophy', label: 'Philosophy & Style', icon: Sparkles },
                 ].map((tab) => (
                     <button
@@ -224,7 +269,54 @@ const ManageAbout = () => {
                     </div>
                 )}
 
-                {/* 3. PHILOSOPHY & STYLE */}
+                {/* 3. PORTFOLIO CATEGORIES */}
+                {activeTab === 'categories' && (
+                    <div className="bg-white rounded-[2.5rem] p-10 border border-[#5A2A45]/5 shadow-sm">
+                        <div className="mb-10">
+                            <h3 className="font-display text-3xl text-[#5A2A45] mb-2">Portfolio Category Cards</h3>
+                            <p className="text-xs text-[#8F8A86] font-outfit">Manage the four vertical image frames on the right side of the About page.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {(pageData.portfolioCategories || []).map((cat, idx) => (
+                                <div key={idx} className="space-y-4 p-6 bg-[#FAF9F6] rounded-[2rem] border border-[#5A2A45]/5">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#B77A8C]">Card {idx + 1}</span>
+                                    </div>
+
+                                    <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-white border border-[#5A2A45]/10 group">
+                                        {cat.image ? (
+                                            <img src={cat.image} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center opacity-20">
+                                                <ImageIcon size={32} />
+                                            </div>
+                                        )}
+                                        <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
+                                            <Upload size={20} />
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                onChange={(e) => handleUploadCategoryImage(e.target.files[0], idx)}
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#8F8A86] mb-2">Category Name</label>
+                                        <input
+                                            value={cat.name}
+                                            onChange={(e) => handleUpdateCategory(idx, 'name', e.target.value)}
+                                            className="w-full p-3 bg-white rounded-xl outline-none text-sm text-[#5A2A45] border border-transparent focus:border-[#B77A8C]/20"
+                                            placeholder="e.g. Newborn"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {activeTab === 'philosophy' && (
                     <div className="space-y-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

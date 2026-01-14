@@ -81,12 +81,14 @@ const About = () => {
     const bio = pageData?.bio || {};
     const hero = pageData?.hero || { images: [] };
 
-    const portfolioCategories = [
-        { id: 1, name: 'Newborn', image: newbornImg },
-        { id: 2, name: 'Maternity', image: maternityImg },
-        { id: 3, name: 'Baby', image: babyImg },
-        { id: 4, name: 'Family', image: familyImg }
-    ];
+    const portfolioCategories = (pageData?.portfolioCategories && pageData.portfolioCategories.length > 0)
+        ? pageData.portfolioCategories
+        : [
+            { id: 1, name: 'Newborn', image: newbornImg },
+            { id: 2, name: 'Maternity', image: maternityImg },
+            { id: 3, name: 'Baby', image: babyImg },
+            { id: 4, name: 'Family', image: familyImg }
+        ];
 
     // Build the gallery images with their designated float classes
     const displayHeroImages = defaultAboutImages.map((config, index) => ({
@@ -183,8 +185,8 @@ const About = () => {
                         {/* Right Side - Portfolio Categories */}
                         <div className="lg:flex-[0_0_220px] w-full lg:sticky lg:top-24 flex lg:flex-col items-center">
                             <div className="flex flex-col gap-4 w-full max-w-[220px] mx-auto">
-                                {portfolioCategories.map((category) => (
-                                    <div key={category.id} className="relative w-full group">
+                                {portfolioCategories.map((category, index) => (
+                                    <div key={category._id || category.id || index} className="relative w-full group">
                                         {/* Ribbon Banner */}
                                         <div className="relative bg-gradient-to-br from-[#D6A9B4] to-[#C89AA8] py-1.5 px-4 text-center -mb-px z-10 shadow-[0_2px_8px_rgba(214,169,180,0.3)] flex items-center justify-center gap-3 transition-all duration-300 group-hover:translate-y-[-2px] group-hover:shadow-[0_4px_12px_rgba(214,169,180,0.5)]">
                                             <div className="flex gap-0.5">
